@@ -1,0 +1,54 @@
+\documentclass[12pt,a4paper]{article}
+\usepackage[polish]{babel}
+\usepackage[T1]{fontenc}
+\usepackage[utf8x]{inputenc}
+\usepackage{hyperref}
+\usepackage{url}
+\usepackage{graphicx}
+\usepackage{float}
+
+\usepackage{color}
+%\newcommand{\todo}[1]{\\ \textcolor{red}{TODO: #1}\PackageWarning{TODO:}{#1!}}
+\newcommand{\todo}[1]{\\ \textcolor{red}{TODO: #1}}
+
+\addtolength{\hoffset}{-1.5cm}
+\addtolength{\marginparwidth}{-1.5cm}
+\addtolength{\textwidth}{3cm}
+\addtolength{\voffset}{-1cm}
+\addtolength{\textheight}{2.5cm}
+\setlength{\topmargin}{0cm}
+\setlength{\headheight}{0cm}
+
+\begin{document}
+
+    \title{Opracowanie bezpiecznego systemu komunikacji głosowej
+    w sieci IP (VoIP) wraz z jego implementacją.
+        \\ \\Telefonia IP}
+
+    \author{Krzysztof Czarnecki 136224\\Piotr Zieliński 136333}
+    \date{\today}
+    \maketitle
+
+    \newpage
+    \tableofcontents
+
+    \input{texts/charakterystyka_ogolna.tex}
+    \input{texts/architerktura_systemu.tex}
+    \input{texts/wymagania.tex}
+    \input{texts/narzedzia.tex}
+\end{document}
+
+% PUNKTORY
+% \begin{itemize}
+% \item Public Documents
+% \item All Documents
+% \item Create Document
+% \end{itemize}
+
+% obrazek
+% \begin{figure}[H]
+% \centering
+% \includegraphics[width=15cm]{pictures/deszyf_mycbc.png}
+% \caption{Wykres zależności czasu deszyfrowania [ms] od wielkości pliku [MB] z uwzględnieniem własnej implementacji szyfru CBC}
+% \label{pictures/szyfrowanie.png}
+% \end{figure}
