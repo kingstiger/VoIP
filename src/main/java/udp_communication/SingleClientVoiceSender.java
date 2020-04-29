@@ -10,15 +10,15 @@ import java.net.DatagramPacket;
 import java.net.DatagramSocket;
 import java.net.SocketException;
 
-public class VoiceSenderImpl implements VoiceSender {
-    private static final Logger logger = Logger.getLogger(VoiceSenderImpl.class);
+public class SingleClientVoiceSender implements VoiceSender {
+    private static final Logger logger = Logger.getLogger(SingleClientVoiceSender.class);
 
     private ConnectionDetails connectionDetails;
     private DatagramSocket socket;
     private Microphone microphone;
     private boolean sendVoice = true;
 
-    public VoiceSenderImpl(ConnectionDetails connectionDetails, Microphone microphone) throws
+    public SingleClientVoiceSender(ConnectionDetails connectionDetails, Microphone microphone) throws
                                                                 SocketException {
         this.connectionDetails = connectionDetails;
 

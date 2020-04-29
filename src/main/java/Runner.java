@@ -1,7 +1,7 @@
 import models.ConnectionDetails;
 import sound_utils.Microphone;
 import udp_communication.VoiceSender;
-import udp_communication.VoiceSenderImpl;
+import udp_communication.SingleClientVoiceSender;
 
 import javax.sound.sampled.LineUnavailableException;
 import java.io.IOException;
@@ -15,7 +15,7 @@ public class Runner {
 
         ConnectionDetails receiver = new ConnectionDetails(InetAddress.getByName("192.168.0.104"), 5555, 1024);
         Microphone microphone = new Microphone();
-        VoiceSender sender = new VoiceSenderImpl(receiver, microphone);
+        VoiceSender sender = new SingleClientVoiceSender(receiver, microphone);
 
         sender.startSending();
     }

@@ -12,16 +12,16 @@ public class VoiceReceiverImpl implements VoiceReceiver {
 
     @Override
     public void startListening() {
-
+        throw new UnsupportedOperationException("Not implemented yet.");
     }
 
     @Override
     public void pauseListening() {
-
+        throw new UnsupportedOperationException("Not implemented yet.");
     }
 
     @Override
     public void stopListening() {
-
+        throw new UnsupportedOperationException("Not implemented yet.");
     }
 }
