@@ -6,7 +6,7 @@ import javax.sound.sampled.*;
 
 public class Microphone {
     private TargetDataLine microphoneLine;
-    private static int CHUNK_SIZE = 1024;
+    private static final int CHUNK_SIZE = 1024;
 
     public Microphone() throws
                              LineUnavailableException {
