@@ -1,16 +1,11 @@
 package temporary;
 
+import javax.sound.sampled.*;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.net.DatagramPacket;
 import java.net.DatagramSocket;
 import java.net.InetAddress;
-import javax.sound.sampled.AudioFormat;
-import javax.sound.sampled.AudioSystem;
-import javax.sound.sampled.DataLine;
-import javax.sound.sampled.LineUnavailableException;
-import javax.sound.sampled.SourceDataLine;
-import javax.sound.sampled.TargetDataLine;
 
 public class Sender {
 
@@ -18,7 +13,7 @@ public class Sender {
 
         AudioFormat format = new AudioFormat(AudioFormat.Encoding.PCM_SIGNED, 44100, 16, 2, 4, 44100, true);
         TargetDataLine microphone;
-        SourceDataLine speakers;
+//        SourceDataLine speakers;
         try {
             microphone = AudioSystem.getTargetDataLine(format);
 
@@ -33,14 +28,14 @@ public class Sender {
             microphone.start();
 
 
-            DataLine.Info dataLineInfo = new DataLine.Info(SourceDataLine.class, format);
-            speakers = (SourceDataLine) AudioSystem.getLine(dataLineInfo);
-            speakers.open(format);
-            speakers.start();
+//            DataLine.Info dataLineInfo = new DataLine.Info(SourceDataLine.class, format);
+//            speakers = (SourceDataLine) AudioSystem.getLine(dataLineInfo);
+//            speakers.open(format);
+//            speakers.start();
 
 
             // Configure the ip and port
-            String hostname = "localhost";
+            String hostname = "192.168.0.104";
             int port = 5555;
 
             InetAddress address = InetAddress.getByName(hostname);
@@ -50,10 +45,10 @@ public class Sender {
                 numBytesRead = microphone.read(data, 0, CHUNK_SIZE);
                 //  bytesRead += numBytesRead;
                 // write the mic data to a stream for use later
-                out.write(data, 0, numBytesRead);
+//                out.write(data, 0, numBytesRead);
                 // write mic data to stream for immediate playback
-                speakers.write(data, 0, numBytesRead);
-                DatagramPacket request = new DatagramPacket(data,numBytesRead, address, port);
+//                speakers.write(data, 0, numBytesRead);
+                DatagramPacket request = new DatagramPacket(data, numBytesRead, address, port);
                 socket.send(request);
 
             }

@@ -1,5 +1,7 @@
 package security_utils;
 
+import models.MicrophoneData;
+
 public interface Encryptor {
-    byte[] encrypt(byte[] data);
+    MicrophoneData encrypt(MicrophoneData data);
 }

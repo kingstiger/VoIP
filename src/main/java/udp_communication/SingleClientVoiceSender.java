@@ -42,13 +42,14 @@ public class SingleClientVoiceSender implements VoiceSender {
         new Thread(() -> {
             while (sendVoice) {
                 MicrophoneData microphoneData = microphone.read();
-                byte[] data = microphoneData.getData();
-                int numBytesRead = microphoneData.getNumBytesRead();
 
                 if (Objects.nonNull(encryption)) {
-//                    data = encrypted data
+                    microphoneData = encryption.encrypt(microphoneData);
                     throw new UnsupportedOperationException("Not implemented yet.");
                 }
+
+                byte[] data = microphoneData.getData();
+                int numBytesRead = microphoneData.getNumBytesRead();
 
                 DatagramPacket request = new DatagramPacket(data, numBytesRead, connectionDetails.getHostUrl(), connectionDetails.getPort());
 

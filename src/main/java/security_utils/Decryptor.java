@@ -1,5 +1,7 @@
 package security_utils;
 
+import java.net.DatagramPacket;
+
 public interface Decryptor {
-    byte[] decrypt(byte[] data);
+    DatagramPacket decrypt(byte[] data);
 }
