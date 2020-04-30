@@ -21,9 +21,8 @@ public class Microphone {
         microphoneLine.start();
     }
 
-    /** . */
     public MicrophoneData read() {
-        byte[] data = new byte[microphoneLine.getBufferSize() / 5]; // // TODO: 2020-04-29  check if we can replace with CHUNK_SIZE
+        byte[] data = new byte[CHUNK_SIZE];
         int numBytesRead = microphoneLine.read(data, 0, CHUNK_SIZE);
 
         return new MicrophoneData(data, numBytesRead);

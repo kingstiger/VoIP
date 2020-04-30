@@ -3,12 +3,14 @@ package udp_communication;
 import models.ConnectionDetails;
 import models.MicrophoneData;
 import org.apache.log4j.Logger;
+import security_utils.Encryptor;
 import sound_utils.Microphone;
 
 import java.io.IOException;
 import java.net.DatagramPacket;
 import java.net.DatagramSocket;
 import java.net.SocketException;
+import java.util.Objects;
 
 public class SingleClientVoiceSender implements VoiceSender {
     private static final Logger logger = Logger.getLogger(SingleClientVoiceSender.class);
@@ -18,21 +20,35 @@ public class SingleClientVoiceSender implements VoiceSender {
     private Microphone microphone;
     private boolean sendVoice = true;
 
+    private Encryptor encryption;
+
     public SingleClientVoiceSender(ConnectionDetails connectionDetails, Microphone microphone) throws
                                                                 SocketException {
         this.connectionDetails = connectionDetails;
-
-        socket = new DatagramSocket();
+        this.socket = new DatagramSocket();
         this.microphone = microphone;
+    }
+
+    public SingleClientVoiceSender(ConnectionDetails connectionDetails, Microphone microphone, Encryptor encryptor) throws
+                                                                                                                 SocketException {
+        this.connectionDetails = connectionDetails;
+        this.socket = new DatagramSocket();
+        this.microphone = microphone;
+        this.encryption = encryptor;
     }
 
     @Override
     public void startSending() {
         new Thread(() -> {
             while (sendVoice) {
-                MicrophoneData read = microphone.read();
-                byte[] data = read.getData();
-                int numBytesRead = read.getNumBytesRead();
+                MicrophoneData microphoneData = microphone.read();
+                byte[] data = microphoneData.getData();
+                int numBytesRead = microphoneData.getNumBytesRead();
+
+                if (Objects.nonNull(encryption)) {
+//                    data = encrypted data
+                    throw new UnsupportedOperationException("Not implemented yet.");
+                }
 
                 DatagramPacket request = new DatagramPacket(data, numBytesRead, connectionDetails.getHostUrl(), connectionDetails.getPort());
 
@@ -47,6 +63,7 @@ public class SingleClientVoiceSender implements VoiceSender {
 
     @Override
     public void pauseSending() {
+        sendVoice = false;
         throw new UnsupportedOperationException("Not implemented yet.");
     }
 
