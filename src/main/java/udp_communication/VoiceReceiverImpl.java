@@ -49,7 +49,7 @@ public class VoiceReceiverImpl implements VoiceReceiver {
                 }
 
                 if (Objects.nonNull(decryptor)) {
-                    response = decryptor.decrypt(buffer);
+                    response = decryptor.decrypt(response);
                     throw new UnsupportedOperationException("Not implemented yet.");
                 }
 
