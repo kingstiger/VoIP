@@ -3,10 +3,10 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 <?import java.net.URL?>
-<AnchorPane xmlns:fx="http://javafx.com/fxml/1" fx:id="mainBackground" prefHeight="800.0" prefWidth="800.0"
-            xmlns="http://javafx.com/javafx/8" fx:controller="gui.components.MainController">
+<AnchorPane xmlns:fx="http://javafx.com/fxml/1" fx:id="mainBackground" xmlns="http://javafx.com/javafx/8"
+            fx:controller="gui.components.MainController">
     <children>
-        <MenuBar AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" VBox.vgrow="NEVER">
+        <MenuBar AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" VBox.vgrow="NEVER">
             <menus>
                 <Menu mnemonicParsing="false" text="File">
                     <items>
@@ -45,15 +45,15 @@
                 </Menu>
             </menus>
         </MenuBar>
-        <VBox fx:id="loginPane" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0"
-              AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" alignment="BOTTOM_CENTER">
+        <VBox fx:id="loginPane" alignment="BOTTOM_CENTER" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0"
+              AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
             <children>
                 <fx:include fx:id="login" source="../login/login.fxml"/>
             </children>
         </VBox>
 
-        <VBox fx:id="registerPane" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0"
-              AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" alignment="BOTTOM_CENTER">
+        <VBox fx:id="registerPane" alignment="BOTTOM_CENTER" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0"
+              AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
             <children>
                 <fx:include fx:id="register" source="../register/register.fxml"/>
             </children>
