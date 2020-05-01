@@ -24,7 +24,7 @@ public class RegisterController {
 
     @FXML
     void initialize() {
-        setEnabled(true);
+        setEnabled(false);
     }
 
     public void setEnabled(boolean enabled) {

@@ -1,11 +1,18 @@
 package gui.components;
 
 import javafx.fxml.FXML;
-
-import java.net.URL;
-import java.util.ResourceBundle;
+import javafx.scene.layout.VBox;
 
 public class MainController {
+
+    @FXML
+    private VBox callPane;
+
+    @FXML
+    private VBox registerPane;
+
+    @FXML
+    private VBox loginPane;
 
     @FXML
     private LoginController loginController;
@@ -14,13 +21,12 @@ public class MainController {
     private RegisterController registerController;
 
     @FXML
-    private ResourceBundle resources;
-
-    @FXML
-    private URL location;
+    private CallPageController callPageController;
 
     @FXML
     void initialize() {
-
+        callPane.setVisible(true);
+        loginPane.setVisible(false);
+        registerPane.setVisible(false);
     }
 }
