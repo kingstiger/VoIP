@@ -16,11 +16,10 @@ public class SenderRunner {
                                            IOException,
                                            LineUnavailableException {
         AudioFormat format = new AudioFormat(AudioFormat.Encoding.PCM_SIGNED, 44100, 16, 2, 4, 44100, true);
-        ConnectionDetails receiver = new ConnectionDetails(InetAddress.getByName("localhost"), 5555, 1024);
+        ConnectionDetails receiver = new ConnectionDetails(InetAddress.getByName("192.168.0.104"), 5555, 1024);
         Microphone microphone = new Microphone(format);
 
         VoiceSender sender = new SingleClientVoiceSender(receiver, microphone);
         sender.startSending();
     }
-
 }

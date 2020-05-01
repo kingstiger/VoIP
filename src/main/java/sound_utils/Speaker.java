@@ -6,7 +6,6 @@ import java.net.DatagramPacket;
 public class Speaker {
     private SourceDataLine speakers;
 
-
     public Speaker(AudioFormat format) throws
                                        LineUnavailableException {
         DataLine.Info dataLineInfo = new DataLine.Info(SourceDataLine.class, format);
