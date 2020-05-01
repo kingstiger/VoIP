@@ -1,13 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import javafx.scene.control.*?>
-<?import javafx.scene.layout.AnchorPane?>
-<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.layout.*?>
 <?import java.net.URL?>
-<VBox xmlns:fx="http://javafx.com/fxml/1" prefHeight="400.0" prefWidth="640.0" xmlns="http://javafx.com/javafx/8"
-      fx:controller="gui.components.MainController">
+<AnchorPane xmlns:fx="http://javafx.com/fxml/1" fx:id="mainBackground" prefHeight="800.0" prefWidth="800.0"
+            xmlns="http://javafx.com/javafx/8" fx:controller="gui.components.MainController">
     <children>
-        <MenuBar VBox.vgrow="NEVER">
+        <MenuBar AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" VBox.vgrow="NEVER">
             <menus>
                 <Menu mnemonicParsing="false" text="File">
                     <items>
@@ -46,13 +45,21 @@
                 </Menu>
             </menus>
         </MenuBar>
-        <AnchorPane maxHeight="-1.0" maxWidth="-1.0" prefHeight="-1.0" prefWidth="-1.0" VBox.vgrow="ALWAYS">
+        <VBox fx:id="loginPane" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0"
+              AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" alignment="BOTTOM_CENTER">
             <children>
-                <fx:include source="../login/login.fxml"/>
+                <fx:include fx:id="login" source="../login/login.fxml"/>
             </children>
-        </AnchorPane>
+        </VBox>
+
+        <VBox fx:id="registerPane" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0"
+              AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" alignment="BOTTOM_CENTER">
+            <children>
+                <fx:include fx:id="register" source="../register/register.fxml"/>
+            </children>
+        </VBox>
     </children>
     <stylesheets>
         <URL value="@main.css"/>
     </stylesheets>
-</VBox>
+</AnchorPane>

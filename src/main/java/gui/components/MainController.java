@@ -8,6 +8,9 @@ import java.util.ResourceBundle;
 public class MainController {
 
     @FXML
+    private LoginController loginController;
+
+    @FXML
     private ResourceBundle resources;
 
     @FXML
