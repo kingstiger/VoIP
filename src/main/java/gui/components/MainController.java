@@ -11,6 +11,9 @@ public class MainController {
     private LoginController loginController;
 
     @FXML
+    private RegisterController registerController;
+
+    @FXML
     private ResourceBundle resources;
 
     @FXML

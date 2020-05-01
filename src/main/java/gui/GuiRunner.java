@@ -39,10 +39,6 @@ public class GuiRunner extends Application {
         primaryStage.setScene(new Scene(root, 800, 800));
 
         primaryStage.show();
-
-//        component
-//                .getWdTabLogsAnalysController()
-//                .initTreeView(thread);
     }
 
 }
