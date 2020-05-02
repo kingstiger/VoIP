@@ -43,7 +43,7 @@ public class UserController {
 
     @PostMapping(value = "/register")
     public ResponseEntity<UserTO> tryToRegister(@RequestBody RegistrationForm registrationForm) {
-        if (Validator.isRegistrationFromValid(registrationForm)) {
+        if (Validator.isRegistrationFormValid(registrationForm)) {
             return ResponseEntity.ok(userService.tryToRegister(registrationForm));
         }
         throw new WrongFormatException("Invalid data format!");

@@ -20,7 +20,7 @@ public class ConfirmationController {
     }
 
     @GetMapping(value = "/{email}")
-    public ResponseEntity<String> confirmAnEmail(@PathVariable String email) {
+    public ResponseEntity<String> confirmEmail(@PathVariable String email) {
         if (userService.tryToConfirmEmail(email)) {
             return ResponseEntity.ok(EmailUtility.getThx4ConfirmationText());
         }
