@@ -1,6 +1,6 @@
 package server.configuration;
 
-import com.mongodb.MongoClientURI;
+import com.mongodb.ConnectionString;
 import com.mongodb.client.MongoClient;
 import com.mongodb.client.MongoClients;
 import com.mongodb.client.MongoDatabase;
@@ -11,10 +11,8 @@ import server.utility.EnvironmentalVariables;
 @Configuration
 public class MongoConfig extends AbstractMongoClientConfiguration {
 
-    private MongoClientURI uri = new MongoClientURI(EnvironmentalVariables.getMongoConnector());
-
-    private MongoClient mongoClient = MongoClients.create(uri.getURI());
-    private MongoDatabase database = mongoClient.getDatabase(uri.getDatabase());
+    private MongoClient mongoClient = MongoClients.create(new ConnectionString(EnvironmentalVariables.getMongoConnector()));
+    private MongoDatabase database = mongoClient.getDatabase("voipServerDB");
 
     @Override
     public MongoClient mongoClient() {
@@ -25,5 +23,4 @@ public class MongoConfig extends AbstractMongoClientConfiguration {
     protected String getDatabaseName() {
         return database.getName();
     }
-
 }

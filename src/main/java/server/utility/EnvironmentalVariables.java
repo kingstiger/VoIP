@@ -14,6 +14,6 @@ public class EnvironmentalVariables {
     }
 
     public static String getMongoConnector() {
-        return System.getenv(MONGO_ADDRESS);
+        return System.getenv(MONGO_ADDRESS) + "@voipdb-ul854.mongodb.net/test?retryWrites=true&w=majority";
     }
 }
