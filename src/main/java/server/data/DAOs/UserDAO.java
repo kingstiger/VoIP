@@ -4,6 +4,7 @@ import lombok.*;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Data
@@ -13,6 +14,7 @@ import java.util.List;
 @Getter
 @Setter
 public class UserDAO {
+
 
     @Id
     private String userID;
@@ -24,5 +26,9 @@ public class UserDAO {
     @NonNull
     private String password;
 
-    private List<UserShortDAO> favourites;
+    @Builder.Default
+    private boolean isEmailValidated = false;
+    @Builder.Default
+    private List<UserShortDAO> favourites = new ArrayList<>();
+    private String IPAddress;
 }

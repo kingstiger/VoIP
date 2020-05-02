@@ -1,6 +1,7 @@
 package server.utility;
 
 import server.data.DTOs.LoginForm;
+import server.data.DTOs.RegistrationForm;
 
 public class Validator {
     public static boolean isUsernameValid(String username) {
@@ -13,11 +14,19 @@ public class Validator {
                 && password.matches("[a-z]+")
                 && password.matches("[0-9]+");
     }
+
     public static boolean isEmailValid(String email) {
         return email.matches("^[a-zA-Z0-9_!#$%&’*+/=?`{|}~^.-]+@[a-zA-Z0-9.-]+$");
     }
+
     public static boolean isLoginFormValid(LoginForm loginForm) {
         return Validator.isPasswordValid(loginForm.getPassword())
                 && Validator.isUsernameValid(loginForm.getUsername());
+    }
+
+    public static boolean isRegistrationFromValid(RegistrationForm registrationForm) {
+        return Validator.isPasswordValid(registrationForm.getPassword())
+                && Validator.isEmailValid(registrationForm.getEmail())
+                && Validator.isUsernameValid(registrationForm.getUsername());
     }
 }
