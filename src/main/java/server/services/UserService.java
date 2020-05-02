@@ -54,14 +54,15 @@ public class UserService {
                     throw new CannotRegisterException("Email " + e.getEmail() + " already taken, try different email!");
                 });
 
-        EmailUtility.sendConfirmationEmail(registrationForm);
-        return UserTO.map(registerNewUser(registrationForm));
+        UserDAO savedUser = registerNewUser(registrationForm);
+        EmailUtility.sendConfirmationEmail(registrationForm, savedUser.get_id().toString());
+        return UserTO.map(savedUser);
     }
 
 
-    public boolean tryToConfirmEmail(String email) {
+    public boolean tryToConfirmEmail(String ID) {
         try {
-            UserDAO userDAO = usersRepository.findByEmail(email)
+            UserDAO userDAO = usersRepository.findById(ID)
                     .orElseThrow(CannotConfirmEmailException::new);
             userDAO.setEmailValidated(true);
             usersRepository.save(userDAO);

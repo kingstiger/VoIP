@@ -14,7 +14,7 @@ public class EmailUtility {
             "This is VoIP app.\n" +
             "We're just trying to make sure that your email is valid.\n" +
             "Click in the link below (or paste it into your browser address bar) to validate your email.\n";
-    private static final String emailTextPt2 = "\n Thanks for registration and have a good day!\n" +
+    private static final String emailTextPt2 = "\nThanks for registration and have a good day!\n" +
             "Sincerely,\n" +
             "VoIP App Dev Team.\n\n" +
             "PS If you haven't registered in VoIP App, please ignore this message.";
@@ -23,7 +23,7 @@ public class EmailUtility {
             "You can now close this tab and start using VoIP app :)";
 
 
-    public static void sendConfirmationEmail(RegistrationForm registrationForm) {
+    public static void sendConfirmationEmail(RegistrationForm registrationForm, String userID) {
         String to = registrationForm.getEmail();
         String from = EnvironmentalVariables.getEmailAddress();
         String host = "smtp.gmail.com";
@@ -35,7 +35,7 @@ public class EmailUtility {
             message.setFrom(new InternetAddress(from));
             message.addRecipient(Message.RecipientType.TO, new InternetAddress(to));
             message.setSubject(emailHeader);
-            message.setText(composeMessage(registrationForm.getEmail()));
+            message.setText(composeMessage(userID));
 
             Transport.send(message);
         } catch (MessagingException mex) {

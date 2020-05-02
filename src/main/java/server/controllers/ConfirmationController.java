@@ -19,9 +19,9 @@ public class ConfirmationController {
         this.userService = userService;
     }
 
-    @GetMapping(value = "/{email}")
-    public ResponseEntity<String> confirmEmail(@PathVariable String email) {
-        if (userService.tryToConfirmEmail(email)) {
+    @GetMapping(value = "/{ID}")
+    public ResponseEntity<String> confirmEmail(@PathVariable String ID) {
+        if (userService.tryToConfirmEmail(ID)) {
             return ResponseEntity.ok(EmailUtility.getThx4ConfirmationText());
         }
         throw new CannotConfirmEmailException("Something failed during the confirmation, sorry");
