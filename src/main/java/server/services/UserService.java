@@ -23,18 +23,14 @@ public class UserService {
     public UserTO getUserByUsername(String username) {
         UserDAO userDAO = usersRepository
                 .findByUsername(username)
-                .orElseThrow(() -> {
-                    throw new NoSuchUserException();
-                });
+                .orElseThrow(NoSuchUserException::new);
 
         return UserTO.map(userDAO);
     }
 
     public UserTO tryToLogIn(LoginForm loginForm) {
         UserDAO userDAO = usersRepository.findByUsername(loginForm.getUsername())
-                .orElseThrow(() -> {
-                    throw new CannotLogInException("Invalid username!");
-                });
+                .orElseThrow(() -> new CannotLogInException("Invalid username!"));
 
         if (loginForm.getPassword().equals(userDAO.getPassword())) {
             updateUserIP(userDAO, loginForm);
