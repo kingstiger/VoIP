@@ -1,4 +1,4 @@
-package udp_communication;
+package com.udp_communication;
 
 import java.io.IOException;
 

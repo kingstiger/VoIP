@@ -1,9 +1,9 @@
-package runners;
+package com.runners;
 
-import models.ConnectionDetails;
-import sound_utils.Microphone;
-import udp_communication.SingleClientVoiceSender;
-import udp_communication.VoiceSender;
+import com.models.ConnectionDetails;
+import com.sound_utils.Microphone;
+import com.udp_communication.SingleClientVoiceSender;
+import com.udp_communication.VoiceSender;
 
 import javax.sound.sampled.AudioFormat;
 import javax.sound.sampled.LineUnavailableException;

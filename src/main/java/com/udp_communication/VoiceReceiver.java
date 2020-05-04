@@ -1,4 +1,4 @@
-package udp_communication;
+package com.udp_communication;
 
 public interface VoiceReceiver {
     void startListening();

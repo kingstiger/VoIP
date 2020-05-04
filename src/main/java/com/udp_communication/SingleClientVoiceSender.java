@@ -1,10 +1,10 @@
-package udp_communication;
+package com.udp_communication;
 
-import models.ConnectionDetails;
-import models.MicrophoneData;
+import com.models.ConnectionDetails;
+import com.models.MicrophoneData;
+import com.security_utils.Encryptor;
+import com.sound_utils.Microphone;
 import org.apache.log4j.Logger;
-import security_utils.Encryptor;
-import sound_utils.Microphone;
 
 import java.io.IOException;
 import java.net.DatagramPacket;

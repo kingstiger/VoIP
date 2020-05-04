@@ -1,6 +1,6 @@
-package sound_utils;
+package com.sound_utils;
 
-import models.MicrophoneData;
+import com.models.MicrophoneData;
 
 import javax.sound.sampled.*;
 

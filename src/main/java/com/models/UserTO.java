@@ -1,11 +1,9 @@
-package models;
+package com.models;
 
 import lombok.Builder;
 import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
-import server.data.DAOs.UserDAO;
-import server.data.DAOs.UserShortDAO;
 
 import java.util.List;
 

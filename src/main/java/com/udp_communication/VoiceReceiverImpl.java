@@ -1,9 +1,9 @@
-package udp_communication;
+package com.udp_communication;
 
-import models.ConnectionDetails;
+import com.models.ConnectionDetails;
+import com.security_utils.Decryptor;
+import com.sound_utils.Speaker;
 import org.apache.log4j.Logger;
-import security_utils.Decryptor;
-import sound_utils.Speaker;
 
 import java.io.IOException;
 import java.net.DatagramPacket;

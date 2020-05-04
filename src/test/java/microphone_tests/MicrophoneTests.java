@@ -1,7 +1,7 @@
 //package microphone_tests;
 //
 //import org.junit.Test;
-//import sound_utils.Microphone;
+//import com.sound_utils.Microphone;
 //
 //public class MicrophoneTests {
 //

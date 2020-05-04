@@ -4,7 +4,7 @@
 <?import javafx.scene.layout.*?>
 <?import java.net.URL?>
 <AnchorPane xmlns:fx="http://javafx.com/fxml/1" fx:id="mainBackground" xmlns="http://javafx.com/javafx/8"
-            fx:controller="gui.components.MainController">
+            fx:controller="com.gui.components.MainController">
     <children>
         <VBox fx:id="loginPane" alignment="BOTTOM_CENTER" visible="false" AnchorPane.bottomAnchor="0.0"
               AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">

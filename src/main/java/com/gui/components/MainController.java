@@ -1,8 +1,10 @@
-package gui.components;
+package com.gui.components;
 
 import javafx.fxml.FXML;
 import javafx.scene.layout.VBox;
+import org.springframework.stereotype.Controller;
 
+@Controller
 public class MainController {
 
     @FXML
@@ -25,8 +27,8 @@ public class MainController {
 
     @FXML
     void initialize() {
-        callPane.setVisible(false);
+        callPane.setVisible(true);
         loginPane.setVisible(false);
-        registerPane.setVisible(true);
+        registerPane.setVisible(false);
     }
 }

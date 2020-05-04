@@ -1,4 +1,4 @@
-package sound_utils;
+package com.sound_utils;
 
 import javax.sound.sampled.*;
 import java.net.DatagramPacket;
