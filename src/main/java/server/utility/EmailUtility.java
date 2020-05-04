@@ -16,17 +16,17 @@ public class EmailUtility {
     @Autowired
     private EmailConfig emailConfig;
 
-    private static final String emailHeader = "Email confirmation from Voice Over IP app";
-    private static final String emailTextPt1 = "Hi!\n" +
+    private static final String EMAIL_HEADER = "Email confirmation from Voice Over IP app";
+    private static final String EMAIL_TEXT_PT_1 = "Hi!\n" +
             "This is VoIP app.\n" +
             "We're just trying to make sure that your email is valid.\n" +
             "Click in the link below (or paste it into your browser address bar) to validate your email.\n";
-    private static final String emailTextPt2 = "\nThanks for registration and have a good day!\n" +
+    private static final String EMAIL_TEXT_PT_2 = "\nThanks for registration and have a good day!\n" +
             "Sincerely,\n" +
             "VoIP App Dev Team.\n\n" +
             "PS If you haven't registered in VoIP App, please ignore this message.";
     @Getter
-    private static final String thx4ConfirmationText = "Thanks for email confirmation!\n" +
+    private static final String THX_4_CONFIRMATION_TEXT = "Thanks for email confirmation!\n" +
             "You can now close this tab and start using VoIP app :)";
 
 
@@ -41,7 +41,7 @@ public class EmailUtility {
             MimeMessage message = new MimeMessage(session);
             message.setFrom(new InternetAddress(from));
             message.addRecipient(Message.RecipientType.TO, new InternetAddress(to));
-            message.setSubject(emailHeader);
+            message.setSubject(EMAIL_HEADER);
             message.setText(composeMessage(userID));
 
             Transport.send(message);
@@ -61,6 +61,7 @@ public class EmailUtility {
 
     private Session getSessionObj(Properties properties) {
         return Session.getInstance(properties, new javax.mail.Authenticator() {
+            @Override
             protected PasswordAuthentication getPasswordAuthentication() {
                 return new PasswordAuthentication(
                         emailConfig.getEmail(),
@@ -74,6 +75,6 @@ public class EmailUtility {
     }
 
     private String composeMessage(String email) {
-        return emailTextPt1 + composeConfirmationURL(email) + emailTextPt2;
+        return EMAIL_TEXT_PT_1 + composeConfirmationURL(email) + EMAIL_TEXT_PT_2;
     }
 }

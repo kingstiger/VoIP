@@ -4,6 +4,9 @@ import server.data.DTOs.LoginForm;
 import server.data.DTOs.RegistrationForm;
 
 public class Validator {
+    private Validator() {
+    }
+
     public static boolean isUsernameValid(String username) {
         return username.matches("[a-zA-Z0-9]+") && !username.isEmpty();
     }

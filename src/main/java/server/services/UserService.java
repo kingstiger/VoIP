@@ -48,11 +48,11 @@ public class UserService {
 
     public UserTO tryToRegister(RegistrationForm registrationForm) {
         usersRepository.findByUsername(registrationForm.getUsername())
-                .ifPresent((e) -> {
+                       .ifPresent(e -> {
                     throw new CannotRegisterException("Username " + e.getUsername() + " taken, try different username!");
                 });
         usersRepository.findByEmail(registrationForm.getEmail())
-                .ifPresent((e) -> {
+                       .ifPresent(e -> {
                     throw new CannotRegisterException("Email " + e.getEmail() + " already taken, try different email!");
                 });
 
@@ -64,10 +64,10 @@ public class UserService {
     }
 
 
-    public boolean tryToConfirmEmail(String ID) {
+    public boolean tryToConfirmEmail(String id) {
         try {
-            UserDAO userDAO = usersRepository.findById(ID)
-                    .orElseThrow(CannotConfirmEmailException::new);
+            UserDAO userDAO = usersRepository.findById(id)
+                                             .orElseThrow(CannotConfirmEmailException::new);
             userDAO.setEmailValidated(true);
             usersRepository.save(userDAO);
         } catch (CannotConfirmEmailException ex) {
