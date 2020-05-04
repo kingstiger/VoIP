@@ -16,7 +16,7 @@ public class CustomErrorController implements ErrorController {
         Integer statusCode = (Integer) request.getAttribute("javax.servlet.error.status_code");
         Exception exception = (Exception) request.getAttribute("javax.servlet.error.exception");
         return "{ErrorCode: " + statusCode + ", " +
-                "ErrorMessage: " + (exception == null ? "N/A" : exception.getMessage()) + "}";
+                "ErrorMessage: " + (exception == null ? "N/A" : "\"" + exception.getMessage()) + "\"}";
     }
 
     @Override
