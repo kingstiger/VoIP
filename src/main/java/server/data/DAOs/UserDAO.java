@@ -29,7 +29,8 @@ public class UserDAO {
     private boolean isEmailValidated = false;
     @Builder.Default
     private List<String> favourites = new ArrayList<>();
-    private String IPAddress;
+    @Builder.Default
+    private String IPAddress = "127.0.0.1";
 
     public UserShortTO mapToFav() {
         return new UserShortTO(_id.toString(), username, true);

@@ -6,6 +6,7 @@ import server.data.DTOs.*;
 import server.repositories.UsersRepository;
 import server.utility.exceptions.*;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -121,5 +122,51 @@ public class UserService {
         usersRepository.save(userDAO);
 
         return getFavouritesOfUser(userID);
+    }
+
+    public UserFavouritesTO deleteFavourite(String userID, String favUsername) {
+        UserDAO userDAO = usersRepository.findById(userID)
+                .orElseThrow(() -> new NoSuchUserException(userID));
+        UserDAO favUserDAO = usersRepository.findByUsername(favUsername)
+                .orElseThrow(() -> new NoSuchUserException((favUsername)));
+        List<String> favourites = userDAO.getFavourites();
+        String favUserID = favUserDAO.get_id().toString();
+
+        if (!favourites.contains(favUserID)) {
+            throw new FavouritesException("User " + favUsername + " is not on favourites list");
+        }
+
+        favourites.remove(favUserID);
+        userDAO.setFavourites(favourites);
+        usersRepository.save(userDAO);
+
+        return getFavouritesOfUser(userID);
+    }
+
+    public void deleteAllUsers() {
+        usersRepository.deleteAll();
+    }
+
+    public void deleteAllFavouritesOfUser(String userID) {
+        UserDAO userDAO = usersRepository.findById(userID)
+                .orElseThrow(() -> new NoSuchUserException(userID));
+
+        userDAO.setFavourites(new ArrayList<>());
+
+        usersRepository.save(userDAO);
+    }
+
+    public void deleteUser(String userID) {
+        UserDAO userDAO = usersRepository.findById(userID)
+                .orElseThrow(() -> new NoSuchUserException(userID));
+
+        usersRepository.delete(userDAO);
+    }
+
+    public List<UserTO> getAllUsers() {
+        return usersRepository.findAll()
+                .stream()
+                .map(UserTO::map)
+                .collect(Collectors.toList());
     }
 }

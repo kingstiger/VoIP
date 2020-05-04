@@ -10,6 +10,8 @@ import server.services.UserService;
 import server.utility.Validator;
 import server.utility.exceptions.WrongFormatException;
 
+import java.util.List;
+
 @RestController
 @RequestMapping("/users")
 public class UserController {
@@ -23,6 +25,13 @@ public class UserController {
     @GetMapping(value = "/test")
     public boolean test() {
         return true;
+    }
+
+    @GetMapping(value = "/all")
+    public ResponseEntity<List<UserTO>> getAllUsers() {
+        List<UserTO> allUsers = userService.getAllUsers();
+
+        return ResponseEntity.ok(allUsers);
     }
 
     @GetMapping(value = "/{username}")
@@ -68,9 +77,30 @@ public class UserController {
     @DeleteMapping(value = "/favourites")
     public ResponseEntity<UserFavouritesTO> removeUserFromFavourites(
             @RequestParam("userID") String userID,
-            @RequestParam("favUsername") String favUserID) {
-        UserFavouritesTO userFavouritesTO = userService.addToFavourites(userID, favUserID);
+            @RequestParam("favUsername") String favUsername) {
+        UserFavouritesTO userFavouritesTO = userService.deleteFavourite(userID, favUsername);
 
         return ResponseEntity.ok(userFavouritesTO);
+    }
+
+    @DeleteMapping(value = "/all")
+    public ResponseEntity<String> removeAllUsers() {
+        userService.deleteAllUsers();
+
+        return ResponseEntity.ok("All users deleted");
+    }
+
+    @DeleteMapping(value = "/{userID}")
+    public ResponseEntity<String> removeAllUsers(@PathVariable String userID) {
+        userService.deleteUser(userID);
+
+        return ResponseEntity.ok("Deleted user");
+    }
+
+    @DeleteMapping(value = "/favourites/all")
+    public ResponseEntity<String> deleteAllFavouritesOfUser(@RequestParam("userID") String userID) {
+        userService.deleteAllFavouritesOfUser(userID);
+
+        return ResponseEntity.ok("Deleted all favourites");
     }
 }
