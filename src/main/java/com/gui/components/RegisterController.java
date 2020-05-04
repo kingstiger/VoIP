@@ -4,6 +4,7 @@ import com.models.RegistrationForm;
 import com.rest_providers.UserProviderImpl;
 import com.utils.IpUtils;
 import com.utils.PasswordUtils;
+import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
@@ -17,6 +18,9 @@ import java.net.UnknownHostException;
 
 @Controller
 public class RegisterController {
+    @Autowired
+    private MainController mainController;
+
     @Autowired
     private UserProviderImpl userProvider;
 
@@ -46,7 +50,7 @@ public class RegisterController {
     @FXML
     void register(ActionEvent event) throws
                                      UnknownHostException {
-        RegistrationForm userShortDAO = RegistrationForm
+        RegistrationForm registrationForm = RegistrationForm
                 .builder()
                 .username(usernameTF.getText())
                 .email(emailTF.getText())
@@ -54,12 +58,24 @@ public class RegisterController {
                 .IPAddress(IpUtils.getLocalIpAddr())
                 .build();
 
-        System.out.println(userShortDAO);
-        userProvider.register(userShortDAO);
+        new Thread(() -> Platform.runLater(() -> {
+            try {
+                userProvider.register(registrationForm);
+                controllers.AlertController.showAlert(String.format("User %s registered successfully",
+                                                                    registrationForm.getUsername()),
+                                                      null,
+                                                      "Now you can use application!");
+                mainController.switchToCall();
+            } catch (Exception e) {
+                controllers.AlertController.showAlert("Failed to registered!",
+                                                      null,
+                                                      "Try to use another user or email.");
+            }
+        })).start();
     }
 
     @FXML
     void login(ActionEvent event) {
-
+        mainController.switchToLogin();
     }
 }

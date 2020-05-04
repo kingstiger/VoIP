@@ -27,8 +27,25 @@ public class MainController {
 
     @FXML
     void initialize() {
-        callPane.setVisible(false);
-        loginPane.setVisible(false);
-        registerPane.setVisible(true);
+        makePanelsVisible(false, true, false);
     }
+
+    public void switchToLogin() {
+        makePanelsVisible(false, true, false);
+    }
+
+    public void switchToRegister() {
+        makePanelsVisible(false, false, true);
+    }
+
+    public void switchToCall() {
+        makePanelsVisible(true, false, false);
+    }
+
+    private void makePanelsVisible(boolean callPage, boolean loginPage, boolean registerPage) {
+        callPane.setVisible(callPage);
+        loginPane.setVisible(loginPage);
+        registerPane.setVisible(registerPage);
+    }
+
 }
