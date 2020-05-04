@@ -1,20 +1,19 @@
 package com.models;
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NonNull;
-import lombok.Setter;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import lombok.*;
 
 @AllArgsConstructor
 @Getter
 @Setter
+@Builder
+@EqualsAndHashCode
+@NoArgsConstructor
+@ToString
 public class RegistrationForm {
-    @NonNull
     private String username;
-    @NonNull
     private String email;
-    @NonNull
     private String password;
-    @NonNull
+    @JsonProperty("IPAddress")
     private String IPAddress;
 }

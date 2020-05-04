@@ -16,3 +16,4 @@ public class LoginForm {
     @NonNull
     private String IPAddress;
 }
+

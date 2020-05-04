@@ -4,6 +4,9 @@ import java.net.InetAddress;
 import java.net.UnknownHostException;
 
 public class IpUtils {
+    private IpUtils() {
+    }
+
     public static String getLocalIpAddr() throws
                                           UnknownHostException {
         InetAddress inetAddress = InetAddress.getLocalHost();

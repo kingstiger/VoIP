@@ -27,8 +27,8 @@ public class MainController {
 
     @FXML
     void initialize() {
-        callPane.setVisible(true);
+        callPane.setVisible(false);
         loginPane.setVisible(false);
-        registerPane.setVisible(false);
+        registerPane.setVisible(true);
     }
 }

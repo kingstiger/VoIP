@@ -25,7 +25,6 @@ public class GuiRunner extends Application {
     private MainController component;
 
     private ConfigurableApplicationContext springContext;
-    private Parent root;
     private FXMLLoader loader;
 
     public static void main(String[] args) {
@@ -54,7 +53,7 @@ public class GuiRunner extends Application {
         URL mainFxmlFile = ResourceUtils.getURL("src/main/resources/fxml_files/main/main.fxml");
 
         loader.setLocation(mainFxmlFile);
-        root = loader.load();
+        Parent root = loader.load();
 
         component = loader.getController();
 

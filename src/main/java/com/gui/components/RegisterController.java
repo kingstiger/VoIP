@@ -1,8 +1,9 @@
 package com.gui.components;
 
-import com.models.UserShortDAO;
+import com.models.RegistrationForm;
 import com.rest_providers.UserProviderImpl;
 import com.utils.IpUtils;
+import com.utils.PasswordUtils;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
@@ -45,10 +46,11 @@ public class RegisterController {
     @FXML
     void register(ActionEvent event) throws
                                      UnknownHostException {
-        UserShortDAO userShortDAO = UserShortDAO
+        RegistrationForm userShortDAO = RegistrationForm
                 .builder()
                 .username(usernameTF.getText())
                 .email(emailTF.getText())
+                .password(PasswordUtils.getPasswordHash(passwordTF.getText()))
                 .IPAddress(IpUtils.getLocalIpAddr())
                 .build();
 

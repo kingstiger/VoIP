@@ -1,28 +1,28 @@
 package com.rest_providers;
 
-import com.models.UserShortDAO;
+import com.models.LoginForm;
+import com.models.RegistrationForm;
+import com.models.UserTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestTemplate;
-import rest_providers.UserProvider;
 
 @Component
 public class UserProviderImpl extends RestTemplateConfiguration implements UserProvider {
-    final String url = "127.0.0.1:8080/users/register";
+    final String url = "https://server-voip.herokuapp.com//users/register";
 
     @Autowired
     private RestTemplate restTemplate;
 
-    public void register(UserShortDAO registerForm) {
+    public void register(RegistrationForm registerForm) {
         new Thread(() -> {
-            String xd = restTemplate.postForObject(url, registerForm, String.class);
-            System.out.println(xd);
+            UserTO user = restTemplate.postForObject(url, registerForm, UserTO.class);
+            System.out.println(user);
 
         }).start();
-        throw new UnsupportedOperationException("Not implemented yet.");
     }
 
-    public void login(Object loginForm) {
+    public void login(LoginForm loginForm) {
         throw new UnsupportedOperationException("Not implemented yet.");
     }
 

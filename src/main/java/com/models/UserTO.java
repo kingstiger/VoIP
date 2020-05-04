@@ -1,16 +1,14 @@
 package com.models;
 
-import lombok.Builder;
-import lombok.Data;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 
 import java.util.List;
 
 @Data
 @Builder
-@Getter
-@Setter
+@ToString
+@AllArgsConstructor
+@NoArgsConstructor
 public class UserTO {
     private String username;
     private String email;
