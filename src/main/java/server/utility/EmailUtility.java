@@ -1,6 +1,9 @@
 package server.utility;
 
 import lombok.Getter;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import server.configuration.EmailConfig;
 import server.data.DTOs.RegistrationForm;
 
 import javax.mail.*;
@@ -8,7 +11,11 @@ import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeMessage;
 import java.util.Properties;
 
+@Service
 public class EmailUtility {
+    @Autowired
+    private EmailConfig emailConfig;
+
     private static final String emailHeader = "Email confirmation from Voice Over IP app";
     private static final String emailTextPt1 = "Hi!\n" +
             "This is VoIP app.\n" +
@@ -23,9 +30,9 @@ public class EmailUtility {
             "You can now close this tab and start using VoIP app :)";
 
 
-    public static void sendConfirmationEmail(RegistrationForm registrationForm, String userID) {
+    public void sendConfirmationEmail(RegistrationForm registrationForm, String userID) {
         String to = registrationForm.getEmail();
-        String from = EnvironmentalVariables.getEmailAddress();
+        String from = emailConfig.getEmail();
         String host = "smtp.gmail.com";
         Properties properties = setProperties(host);
         Session session = getSessionObj(properties);
@@ -43,7 +50,7 @@ public class EmailUtility {
         }
     }
 
-    private static Properties setProperties(String host) {
+    private Properties setProperties(String host) {
         Properties properties = System.getProperties();
         properties.put("mail.smtp.host", host);
         properties.put("mail.smtp.port", "465");
@@ -52,21 +59,21 @@ public class EmailUtility {
         return properties;
     }
 
-    private static Session getSessionObj(Properties properties) {
+    private Session getSessionObj(Properties properties) {
         return Session.getInstance(properties, new javax.mail.Authenticator() {
             protected PasswordAuthentication getPasswordAuthentication() {
                 return new PasswordAuthentication(
-                        EnvironmentalVariables.getEmailAddress(),
-                        EnvironmentalVariables.getEmailPassword());
+                        emailConfig.getEmail(),
+                        emailConfig.getPassword());
             }
         });
     }
 
-    private static String composeConfirmationURL(String email) {
+    private String composeConfirmationURL(String email) {
         return "https://server-voip.herokuapp.com/confirm/" + email;
     }
 
-    private static String composeMessage(String email) {
+    private String composeMessage(String email) {
         return emailTextPt1 + composeConfirmationURL(email) + emailTextPt2;
     }
 }

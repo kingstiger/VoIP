@@ -15,8 +15,10 @@ import server.utility.exceptions.NoSuchUserException;
 @Service
 public class UserService {
     private final UsersRepository usersRepository;
+    private EmailUtility emailUtility;
 
-    public UserService(UsersRepository usersRepository) {
+    public UserService(UsersRepository usersRepository, EmailUtility emailUtility) {
+        this.emailUtility = emailUtility;
         this.usersRepository = usersRepository;
     }
 
@@ -55,7 +57,9 @@ public class UserService {
                 });
 
         UserDAO savedUser = registerNewUser(registrationForm);
-        EmailUtility.sendConfirmationEmail(registrationForm, savedUser.get_id().toString());
+        emailUtility.sendConfirmationEmail(registrationForm,
+                                           savedUser.get_id()
+                                                    .toString());
         return UserTO.map(savedUser);
     }
 
