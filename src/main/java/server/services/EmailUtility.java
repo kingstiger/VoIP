@@ -1,7 +1,6 @@
-package server.utility;
+package server.services;
 
 import lombok.Getter;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import server.configuration.EmailConfig;
 import server.data.DTOs.RegistrationForm;
@@ -13,8 +12,7 @@ import java.util.Properties;
 
 @Service
 public class EmailUtility {
-    @Autowired
-    private EmailConfig emailConfig;
+    private final EmailConfig emailConfig;
 
     private static final String EMAIL_HEADER = "Email confirmation from Voice Over IP app";
     private static final String EMAIL_TEXT_PT_1 = "Hi!\n" +
@@ -28,6 +26,10 @@ public class EmailUtility {
     @Getter
     private static final String THX_4_CONFIRMATION_TEXT = "Thanks for email confirmation!\n" +
             "You can now close this tab and start using VoIP app :)";
+
+    public EmailUtility(EmailConfig emailConfig) {
+        this.emailConfig = emailConfig;
+    }
 
 
     public void sendConfirmationEmail(RegistrationForm registrationForm, String userID) {

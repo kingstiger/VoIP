@@ -5,7 +5,7 @@ public class NoSuchUserException extends RuntimeException {
         super("No such user!");
     }
 
-    public NoSuchUserException(String message) {
-        super(message);
+    public NoSuchUserException(String username) {
+        super("No such user: " + username);
     }
 }

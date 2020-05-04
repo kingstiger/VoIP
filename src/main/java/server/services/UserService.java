@@ -2,15 +2,12 @@ package server.services;
 
 import org.springframework.stereotype.Service;
 import server.data.DAOs.UserDAO;
-import server.data.DTOs.LoginForm;
-import server.data.DTOs.RegistrationForm;
-import server.data.DTOs.UserTO;
+import server.data.DTOs.*;
 import server.repositories.UsersRepository;
-import server.utility.EmailUtility;
-import server.utility.exceptions.CannotConfirmEmailException;
-import server.utility.exceptions.CannotLogInException;
-import server.utility.exceptions.CannotRegisterException;
-import server.utility.exceptions.NoSuchUserException;
+import server.utility.exceptions.*;
+
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class UserService {
@@ -25,7 +22,7 @@ public class UserService {
     public UserTO getUserByUsername(String username) {
         UserDAO userDAO = usersRepository
                 .findByUsername(username)
-                .orElseThrow(NoSuchUserException::new);
+                .orElseThrow(() -> new NoSuchUserException(username));
 
         return UserTO.map(userDAO);
     }
@@ -34,11 +31,14 @@ public class UserService {
         UserDAO userDAO = usersRepository.findByUsername(loginForm.getUsername())
                 .orElseThrow(() -> new CannotLogInException("Invalid username!"));
 
-        if (loginForm.getPassword().equals(userDAO.getPassword())) {
+        if (!loginForm.getPassword().equals(userDAO.getPassword())) {
+            throw new CannotLogInException("Invalid password!");
+        } else if (!userDAO.isEmailValidated()) {
+            throw new CannotLogInException("Email not validated!");
+        } else {
             updateUserIP(userDAO, loginForm);
             return UserTO.map(userDAO);
         }
-        throw new CannotLogInException("Invalid password!");
     }
 
     private void updateUserIP(UserDAO userDAO, LoginForm loginForm) {
@@ -84,5 +84,42 @@ public class UserService {
                 .IPAddress(registrationForm.getIPAddress())
                 .build()
         );
+    }
+
+    public UserFavouritesTO getFavouritesOfUser(String userID) {
+        UserDAO userDAO = usersRepository.findById(userID)
+                .orElseThrow(NoClassDefFoundError::new);
+
+        List<String> favouritesIDs = userDAO.getFavourites();
+
+        List<UserShortTO> favourites = usersRepository.findAllBy_idIn(favouritesIDs)
+                .stream()
+                .map(UserDAO::mapToFav)
+                .collect(Collectors.toList());
+        List<UserShortTO> notFavourites = usersRepository.findAllBy_idNotIn(favouritesIDs)
+                .stream()
+                .map(UserDAO::mapToNotFav)
+                .collect(Collectors.toList());
+
+        favourites.addAll(notFavourites);
+        return new UserFavouritesTO(userID, userDAO.getUsername(), favourites);
+    }
+
+    public UserFavouritesTO addToFavourites(String userID, String favouriteUsername) {
+        UserDAO userDAO = usersRepository.findById(userID)
+                .orElseThrow(() -> new NoSuchUserException(userID));
+        String favouriteID = usersRepository.findByUsername(favouriteUsername)
+                .orElseThrow(() -> new NoSuchUserException(favouriteUsername))
+                .get_id()
+                .toString();
+
+        if (userDAO.getFavourites().contains(favouriteID)) {
+            throw new FavouritesException("User " + favouriteUsername + " already is on 'favourites' list");
+        }
+
+        userDAO.getFavourites().add(favouriteID);
+        usersRepository.save(userDAO);
+
+        return getFavouritesOfUser(userID);
     }
 }

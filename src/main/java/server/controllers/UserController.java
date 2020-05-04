@@ -4,6 +4,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import server.data.DTOs.LoginForm;
 import server.data.DTOs.RegistrationForm;
+import server.data.DTOs.UserFavouritesTO;
 import server.data.DTOs.UserTO;
 import server.services.UserService;
 import server.utility.Validator;
@@ -26,11 +27,17 @@ public class UserController {
 
     @GetMapping(value = "/{username}")
     public ResponseEntity<UserTO> getUserByUsername(@PathVariable("username") String username) {
-
         if (Validator.isUsernameValid(username)) {
             return ResponseEntity.ok(userService.getUserByUsername(username));
         }
         throw new WrongFormatException("Invalid username!");
+    }
+
+    @GetMapping(value = "/favourites")
+    public ResponseEntity<UserFavouritesTO> getFavouritesOfUser(@RequestParam("userID") String userID) {
+        UserFavouritesTO favouritesOfUser = userService.getFavouritesOfUser(userID);
+
+        return ResponseEntity.ok(favouritesOfUser);
     }
 
     @PostMapping(value = "/login")
@@ -47,5 +54,23 @@ public class UserController {
             return ResponseEntity.ok(userService.tryToRegister(registrationForm));
         }
         throw new WrongFormatException("Invalid data format!");
+    }
+
+    @PostMapping(value = "/favourites")
+    public ResponseEntity<UserFavouritesTO> addUserToFavourites(
+            @RequestParam("userID") String userID,
+            @RequestParam("favUsername") String favUsername) {
+        UserFavouritesTO userFavouritesTO = userService.addToFavourites(userID, favUsername);
+
+        return ResponseEntity.ok(userFavouritesTO);
+    }
+
+    @DeleteMapping(value = "/favourites")
+    public ResponseEntity<UserFavouritesTO> removeUserFromFavourites(
+            @RequestParam("userID") String userID,
+            @RequestParam("favUsername") String favUserID) {
+        UserFavouritesTO userFavouritesTO = userService.addToFavourites(userID, favUserID);
+
+        return ResponseEntity.ok(userFavouritesTO);
     }
 }

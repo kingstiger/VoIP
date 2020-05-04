@@ -5,7 +5,6 @@ import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
 import server.data.DAOs.UserDAO;
-import server.data.DAOs.UserShortDAO;
 
 import java.util.List;
 
@@ -16,7 +15,7 @@ import java.util.List;
 public class UserTO {
     private String username;
     private String email;
-    private List<UserShortDAO> favourites;
+    private List<String> favourites;
     private String IPAddress;
 
     public static UserTO map(UserDAO userDAO) {

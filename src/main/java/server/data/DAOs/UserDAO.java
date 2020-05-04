@@ -4,6 +4,7 @@ import lombok.*;
 import org.bson.types.ObjectId;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
+import server.data.DTOs.UserShortTO;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -27,6 +28,14 @@ public class UserDAO {
     @Builder.Default
     private boolean isEmailValidated = false;
     @Builder.Default
-    private List<UserShortDAO> favourites = new ArrayList<>();
+    private List<String> favourites = new ArrayList<>();
     private String IPAddress;
+
+    public UserShortTO mapToFav() {
+        return new UserShortTO(_id.toString(), username, true);
+    }
+
+    public UserShortTO mapToNotFav() {
+        return new UserShortTO(_id.toString(), username, false);
+    }
 }
