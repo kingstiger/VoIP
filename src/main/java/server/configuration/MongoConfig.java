@@ -9,7 +9,7 @@ import org.springframework.context.annotation.PropertySource;
 import org.springframework.data.mongodb.config.AbstractMongoClientConfiguration;
 
 @Configuration
-@PropertySource("classpath:mongo.properties")
+@PropertySource(value = "classpath:mongo.properties", ignoreResourceNotFound = true)
 public class MongoConfig extends AbstractMongoClientConfiguration {
     private MongoClient mongoClient;
     private MongoDatabase database;
