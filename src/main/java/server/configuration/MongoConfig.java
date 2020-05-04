@@ -1,18 +1,18 @@
 package server.configuration;
 
-import com.mongodb.ConnectionString;
 import com.mongodb.client.MongoClient;
 import com.mongodb.client.MongoClients;
 import com.mongodb.client.MongoDatabase;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.PropertySource;
 import org.springframework.data.mongodb.config.AbstractMongoClientConfiguration;
-import server.utility.EnvironmentalVariables;
 
 @Configuration
+@PropertySource("classpath:mongo.properties")
 public class MongoConfig extends AbstractMongoClientConfiguration {
-
-    private MongoClient mongoClient = MongoClients.create(new ConnectionString(EnvironmentalVariables.getMongoConnector()));
-    private MongoDatabase database = mongoClient.getDatabase("voipServerDB");
+    private MongoClient mongoClient;
+    private MongoDatabase database;
 
     @Override
     public MongoClient mongoClient() {
@@ -22,5 +22,10 @@ public class MongoConfig extends AbstractMongoClientConfiguration {
     @Override
     protected String getDatabaseName() {
         return database.getName();
+    }
+
+    public MongoConfig(@Value("${mongo.address:#{environment.MONGO_ADDRESS}}") String url) {
+        this.mongoClient = MongoClients.create(url);
+        database = mongoClient.getDatabase("voipServerDB");
     }
 }
