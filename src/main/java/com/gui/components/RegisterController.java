@@ -4,6 +4,7 @@ import com.models.RegistrationForm;
 import com.rest_providers.UserProviderImpl;
 import com.utils.IpUtils;
 import com.utils.PasswordUtils;
+import controllers.AlertController;
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -49,7 +50,8 @@ public class RegisterController {
 
     @FXML
     void register(ActionEvent event) throws
-                                     UnknownHostException {
+                                     UnknownHostException,
+                                     InterruptedException {
         RegistrationForm registrationForm = RegistrationForm
                 .builder()
                 .username(usernameTF.getText())
@@ -58,20 +60,24 @@ public class RegisterController {
                 .IPAddress(IpUtils.getLocalIpAddr())
                 .build();
 
-        new Thread(() -> Platform.runLater(() -> {
+        Thread thread = new Thread(() -> Platform.runLater(() -> {
             try {
                 userProvider.register(registrationForm);
-                controllers.AlertController.showAlert(String.format("User %s registered successfully",
-                                                                    registrationForm.getUsername()),
-                                                      null,
-                                                      "Now you can use application!");
                 mainController.switchToCall();
+                AlertController.showAlert(String.format("User %s registered successfully",
+                                                        registrationForm.getUsername()),
+                                          null,
+                                          "Now you can use application!");
             } catch (Exception e) {
-                controllers.AlertController.showAlert("Failed to registered!",
-                                                      null,
-                                                      "Try to use another user or email.");
+                e.printStackTrace();
+                AlertController.showAlert("Failed to registered!",
+                                          null,
+                                          "Try to use another user or email.");
             }
-        })).start();
+        }));
+
+        thread.start();
+        thread.join();
     }
 
     @FXML
