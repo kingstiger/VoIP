@@ -60,25 +60,24 @@ public class RegisterController {
                 .IPAddress(IpUtils.getLocalIpAddr())
                 .build();
 
-        Thread thread = new Thread(() -> Platform.runLater(() -> {
-            try {
-                userProvider.register(registrationForm);
-                mainController.switchToCall();
-                AlertController.showAlert(String.format("User %s registered successfully",
-                                                        registrationForm.getUsername()),
-                                          null,
-                                          "Now you can use application!");
-            } catch (Exception e) {
-                e.printStackTrace();
-                AlertController.showAlert("Failed to registered!",
-                                          null,
-                                          "Try to use another user or email.");
-            }
-        }));
-
-        thread.start();
-        thread.join();
+        Platform.runLater(() -> {
+            new Thread(() -> {
+                try {
+                    userProvider.register(registrationForm);
+                    AlertController.showAlert(String.format("User %s registered successfully",
+                                                            registrationForm.getUsername()),
+                                              null,
+                                              "Check your email and confirm. Then login into application.");
+                } catch (Exception e) {
+                    e.printStackTrace();
+                    AlertController.showAlert("Failed to registered!",
+                                              null,
+                                              "Try to use another user or email.");
+                }
+            }).start();
+        });
     }
+
 
     @FXML
     void login(ActionEvent event) {
