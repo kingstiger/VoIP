@@ -112,7 +112,7 @@ public class CallPageController {
     void mute(ActionEvent event) throws
                                  IOException {
         if (sendingVoice) {
-            voiceSender.pauseSending();
+            voiceSender.stopSending();
         } else {
             voiceSender.startSending();
         }

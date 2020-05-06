@@ -65,12 +65,6 @@ public class SingleClientVoiceSender implements VoiceSender {
     }
 
     @Override
-    public void pauseSending() {
-        sendVoice = false;
-        throw new UnsupportedOperationException("Not implemented yet.");
-    }
-
-    @Override
     public void stopSending() {
         sendVoice = false;
         socket.close();
