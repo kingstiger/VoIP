@@ -4,7 +4,6 @@ import com.models.RegistrationForm;
 import com.rest_providers.UserProviderImpl;
 import com.utils.IpUtils;
 import com.utils.PasswordUtils;
-import controllers.AlertController;
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;

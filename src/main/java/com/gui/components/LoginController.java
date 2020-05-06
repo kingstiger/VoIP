@@ -60,7 +60,7 @@ public class LoginController {
                     mainController.switchToCall();
                 } catch (Exception e) {
                     e.printStackTrace();
-                    controllers.AlertController.showAlert("Failed to login!",
+                    AlertController.showAlert("Failed to login!",
                                                           null,
                                                           "Register or activate your account!");
                 }

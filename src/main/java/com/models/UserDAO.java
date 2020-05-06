@@ -1,6 +1,5 @@
 package com.models;
 
-import com.sun.corba.se.spi.ior.ObjectId;
 import lombok.*;
 
 import java.util.ArrayList;
@@ -12,7 +11,7 @@ import java.util.List;
 @Getter
 @Setter
 public class UserDAO {
-    private ObjectId _id;
+    private int _id;
     @NonNull
     private String username;
     @NonNull

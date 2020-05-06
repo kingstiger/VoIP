@@ -5,7 +5,7 @@
  * All Rights Reserved
  *
  ********************************************/
-package controllers;
+package com.gui.components;
 
 import javafx.scene.control.Alert;
 import javafx.scene.control.TextInputDialog;
