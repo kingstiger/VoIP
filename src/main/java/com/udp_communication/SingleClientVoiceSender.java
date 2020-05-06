@@ -39,6 +39,8 @@ public class SingleClientVoiceSender implements VoiceSender {
 
     @Override
     public void startSending() {
+        sendVoice = true;
+
         new Thread(() -> {
             while (sendVoice) {
                 MicrophoneData microphoneData = microphone.read();

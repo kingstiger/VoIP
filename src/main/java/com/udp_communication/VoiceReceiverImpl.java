@@ -37,6 +37,8 @@ public class VoiceReceiverImpl implements VoiceReceiver {
 
     @Override
     public void startListening() {
+        receiveVoice = true;
+
         new Thread(() -> {
             while (receiveVoice) {
                 byte[] buffer = new byte[connectionDetails.getVoicePackageLength()];

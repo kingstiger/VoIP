@@ -1,5 +1,6 @@
 package com.rest_providers;
 
+import com.models.MessageTO;
 import com.models.UserTO;
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestTemplate;
@@ -10,10 +11,8 @@ public class CallerProvider {
 
     private RestTemplate restTemplate = RestTemplateConfiguration.restTemplate();
 
-    public void callTo(UserTO user) {
+    public MessageTO callTo(UserTO user) {
         String url = "http://" + user.getIPAddress() + port + "/call";
-        String response = restTemplate.postForObject(url, user, String.class);
-
-        System.out.println(response);
+        return restTemplate.postForObject(url, user, MessageTO.class);
     }
 }

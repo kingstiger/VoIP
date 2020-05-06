@@ -1,6 +1,7 @@
 package com.caller_controller;
 
 import com.gui.components.CallPageController;
+import com.models.MessageTO;
 import com.models.UserTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -16,8 +17,8 @@ public class CallerController {
     private CallPageController controller;
 
     @PostMapping("/call")
-    public String serveIncomingCall(@RequestBody UserTO user) {
+    public MessageTO serveIncomingCall(@RequestBody UserTO user) {
         controller.informAboutNewCall(user);
-        return "User informed!";
+        return new MessageTO("User informed!");
     }
 }
