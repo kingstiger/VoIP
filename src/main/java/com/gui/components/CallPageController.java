@@ -29,8 +29,6 @@ import javax.sound.sampled.AudioFormat;
 import javax.sound.sampled.LineUnavailableException;
 import java.io.IOException;
 import java.net.InetAddress;
-import java.net.SocketException;
-import java.net.UnknownHostException;
 import java.util.List;
 
 @Controller
@@ -95,9 +93,8 @@ public class CallPageController {
 
     @FXML
     void call(ActionEvent event) throws
-                                 UnknownHostException,
-                                 LineUnavailableException,
-                                 SocketException {
+                                 IOException,
+                                 LineUnavailableException {
         AudioFormat format = new AudioFormat(AudioFormat.Encoding.PCM_SIGNED, 44100, 16, 2, 4, 44100, true);
         ConnectionDetails receiverConnection = new ConnectionDetails(InetAddress.getByName("localhost"), 5555, 1024);
         ConnectionDetails senderConnection = new ConnectionDetails(InetAddress.getByName(selectedUser.getIPAddress()),
@@ -108,6 +105,10 @@ public class CallPageController {
 
         voiceReceiver = new VoiceReceiverImpl(receiverConnection, speaker);
         voiceSender = new SingleClientVoiceSender(senderConnection, microphone);
+
+        voiceReceiver.startListening();
+        voiceSender.startSending();
+
         sendingVoice = true;
         muteBtn.setDisable(false);
     }
