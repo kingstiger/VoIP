@@ -1,11 +1,12 @@
 package server.controllers;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import server.data.DTOs.LoginForm;
-import server.data.DTOs.RegistrationForm;
 import server.data.DTOs.UserFavouritesTO;
-import server.data.DTOs.UserTO;
+import server.data.DTOs.UserShortTO;
+import server.services.SecurityService;
 import server.services.UserService;
 import server.utility.Validator;
 import server.utility.exceptions.WrongFormatException;
@@ -16,26 +17,33 @@ import java.util.List;
 @RequestMapping("/users")
 public class UserController {
 
-    private final UserService userService;
+    @Autowired
+    private UserService userService;
 
-    public UserController(UserService userService) {
-        this.userService = userService;
-    }
+    @Autowired
+    private SecurityService securityService;
 
+    //debug only
     @GetMapping(value = "/test")
     public boolean test() {
         return true;
     }
 
     @GetMapping(value = "/all")
-    public ResponseEntity<List<UserTO>> getAllUsers() {
-        List<UserTO> allUsers = userService.getAllUsers();
-
-        return ResponseEntity.ok(allUsers);
+    public ResponseEntity<?> getAllUsers(
+            @RequestParam("userID") String userID,
+            @RequestHeader("token") String token) {
+        if (securityService.isTokenValid(userID, token)) {
+            List<UserShortTO> allUsers = userService.getAllUsers(userID);
+            return ResponseEntity.ok(allUsers);
+        } else {
+            return new ResponseEntity<>("Unauthorized", HttpStatus.UNAUTHORIZED);
+        }
     }
 
+    //debug only
     @GetMapping(value = "/{username}")
-    public ResponseEntity<UserTO> getUserByUsername(@PathVariable("username") String username) {
+    public ResponseEntity<?> getUserByUsername(@PathVariable("username") String username) {
         if (Validator.isUsernameValid(username)) {
             return ResponseEntity.ok(userService.getUserByUsername(username));
         }
@@ -43,62 +51,64 @@ public class UserController {
     }
 
     @GetMapping(value = "/favourites")
-    public ResponseEntity<UserFavouritesTO> getFavouritesOfUser(@RequestParam("userID") String userID) {
-        UserFavouritesTO favouritesOfUser = userService.getFavouritesOfUser(userID);
-
-        return ResponseEntity.ok(favouritesOfUser);
-    }
-
-    @PostMapping(value = "/login")
-    public ResponseEntity<UserTO> tryToLogin(@RequestBody LoginForm loginForm) {
-        if (Validator.isLoginFormValid(loginForm)) {
-            return ResponseEntity.ok(userService.tryToLogIn(loginForm));
+    public ResponseEntity<?> getFavouritesOfUser(@RequestParam("userID") String userID,
+                                                 @RequestHeader("token") String token) {
+        if (securityService.isTokenValid(userID, token)) {
+            UserFavouritesTO favouritesOfUser = userService.getFavouritesOfUser(userID);
+            return ResponseEntity.ok(favouritesOfUser);
+        } else {
+            return new ResponseEntity<>("Unauthorized", HttpStatus.UNAUTHORIZED);
         }
-        throw new WrongFormatException("Invalid username and/or password!");
-    }
-
-    @PostMapping(value = "/register")
-    public ResponseEntity<UserTO> tryToRegister(@RequestBody RegistrationForm registrationForm) {
-        if (Validator.isRegistrationFormValid(registrationForm)) {
-            return ResponseEntity.ok(userService.tryToRegister(registrationForm));
-        }
-        throw new WrongFormatException("Invalid data format!");
     }
 
     @PostMapping(value = "/favourites")
-    public ResponseEntity<UserFavouritesTO> addUserToFavourites(
+    public ResponseEntity<?> addUserToFavourites(
             @RequestParam("userID") String userID,
-            @RequestParam("favUsername") String favUsername) {
-        UserFavouritesTO userFavouritesTO = userService.addToFavourites(userID, favUsername);
-
-        return ResponseEntity.ok(userFavouritesTO);
+            @RequestParam("favUsername") String favUsername,
+            @RequestHeader("token") String token) {
+        if (securityService.isTokenValid(userID, token)) {
+            UserFavouritesTO userFavouritesTO = userService.addToFavourites(userID, favUsername);
+            return ResponseEntity.ok(userFavouritesTO);
+        } else {
+            return new ResponseEntity<>("Unauthorized", HttpStatus.UNAUTHORIZED);
+        }
     }
 
     @DeleteMapping(value = "/favourites")
-    public ResponseEntity<UserFavouritesTO> removeUserFromFavourites(
+    public ResponseEntity<?> removeUserFromFavourites(
             @RequestParam("userID") String userID,
-            @RequestParam("favUsername") String favUsername) {
-        UserFavouritesTO userFavouritesTO = userService.deleteFavourite(userID, favUsername);
-
-        return ResponseEntity.ok(userFavouritesTO);
+            @RequestParam("favUsername") String favUsername,
+            @RequestHeader("token") String token) {
+        if (securityService.isTokenValid(userID, token)) {
+            UserFavouritesTO userFavouritesTO = userService.deleteFavourite(userID, favUsername);
+            return ResponseEntity.ok(userFavouritesTO);
+        } else {
+            return new ResponseEntity<>("Unauthorized", HttpStatus.UNAUTHORIZED);
+        }
     }
 
+    //debug only
     @DeleteMapping(value = "/all")
-    public ResponseEntity<String> removeAllUsers() {
+    public ResponseEntity<?> removeAllUsers() {
         userService.deleteAllUsers();
 
         return ResponseEntity.ok("All users deleted");
     }
 
     @DeleteMapping(value = "/{userID}")
-    public ResponseEntity<String> removeAllUsers(@PathVariable String userID) {
-        userService.deleteUser(userID);
-
-        return ResponseEntity.ok("Deleted user");
+    public ResponseEntity<?> removeUser(@PathVariable String userID,
+                                        @RequestHeader("token") String token) {
+        if (securityService.isTokenValid(userID, token)) {
+            userService.deleteUser(userID);
+            return ResponseEntity.ok("Deleted user");
+        } else {
+            return new ResponseEntity<>("Unauthorized", HttpStatus.UNAUTHORIZED);
+        }
     }
 
     @DeleteMapping(value = "/favourites/all")
-    public ResponseEntity<String> deleteAllFavouritesOfUser(@RequestParam("userID") String userID) {
+    public ResponseEntity<?> deleteAllFavouritesOfUser(@RequestParam("userID") String userID,
+                                                       @RequestHeader("token") String token) {
         userService.deleteAllFavouritesOfUser(userID);
 
         return ResponseEntity.ok("Deleted all favourites");

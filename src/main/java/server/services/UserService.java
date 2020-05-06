@@ -1,5 +1,6 @@
 package server.services;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import server.data.DAOs.UserDAO;
 import server.data.DTOs.*;
@@ -12,23 +13,21 @@ import java.util.stream.Collectors;
 
 @Service
 public class UserService {
-    private final UsersRepository usersRepository;
+    @Autowired
+    private UsersRepository usersRepository;
+
+    @Autowired
     private EmailUtility emailUtility;
 
-    public UserService(UsersRepository usersRepository, EmailUtility emailUtility) {
-        this.emailUtility = emailUtility;
-        this.usersRepository = usersRepository;
-    }
-
-    public UserTO getUserByUsername(String username) {
+    public UserFavouritesTO getUserByUsername(String username) {
         UserDAO userDAO = usersRepository
                 .findByUsername(username)
                 .orElseThrow(() -> new NoSuchUserException(username));
 
-        return UserTO.map(userDAO);
+        return getFavouritesOfUser(userDAO.get_id().toString());
     }
 
-    public UserTO tryToLogIn(LoginForm loginForm) {
+    public UserDAO tryToLogIn(LoginForm loginForm) {
         UserDAO userDAO = usersRepository.findByUsername(loginForm.getUsername())
                 .orElseThrow(() -> new CannotLogInException("Invalid username!"));
 
@@ -38,7 +37,7 @@ public class UserService {
             throw new CannotLogInException("Email not validated!");
         } else {
             updateUserIP(userDAO, loginForm);
-            return UserTO.map(userDAO);
+            return userDAO;
         }
     }
 
@@ -49,32 +48,19 @@ public class UserService {
 
     public UserTO tryToRegister(RegistrationForm registrationForm) {
         usersRepository.findByUsername(registrationForm.getUsername())
-                       .ifPresent(e -> {
+                .ifPresent(e -> {
                     throw new CannotRegisterException("Username " + e.getUsername() + " taken, try different username!");
                 });
         usersRepository.findByEmail(registrationForm.getEmail())
-                       .ifPresent(e -> {
+                .ifPresent(e -> {
                     throw new CannotRegisterException("Email " + e.getEmail() + " already taken, try different email!");
                 });
 
         UserDAO savedUser = registerNewUser(registrationForm);
         emailUtility.sendConfirmationEmail(registrationForm,
-                                           savedUser.get_id()
-                                                    .toString());
+                savedUser.get_id()
+                        .toString());
         return UserTO.map(savedUser);
-    }
-
-
-    public boolean tryToConfirmEmail(String id) {
-        try {
-            UserDAO userDAO = usersRepository.findById(id)
-                                             .orElseThrow(CannotConfirmEmailException::new);
-            userDAO.setEmailValidated(true);
-            usersRepository.save(userDAO);
-        } catch (CannotConfirmEmailException ex) {
-            return false;
-        }
-        return true;
     }
 
     private UserDAO registerNewUser(RegistrationForm registrationForm) {
@@ -85,6 +71,18 @@ public class UserService {
                 .IPAddress(registrationForm.getIPAddress())
                 .build()
         );
+    }
+
+    public boolean tryToConfirmEmail(String id) {
+        try {
+            UserDAO userDAO = usersRepository.findById(id)
+                    .orElseThrow(CannotConfirmEmailException::new);
+            userDAO.setEmailValidated(true);
+            usersRepository.save(userDAO);
+        } catch (CannotConfirmEmailException ex) {
+            return false;
+        }
+        return true;
     }
 
     public UserFavouritesTO getFavouritesOfUser(String userID) {
@@ -163,10 +161,7 @@ public class UserService {
         usersRepository.delete(userDAO);
     }
 
-    public List<UserTO> getAllUsers() {
-        return usersRepository.findAll()
-                .stream()
-                .map(UserTO::map)
-                .collect(Collectors.toList());
+    public List<UserShortTO> getAllUsers(String userID) {
+        return getFavouritesOfUser(userID).getFavourites();
     }
 }
