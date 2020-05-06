@@ -66,5 +66,6 @@ public class VoiceReceiverImpl implements VoiceReceiver {
     @Override
     public void stopListening() {
         receiveVoice = false;
+        serverSocket.close();
     }
 }

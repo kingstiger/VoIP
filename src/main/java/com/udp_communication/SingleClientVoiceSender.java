@@ -71,5 +71,6 @@ public class SingleClientVoiceSender implements VoiceSender {
     @Override
     public void stopSending() {
         sendVoice = false;
+        socket.close();
     }
 }

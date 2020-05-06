@@ -85,6 +85,7 @@ public class CallPageController {
         favouriteColumn.setCellValueFactory(new PropertyValueFactory("favourite"));
         initRefreshingUsersThread();
         muteBtn.setDisable(true);
+        disconnectBtn.setDisable(true);
     }
 
     @FXML
@@ -98,8 +99,13 @@ public class CallPageController {
     void call(ActionEvent event) throws
                                  IOException,
                                  LineUnavailableException {
-        startCall(selectedUser);
-        callerProvider.callTo(selectedUser);
+        try {
+            startCall(selectedUser);
+            callerProvider.callTo(selectedUser);
+            disconnectBtn.setDisable(false);
+        } catch (Exception e) {
+            this.disconnect(null);
+        }
     }
 
     @FXML
@@ -127,7 +133,13 @@ public class CallPageController {
 
             if (result.isPresent() && result.get()
                                             .equals(ButtonType.OK)) {
-                // todo: do sth
+                try {
+                    startCall(callingUser);
+                } catch (IOException e) {
+                    e.printStackTrace();
+                } catch (LineUnavailableException e) {
+                    e.printStackTrace();
+                }
             }
         });
     }

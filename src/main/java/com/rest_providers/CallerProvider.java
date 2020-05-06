@@ -13,7 +13,7 @@ public class CallerProvider extends RestTemplateConfiguration {
     private RestTemplate restTemplate2;
 
     public void callTo(UserTO user) {
-        String url = user.getIPAddress() + port + "/call";
+        String url = "https://" + user.getIPAddress() + port + "/call";
         String response = restTemplate2.postForObject(url, user, String.class);
 
         System.out.println(response);
