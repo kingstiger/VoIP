@@ -14,7 +14,7 @@ import javafx.scene.layout.AnchorPane;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 
-import java.net.UnknownHostException;
+import java.io.IOException;
 
 @Controller
 public class RegisterController {
@@ -49,8 +49,7 @@ public class RegisterController {
 
     @FXML
     void register(ActionEvent event) throws
-                                     UnknownHostException,
-                                     InterruptedException {
+            IOException {
         RegistrationForm registrationForm = RegistrationForm
                 .builder()
                 .username(usernameTF.getText())
@@ -75,7 +74,6 @@ public class RegisterController {
                                               "Try to use another user or email.");
                 }
             });
-
         }).start();
     }
 
