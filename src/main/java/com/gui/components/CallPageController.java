@@ -125,6 +125,7 @@ public class CallPageController {
     void disconnect(ActionEvent event) {
         voiceSender.stopSending();
         voiceReceiver.stopListening();
+        disconnectBtn.setDisable(true);
     }
 
     public void informAboutNewCall(UserTO callingUser) {
@@ -135,9 +136,8 @@ public class CallPageController {
                                             .equals(ButtonType.OK)) {
                 try {
                     startCall(callingUser);
-                } catch (IOException e) {
-                    e.printStackTrace();
-                } catch (LineUnavailableException e) {
+                } catch (IOException | LineUnavailableException e) {
+                    disconnect(null);
                     e.printStackTrace();
                 }
             }
@@ -168,6 +168,8 @@ public class CallPageController {
     private void startCall(UserTO user) throws
                                         IOException,
                                         LineUnavailableException {
+        disconnectBtn.setDisable(false);
+
         AudioFormat format = new AudioFormat(AudioFormat.Encoding.PCM_SIGNED, 44100, 16, 2, 4, 44100, true);
         ConnectionDetails receiverConnection = new ConnectionDetails(InetAddress.getByName("localhost"), 5555, 1024);
         ConnectionDetails senderConnection = new ConnectionDetails(InetAddress.getByName(user.getIPAddress()),
