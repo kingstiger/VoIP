@@ -8,12 +8,13 @@ import org.springframework.web.client.RestTemplate;
 @Component
 public class CallerProvider extends RestTemplateConfiguration {
     private String port = ":8080/internal";
+
     @Autowired
-    private RestTemplate restTemplate;
+    private RestTemplate restTemplate2;
 
     public void callTo(UserTO user) {
         String url = user.getIPAddress() + port + "/call";
-        String response = restTemplate.postForObject(url, user, String.class);
+        String response = restTemplate2.postForObject(url, user, String.class);
 
         System.out.println(response);
     }

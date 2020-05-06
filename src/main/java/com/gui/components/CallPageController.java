@@ -11,6 +11,7 @@ import com.udp_communication.SingleClientVoiceSender;
 import com.udp_communication.VoiceReceiver;
 import com.udp_communication.VoiceReceiverImpl;
 import com.udp_communication.VoiceSender;
+import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -121,12 +122,14 @@ public class CallPageController {
     }
 
     public void informAboutNewCall(UserTO callingUser) {
-        Optional<ButtonType> result = AlertController.showCallAlert(callingUser);
+        Platform.runLater(() -> {
+            Optional<ButtonType> result = AlertController.showCallAlert(callingUser);
 
-        if (result.isPresent() && result.get()
-                                        .equals(ButtonType.OK)) {
-
-        }
+            if (result.isPresent() && result.get()
+                                            .equals(ButtonType.OK)) {
+                // todo: do sth
+            }
+        });
     }
 
     private void initRefreshingUsersThread() {
