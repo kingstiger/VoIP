@@ -4,18 +4,16 @@ import com.google.common.collect.Lists;
 import com.models.LoginForm;
 import com.models.RegistrationForm;
 import com.models.UserTO;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestTemplate;
 
 import java.util.List;
 
 @Component
-public class UserProviderImpl extends RestTemplateConfiguration implements UserProvider {
+public class UserProviderImpl implements UserProvider {
     final String url = "https://server-voip.herokuapp.com//users";
 
-    @Autowired
-    private RestTemplate restTemplate;
+    private RestTemplate restTemplate = RestTemplateConfiguration.restTemplate();
 
     public UserTO register(RegistrationForm registerForm) {
         String endpointUrl = url + "/register";

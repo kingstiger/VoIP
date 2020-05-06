@@ -14,7 +14,7 @@ public class UserTO {
     private String username;
     private String email;
     private List<UserShortDAO> favourites;
-    @JsonProperty("IPAddress")
+    @JsonProperty("ipaddress")
     private String IPAddress;
 
     public static UserTO map(UserDAO userDAO) {

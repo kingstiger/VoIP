@@ -1,20 +1,18 @@
 package com.rest_providers;
 
 import com.models.UserTO;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestTemplate;
 
 @Component
-public class CallerProvider extends RestTemplateConfiguration {
+public class CallerProvider {
     private String port = ":8080/internal";
 
-    @Autowired
-    private RestTemplate restTemplate2;
+    private RestTemplate restTemplate = RestTemplateConfiguration.restTemplate();
 
     public void callTo(UserTO user) {
-        String url = "https://" + user.getIPAddress() + port + "/call";
-        String response = restTemplate2.postForObject(url, user, String.class);
+        String url = "http://" + user.getIPAddress() + port + "/call";
+        String response = restTemplate.postForObject(url, user, String.class);
 
         System.out.println(response);
     }
