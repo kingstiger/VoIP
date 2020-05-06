@@ -3,6 +3,7 @@ package com.gui.components;
 import com.GuiRunner;
 import com.models.ConnectionDetails;
 import com.models.UserTO;
+import com.rest_providers.CallerProvider;
 import com.rest_providers.UserProviderImpl;
 import com.sound_utils.Microphone;
 import com.sound_utils.Speaker;
@@ -13,10 +14,7 @@ import com.udp_communication.VoiceSender;
 import javafx.collections.FXCollections;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.scene.control.Button;
-import javafx.scene.control.Label;
-import javafx.scene.control.TableColumn;
-import javafx.scene.control.TableView;
+import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
@@ -30,6 +28,7 @@ import javax.sound.sampled.LineUnavailableException;
 import java.io.IOException;
 import java.net.InetAddress;
 import java.util.List;
+import java.util.Optional;
 
 @Controller
 public class CallPageController {
@@ -44,6 +43,9 @@ public class CallPageController {
 
     @Autowired
     private UserProviderImpl userProvider;
+
+    @Autowired
+    private CallerProvider callerProvider;
 
     @FXML
     private TableView<UserTO> usersTable;
@@ -95,22 +97,8 @@ public class CallPageController {
     void call(ActionEvent event) throws
                                  IOException,
                                  LineUnavailableException {
-        AudioFormat format = new AudioFormat(AudioFormat.Encoding.PCM_SIGNED, 44100, 16, 2, 4, 44100, true);
-        ConnectionDetails receiverConnection = new ConnectionDetails(InetAddress.getByName("localhost"), 5555, 1024);
-        ConnectionDetails senderConnection = new ConnectionDetails(InetAddress.getByName(selectedUser.getIPAddress()),
-                                                                   5555,
-                                                                   1024);
-        Speaker speaker = new Speaker(format);
-        Microphone microphone = new Microphone(format);
-
-        voiceReceiver = new VoiceReceiverImpl(receiverConnection, speaker);
-        voiceSender = new SingleClientVoiceSender(senderConnection, microphone);
-
-        voiceReceiver.startListening();
-        voiceSender.startSending();
-
-        sendingVoice = true;
-        muteBtn.setDisable(false);
+        startCall(selectedUser);
+        callerProvider.callTo(selectedUser);
     }
 
     @FXML
@@ -132,6 +120,15 @@ public class CallPageController {
         voiceReceiver.stopListening();
     }
 
+    public void informAboutNewCall(UserTO callingUser) {
+        Optional<ButtonType> result = AlertController.showCallAlert(callingUser);
+
+        if (result.isPresent() && result.get()
+                                        .equals(ButtonType.OK)) {
+
+        }
+    }
+
     private void initRefreshingUsersThread() {
         new Thread(() -> {
             while (GuiRunner.isRunning()) {
@@ -151,5 +148,26 @@ public class CallPageController {
 
     private void updateSelectedUserInfo() {
         selectedUserLbl.setText(selectedUser.getUsername());
+    }
+
+    private void startCall(UserTO user) throws
+                                        IOException,
+                                        LineUnavailableException {
+        AudioFormat format = new AudioFormat(AudioFormat.Encoding.PCM_SIGNED, 44100, 16, 2, 4, 44100, true);
+        ConnectionDetails receiverConnection = new ConnectionDetails(InetAddress.getByName("localhost"), 5555, 1024);
+        ConnectionDetails senderConnection = new ConnectionDetails(InetAddress.getByName(user.getIPAddress()),
+                                                                   5555,
+                                                                   1024);
+        Speaker speaker = new Speaker(format);
+        Microphone microphone = new Microphone(format);
+
+        voiceReceiver = new VoiceReceiverImpl(receiverConnection, speaker);
+        voiceSender = new SingleClientVoiceSender(senderConnection, microphone);
+
+        voiceReceiver.startListening();
+        voiceSender.startSending();
+
+        sendingVoice = true;
+        muteBtn.setDisable(false);
     }
 }

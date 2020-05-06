@@ -7,7 +7,9 @@
  ********************************************/
 package com.gui.components;
 
+import com.models.UserTO;
 import javafx.scene.control.Alert;
+import javafx.scene.control.ButtonType;
 import javafx.scene.control.TextInputDialog;
 
 import java.util.Optional;
@@ -46,5 +48,14 @@ public class AlertController {
 
         Optional<String> result = dialog.showAndWait();
         return result.orElse("");
+    }
+
+    public static Optional<ButtonType> showCallAlert(UserTO callingUser) {
+        Alert alert = new Alert(Alert.AlertType.WARNING,
+                                "User " + callingUser.getUsername() + "is calling.\nWould you like to answer?",
+                                ButtonType.CANCEL, ButtonType.OK);
+
+        Optional<ButtonType> result = alert.showAndWait();
+        return result;
     }
 }
