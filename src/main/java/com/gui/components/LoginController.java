@@ -15,7 +15,7 @@ import javafx.scene.layout.AnchorPane;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 
-import java.net.UnknownHostException;
+import java.io.IOException;
 
 @Controller
 public class LoginController {
@@ -45,7 +45,7 @@ public class LoginController {
 
     @FXML
     void login(ActionEvent event) throws
-                                  UnknownHostException {
+            IOException {
         LoginForm loginForm = LoginForm
                 .builder()
                 .username(usernameTF.getText())
@@ -61,8 +61,8 @@ public class LoginController {
                 } catch (Exception e) {
                     e.printStackTrace();
                     AlertController.showAlert("Failed to login!",
-                                                          null,
-                                                          "Register or activate your account!");
+                            null,
+                            "Register or activate your account!");
                 }
             });
 
