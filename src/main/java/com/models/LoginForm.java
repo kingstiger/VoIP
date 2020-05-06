@@ -1,19 +1,19 @@
 package com.models;
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NonNull;
-import lombok.Setter;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import lombok.*;
 
 @AllArgsConstructor
 @Getter
 @Setter
+@Builder
 public class LoginForm {
     @NonNull
     private String username;
     @NonNull
     private String password;
     @NonNull
+    @JsonProperty("IPAddress")
     private String IPAddress;
 }
 

@@ -4,10 +4,12 @@ import com.models.LoginForm;
 import com.models.RegistrationForm;
 import com.models.UserTO;
 
+import java.util.List;
+
 public interface UserProvider {
     UserTO register(RegistrationForm registerForm);
 
-    void login(LoginForm loginForm);
+    UserTO login(LoginForm loginForm);
 
-    void obtainAll();
+    List<UserTO> getAllUsers();
 }

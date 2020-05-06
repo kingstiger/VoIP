@@ -43,6 +43,7 @@ public class MainController {
     }
 
     private void makePanelsVisible(boolean callPage, boolean loginPage, boolean registerPage) {
+        CallPageController.setVisible(callPage);
         callPane.setVisible(callPage);
         loginPane.setVisible(loginPage);
         registerPane.setVisible(registerPage);

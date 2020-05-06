@@ -7,6 +7,7 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.image.Image;
 import javafx.stage.Stage;
+import lombok.Getter;
 import org.apache.log4j.Logger;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -19,10 +20,11 @@ import java.net.URL;
 
 @SpringBootApplication
 public class GuiRunner extends Application {
-
     private static Logger logger = Logger.getLogger(GuiRunner.class);
     private Image icon = new Image("file:///icons/phone.jpg");
     private MainController component;
+    @Getter
+    private static boolean running = true;
 
     private ConfigurableApplicationContext springContext;
     private FXMLLoader loader;
@@ -43,6 +45,7 @@ public class GuiRunner extends Application {
     public void stop() throws
                        Exception {
         springContext.stop();
+        running = false;
     }
 
     @Override

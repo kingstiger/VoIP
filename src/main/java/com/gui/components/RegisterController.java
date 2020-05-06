@@ -60,8 +60,9 @@ public class RegisterController {
                 .IPAddress(IpUtils.getLocalIpAddr())
                 .build();
 
-        Platform.runLater(() -> {
-            new Thread(() -> {
+        new Thread(() -> {
+            Platform.runLater(() -> {
+
                 try {
                     userProvider.register(registrationForm);
                     AlertController.showAlert(String.format("User %s registered successfully",
@@ -74,8 +75,9 @@ public class RegisterController {
                                               null,
                                               "Try to use another user or email.");
                 }
-            }).start();
-        });
+            });
+
+        }).start();
     }
 
 
