@@ -38,7 +38,6 @@ public class CallPageController {
     private static boolean visible = false;
     private VoiceSender voiceSender;
     private VoiceReceiver voiceReceiver;
-    private boolean sendingVoice = false;
 
     private UserTO selectedUser;
 
@@ -109,16 +108,15 @@ public class CallPageController {
     }
 
     @FXML
-    void mute(ActionEvent event) throws
-                                 IOException {
-        if (sendingVoice) {
-            voiceSender.stopSending();
+    void mute(ActionEvent event) {
+        if (muteBtn.getText()
+                   .equalsIgnoreCase("mute")) {
+            muteBtn.setText("Unmute");
+            voiceSender.pauseSending();
         } else {
-            voiceSender.startSending();
+            muteBtn.setText("Mute");
+            voiceSender.resumeSending();
         }
-
-        sendingVoice = !sendingVoice;
-        muteBtn.setDisable(sendingVoice);
     }
 
     @FXML
@@ -126,6 +124,7 @@ public class CallPageController {
         voiceSender.stopSending();
         voiceReceiver.stopListening();
         disconnectBtn.setDisable(true);
+        muteBtn.setDisable(true);
     }
 
     public void informAboutNewCall(UserTO callingUser) {
@@ -169,22 +168,24 @@ public class CallPageController {
                                         IOException,
                                         LineUnavailableException {
         disconnectBtn.setDisable(false);
+        muteBtn.setDisable(false);
 
         AudioFormat format = new AudioFormat(AudioFormat.Encoding.PCM_SIGNED, 44100, 16, 2, 4, 44100, true);
         ConnectionDetails receiverConnection = new ConnectionDetails(InetAddress.getByName("localhost"), 5555, 1024);
         ConnectionDetails senderConnection = new ConnectionDetails(InetAddress.getByName(user.getIPAddress()),
                                                                    5555,
                                                                    1024);
+
         Speaker speaker = new Speaker(format);
-        Microphone microphone = new Microphone(format);
-
         voiceReceiver = new VoiceReceiverImpl(receiverConnection, speaker);
-        voiceSender = new SingleClientVoiceSender(senderConnection, microphone);
-
         voiceReceiver.startListening();
-        voiceSender.startSending();
 
-        sendingVoice = true;
-        muteBtn.setDisable(false);
+        try {
+            Microphone microphone = new Microphone(format);
+            voiceSender = new SingleClientVoiceSender(senderConnection, microphone);
+            voiceSender.startSending();
+        } catch (Exception e) {
+            AlertController.showAlert("You have no microphone!", null, "Check your microphone settings!");
+        }
     }
 }

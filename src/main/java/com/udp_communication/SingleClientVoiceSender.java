@@ -19,6 +19,7 @@ public class SingleClientVoiceSender implements VoiceSender {
     private DatagramSocket socket;
     private Microphone microphone;
     private boolean sendVoice = true;
+    private boolean establishedConnection = false;
 
     private Encryptor encryption;
 
@@ -39,10 +40,15 @@ public class SingleClientVoiceSender implements VoiceSender {
 
     @Override
     public void startSending() {
+        establishedConnection = true;
         sendVoice = true;
 
         new Thread(() -> {
-            while (sendVoice) {
+            while (establishedConnection) {
+                if (!sendVoice) {
+                    continue;
+                }
+
                 MicrophoneData microphoneData = microphone.read();
 
                 if (Objects.nonNull(encryption)) {
@@ -65,7 +71,19 @@ public class SingleClientVoiceSender implements VoiceSender {
     }
 
     @Override
+    public void pauseSending() {
+        this.sendVoice = false;
+    }
+
+    @Override
+    public void resumeSending() {
+        this.sendVoice = true;
+    }
+
+
+    @Override
     public void stopSending() {
+        establishedConnection = false;
         sendVoice = false;
         socket.close();
     }
