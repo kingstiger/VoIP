@@ -13,7 +13,8 @@ import server.services.UserService;
 import server.utility.Validator;
 import server.utility.exceptions.WrongFormatException;
 
-@RestController(value = "/auth")
+@RestController
+@RequestMapping(value = "/auth")
 public class AuthController {
 
     @Autowired
