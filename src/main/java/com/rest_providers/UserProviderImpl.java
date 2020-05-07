@@ -11,7 +11,7 @@ import java.util.List;
 
 @Component
 public class UserProviderImpl implements UserProvider {
-    final String url = "https://server-voip.herokuapp.com//users";
+    final String url = "https://server-voip.herokuapp.com";
 
     private RestTemplate restTemplate = RestTemplateConfiguration.restTemplate();
 

@@ -17,8 +17,6 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
-import javafx.scene.paint.Color;
-import javafx.scene.text.Font;
 import lombok.Getter;
 import lombok.Setter;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -58,12 +56,6 @@ public class CallPageController {
 
     @FXML
     private TableColumn<Boolean, UserTO> statusColumn;
-
-    @FXML
-    private Font x1;
-
-    @FXML
-    private Color x2;
 
     @FXML
     private Button disconnectBtn;
