@@ -3,6 +3,7 @@ package com.gui.components;
 import com.GuiRunner;
 import com.models.ConnectionDetails;
 import com.models.UserTO;
+import com.rest_providers.AuthProviderImpl;
 import com.rest_providers.CallerProvider;
 import com.rest_providers.UserProviderImpl;
 import com.sound_utils.Microphone;
@@ -38,6 +39,12 @@ public class CallPageController {
     private VoiceReceiver voiceReceiver;
 
     private UserTO selectedUser;
+
+    @Autowired
+    private MainController mainController;
+
+    @Autowired
+    private AuthProviderImpl authProvider;
 
     @Autowired
     private UserProviderImpl userProvider;
@@ -140,7 +147,8 @@ public class CallPageController {
             while (GuiRunner.isRunning()) {
                 try {
                     if (CallPageController.isVisible()) {
-                        List<UserTO> allUsers = userProvider.getAllUsers();
+                        List<UserTO> allUsers = userProvider.getAllUsers(mainController.getTokenService()
+                                                                                       .getToken());
                         usersTable.setItems(FXCollections.observableArrayList(allUsers));
                     }
 

@@ -1,7 +1,7 @@
 package com.gui.components;
 
 import com.models.RegistrationForm;
-import com.rest_providers.UserProviderImpl;
+import com.rest_providers.AuthProviderImpl;
 import com.utils.IpUtils;
 import com.utils.PasswordUtils;
 import javafx.application.Platform;
@@ -22,7 +22,7 @@ public class RegisterController {
     private MainController mainController;
 
     @Autowired
-    private UserProviderImpl userProvider;
+    private AuthProviderImpl userProvider;
 
     @FXML
     private Button registerBtn;

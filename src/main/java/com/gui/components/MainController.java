@@ -1,11 +1,15 @@
 package com.gui.components;
 
+import com.utils.TokenService;
 import javafx.fxml.FXML;
 import javafx.scene.layout.VBox;
+import lombok.Getter;
 import org.springframework.stereotype.Controller;
 
 @Controller
 public class MainController {
+    @Getter
+    private TokenService tokenService;
 
     @FXML
     private VBox callPane;
@@ -49,4 +53,7 @@ public class MainController {
         registerPane.setVisible(registerPage);
     }
 
+    public void initRefreshingToken(String token) {
+        tokenService = new TokenService(token);
+    }
 }
