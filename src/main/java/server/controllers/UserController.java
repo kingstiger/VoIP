@@ -41,6 +41,17 @@ public class UserController {
         }
     }
 
+    @GetMapping(value = "/me")
+    public ResponseEntity<?> getMeXD(
+            @RequestParam("userID") String userID,
+            @RequestHeader("token") String token) {
+        if (securityService.isTokenValid(userID, token)) {
+            return ResponseEntity.ok(userService.getUser(userID));
+        } else {
+            return new ResponseEntity<>("Unauthorized", HttpStatus.UNAUTHORIZED);
+        }
+    }
+
     //debug only
     @GetMapping(value = "/{username}")
     public ResponseEntity<?> getUserByUsername(@PathVariable("username") String username) {

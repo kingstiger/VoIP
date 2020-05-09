@@ -21,12 +21,11 @@ public class UserTO {
 
     public static UserTO map(UserDAO userDAO) {
         return UserTO.builder()
-                     .userID(userDAO.get_id()
-                                    .toString())
-                     .username(userDAO.getUsername())
-                     .email(userDAO.getEmail())
-                     .favourites(userDAO.getFavourites())
-                     .IPAddress(userDAO.getIPAddress())
-                     .build();
+                .userID(userDAO.get_id().toString())
+                .username(userDAO.getUsername())
+                .email(userDAO.getEmail())
+                .favourites(userDAO.getFavourites())
+                .IPAddress(userDAO.getIPAddress())
+                .build();
     }
 }

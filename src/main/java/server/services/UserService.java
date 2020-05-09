@@ -41,6 +41,13 @@ public class UserService {
         }
     }
 
+    public UserTO getUser(String userID) {
+        UserDAO userDAO = usersRepository
+                .findById(userID)
+                .orElseThrow(() -> new NoSuchUserException(userID));
+        return UserTO.map(userDAO);
+    }
+
     private void updateUserIP(UserDAO userDAO, LoginForm loginForm) {
         userDAO.setIPAddress(loginForm.getIPAddress());
         usersRepository.save(userDAO);
