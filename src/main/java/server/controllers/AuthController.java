@@ -24,14 +24,14 @@ public class AuthController {
     private SecurityService securityService;
 
     @PostMapping(value = "/renewToken")
-    public ResponseEntity<?> renewToken(@RequestParam("userID") String userID,
-                                        @RequestHeader("token") String token) {
+    public ResponseEntity<SecurityInfoDAO> renewToken(@RequestParam("userID") String userID,
+                                                      @RequestHeader("token") String token) {
         SecurityInfoDAO renewedToken = securityService.validateAndRenewToken(userID, token);
         return ResponseEntity.ok(renewedToken);
     }
 
     @PostMapping(value = "/login")
-    public ResponseEntity<?> tryToLogin(@RequestBody LoginForm loginForm) {
+    public ResponseEntity<UserTO> tryToLogin(@RequestBody LoginForm loginForm) {
         if (Validator.isLoginFormValid(loginForm)) {
             UserDAO userDAO = userService.tryToLogIn(loginForm);
             SecurityInfoDAO newToken = securityService.getNewToken(userDAO.get_id().toString());
@@ -41,7 +41,7 @@ public class AuthController {
     }
 
     @PostMapping(value = "/register")
-    public ResponseEntity<?> tryToRegister(@RequestBody RegistrationForm registrationForm) {
+    public ResponseEntity<UserTO> tryToRegister(@RequestBody RegistrationForm registrationForm) {
         if (Validator.isRegistrationFormValid(registrationForm)) {
             return ResponseEntity.ok(userService.tryToRegister(registrationForm));
         }
