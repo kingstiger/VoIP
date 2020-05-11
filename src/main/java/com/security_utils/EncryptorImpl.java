@@ -12,6 +12,6 @@ public class EncryptorImpl implements Encryptor {
     @SneakyThrows
     public MicrophoneData encrypt(MicrophoneData data) {
         byte[] encrypt = new EncryptionUtils(key).encrypt(data.getData());
-        return new MicrophoneData(encrypt, encrypt.length);
+        return new MicrophoneData(encrypt, 1024);
     }
 }
