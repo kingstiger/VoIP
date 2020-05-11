@@ -17,10 +17,12 @@ public class SenderRunner {
     public static void main(String[] args) throws
                                            IOException,
                                            LineUnavailableException {
+        String ip = "127.0.0.1";
+
         Encryptor encryptor = new EncryptorImpl("testowyklucz");
 
         AudioFormat format = new AudioFormat(AudioFormat.Encoding.PCM_SIGNED, 44100, 16, 2, 4, 44100, true);
-        ConnectionDetails receiver = new ConnectionDetails(InetAddress.getByName("192.168.0.108"), 5555, 1024);
+        ConnectionDetails receiver = new ConnectionDetails(InetAddress.getByName(ip), 5555, 1024);
         Microphone microphone = new Microphone(format);
 
         VoiceSender sender = new SingleClientVoiceSender(receiver, microphone, encryptor);

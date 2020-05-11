@@ -13,6 +13,6 @@ public class DecryptorImpl implements Decryptor {
     @SneakyThrows
     public DatagramPacket decrypt(DatagramPacket data) {
         byte[] decrypt = new EncryptionUtils(key).decrypt(data.getData());
-        return new DatagramPacket(decrypt, 1024);
+        return new DatagramPacket(decrypt, decrypt.length);
     }
 }

@@ -41,7 +41,7 @@ public class VoiceReceiverImpl implements VoiceReceiver {
 
         new Thread(() -> {
             while (receiveVoice) {
-                byte[] buffer = new byte[connectionDetails.getVoicePackageLength()];
+                byte[] buffer = new byte[connectionDetails.getVoicePackageLength() + 16];
                 DatagramPacket response = new DatagramPacket(buffer, buffer.length);
 
                 try {
@@ -52,9 +52,9 @@ public class VoiceReceiverImpl implements VoiceReceiver {
 
                 if (Objects.nonNull(decryptor)) {
                     try {
-                        response = decryptor.decrypt(response); // TODO: 2020-04-30
+                        response = decryptor.decrypt(response);
                     } catch (Exception e) {
-
+                        e.printStackTrace();
                     }
                 }
 
