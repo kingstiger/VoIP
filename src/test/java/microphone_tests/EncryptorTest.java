@@ -12,7 +12,7 @@ public class EncryptorTest {
 
     @Test
     public void encryptorTest() {
-        String key = "DHKeyToencryptAndDecrypt";
+        String key = "to jestjakistamklucz";
 
         byte[] dataToEncrypt = "data to encrypt".getBytes();
         MicrophoneData microphoneDataBeforeEncryption = new MicrophoneData(dataToEncrypt, dataToEncrypt.length);
@@ -27,6 +27,6 @@ public class EncryptorTest {
         DatagramPacket decrypt = new DecryptorImpl(key).decrypt(datagramPacketEncryptedMicData);
 
         Assert.assertNotEquals(microphoneDataBeforeEncryption.getData(), decrypt.getData());
-        Assert.assertEquals(dataToEncrypt, decrypt.getData());
+        Assert.assertEquals(new String(dataToEncrypt), new String(decrypt.getData()));
     }
 }

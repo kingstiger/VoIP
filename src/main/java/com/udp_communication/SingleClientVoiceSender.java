@@ -53,7 +53,6 @@ public class SingleClientVoiceSender implements VoiceSender {
 
                 if (Objects.nonNull(encryption)) {
                     microphoneData = encryption.encrypt(microphoneData); // TODO: 2020-04-30
-                    throw new UnsupportedOperationException("Not implemented yet.");
                 }
 
                 byte[] data = microphoneData.getData();

@@ -11,4 +11,10 @@ public class PasswordUtils {
                       .hashString(plainPassword, StandardCharsets.UTF_8)
                       .toString();
     }
+
+    public static String getSha128(String text) {
+        return Hashing.murmur3_128()
+                      .hashString(text, StandardCharsets.UTF_8)
+                      .toString();
+    }
 }

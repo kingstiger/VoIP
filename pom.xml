@@ -96,6 +96,18 @@
             <version>29.0-jre</version>
         </dependency>
 
+        <!-- https://mvnrepository.com/artifact/se.simbio.encryption/library -->
+        <dependency>
+            <groupId>se.simbio.encryption</groupId>
+            <artifactId>library</artifactId>
+            <version>1.0.0</version>
+        </dependency>
+        <dependency>
+            <groupId>org.jasypt</groupId>
+            <artifactId>jasypt</artifactId>
+            <version>1.9.3</version>
+        </dependency>
+
     </dependencies>
 
 
