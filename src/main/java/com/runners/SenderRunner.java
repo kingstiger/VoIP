@@ -1,6 +1,8 @@
 package com.runners;
 
 import com.models.ConnectionDetails;
+import com.security_utils.Encryptor;
+import com.security_utils.EncryptorImpl;
 import com.sound_utils.Microphone;
 import com.udp_communication.SingleClientVoiceSender;
 import com.udp_communication.VoiceSender;
@@ -15,11 +17,13 @@ public class SenderRunner {
     public static void main(String[] args) throws
                                            IOException,
                                            LineUnavailableException {
+        Encryptor encryptor = new EncryptorImpl("testowyklucz");
+
         AudioFormat format = new AudioFormat(AudioFormat.Encoding.PCM_SIGNED, 44100, 16, 2, 4, 44100, true);
-        ConnectionDetails receiver = new ConnectionDetails(InetAddress.getByName("192.168.0.104"), 5555, 1024);
+        ConnectionDetails receiver = new ConnectionDetails(InetAddress.getByName("192.168.0.108"), 5555, 1024);
         Microphone microphone = new Microphone(format);
 
-        VoiceSender sender = new SingleClientVoiceSender(receiver, microphone);
+        VoiceSender sender = new SingleClientVoiceSender(receiver, microphone, encryptor);
         sender.startSending();
     }
 }

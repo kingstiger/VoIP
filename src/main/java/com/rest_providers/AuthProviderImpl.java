@@ -16,10 +16,10 @@ import java.util.Objects;
 @Component
 public class AuthProviderImpl implements AuthProvider {
     final String url = "https://server-voip.herokuapp.com";
-    private UserTO user;
+    private static UserTO user;
 
     @Getter
-    private String token;
+    private static String token;
 
     private RestTemplate restTemplate = RestTemplateConfiguration.restTemplate();
 
@@ -44,13 +44,13 @@ public class AuthProviderImpl implements AuthProvider {
         String endpointUrl = url + "/renewToken";
 
         UriComponentsBuilder builder = UriComponentsBuilder.fromHttpUrl(endpointUrl)
-                                                           .queryParam("", user.get)
+                                                           .queryParam("userID", user.getUserID());
 
         HttpHeaders headers = new HttpHeaders();
         headers.set("token", actualToken);
         HttpEntity<String> entity = new HttpEntity<>(headers);
 
-        restTemplate.postForEntity(endpointUrl, null, Object.class, entity);
+        restTemplate.postForEntity(builder.toUriString(), null, Object.class, entity);
         return token;
     }
 }

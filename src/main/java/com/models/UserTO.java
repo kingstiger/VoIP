@@ -11,6 +11,7 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 public class UserTO {
+    private String userID;
     private String username;
     private String email;
     private List<UserShortDAO> favourites;
