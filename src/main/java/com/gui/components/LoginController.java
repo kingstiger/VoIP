@@ -14,6 +14,7 @@ import javafx.scene.control.CheckBox;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.AnchorPane;
+import lombok.Getter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 
@@ -31,15 +32,18 @@ public class LoginController {
     private Button registerBtn;
 
     @FXML
+    @Getter
     private TextField usernameTF;
 
     @FXML
     private Button loginBtn;
 
     @FXML
+    @Getter
     private CheckBox rememberMeCB;
 
     @FXML
+    @Getter
     private PasswordField passwordTF;
 
     @FXML

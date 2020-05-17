@@ -6,6 +6,7 @@ import com.utils.IpUtils;
 import com.utils.PreferencesKeys;
 import com.utils.PreferencesUtils;
 import com.utils.TokenService;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.layout.VBox;
 import lombok.Getter;
@@ -42,7 +43,7 @@ public class MainController {
     @FXML
     void initialize() throws
                       Exception {
-        makePanelsVisible(false, true, false);
+        switchToLogin();
 
         if (PreferencesUtils.getValue(PreferencesKeys.REMEMBER_ME)) {
             String passwordHash = PreferencesUtils.getValue(PreferencesKeys.PASSWORD_HASH);
@@ -57,6 +58,29 @@ public class MainController {
 
             loginController.login(loginForm);
         }
+    }
+
+    @FXML
+    void chooseServer(ActionEvent event) {
+
+    }
+
+    @FXML
+    void logout(ActionEvent event) throws
+                                   Exception {
+        PreferencesUtils.setValue(PreferencesKeys.REMEMBER_ME, false);
+        loginController.getPasswordTF()
+                       .clear();
+        loginController.getRememberMeCB()
+                       .setSelected(false);
+        loginController.getUsernameTF()
+                       .clear();
+        switchToLogin();
+    }
+
+    @FXML
+    void closeApp(ActionEvent event) {
+        System.exit(0);
     }
 
     public void switchToLogin() {

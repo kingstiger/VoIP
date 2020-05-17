@@ -53,7 +53,6 @@ public class GuiRunner extends Application {
     public void start(Stage primaryStage) throws
                                           IOException,
                                           URISyntaxException {
-
         URL mainFxmlFile = ResourceUtils.getURL("src/main/resources/fxml_files/main/main.fxml");
 
         loader.setLocation(mainFxmlFile);
