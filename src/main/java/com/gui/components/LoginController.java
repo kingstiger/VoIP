@@ -75,7 +75,9 @@ public class LoginController {
                     mainController.initRefreshingToken(AuthProviderImpl.getToken());
                     mainController.switchToCall();
 
-                    if (rememberMeCB.isSelected()) {
+                    if (PreferencesUtils.getValue(PreferencesKeys.REMEMBER_ME)) {
+                        // do nothing
+                    } else if (rememberMeCB.isSelected()) {
                         PreferencesUtils.setValue(PreferencesKeys.REMEMBER_ME, true);
                         PreferencesUtils.setValue(PreferencesKeys.USERNAME, loginForm.getUsername());
                         PreferencesUtils.setValue(PreferencesKeys.PASSWORD_HASH, loginForm.getPassword());

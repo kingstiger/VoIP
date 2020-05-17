@@ -77,6 +77,9 @@ public class CallPageController {
     private Label selectedUserLbl;
 
     @FXML
+    private Label userIpLbl;
+
+    @FXML
     void initialize() {
         usernameColumn.setCellValueFactory(new PropertyValueFactory("username"));
         statusColumn.setCellValueFactory(new PropertyValueFactory("active"));
@@ -162,6 +165,7 @@ public class CallPageController {
 
     private void updateSelectedUserInfo() {
         selectedUserLbl.setText(selectedUser.getUsername());
+        userIpLbl.setText(selectedUser.getIPAddress());
     }
 
     private void startCall(UserTO user) throws

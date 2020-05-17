@@ -12,55 +12,57 @@
       <items>
         <AnchorPane>
           <children>
-            <Label alignment="CENTER" layoutX="14.0" layoutY="14.0" minWidth="60.0" prefWidth="-1.0" style="&#10;"
-                   text="Users" textAlignment="CENTER" wrapText="false">
+              <Label alignment="CENTER" layoutX="14.0" layoutY="14.0" minWidth="60.0" prefWidth="-1.0" style="&#10;"
+                     text="Users" textAlignment="CENTER" wrapText="false">
               <font>
-                <Font size="18.0" fx:id="x1"/>
+                  <Font size="18.0" fx:id="x1"/>
               </font>
               <textFill>
-                <Color blue="0.624" green="0.624" red="0.624" fx:id="x2"/>
+                  <Color blue="0.624" green="0.624" red="0.624" fx:id="x2"/>
               </textFill>
             </Label>
-            <TableView fx:id="usersTable" layoutX="-17.0" layoutY="47.0" onKeyReleased="#updateSelectedUser"
-                       onMouseClicked="#updateSelectedUser" pickOnBounds="false" prefHeight="200.0" prefWidth="200.0"
-                       AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0"
-                       AnchorPane.topAnchor="50.0">
+              <TableView fx:id="usersTable" layoutX="-17.0" layoutY="47.0" onKeyReleased="#updateSelectedUser"
+                         onMouseClicked="#updateSelectedUser" pickOnBounds="false" prefHeight="200.0" prefWidth="200.0"
+                         AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0"
+                         AnchorPane.topAnchor="50.0">
               <columns>
-                <TableColumn fx:id="statusColumn" editable="false" maxWidth="75.0" minWidth="50.0" prefWidth="50.0"
-                             text="Status"/>
-                <TableColumn fx:id="usernameColumn" editable="false" prefWidth="75.0" text="Username"/>
-                <TableColumn fx:id="favouriteColumn" editable="false" maxWidth="75.0" minWidth="50.0" prefWidth="50.0"
-                             text="Favourite"/>
+                  <TableColumn fx:id="statusColumn" editable="false" maxWidth="75.0" minWidth="50.0" prefWidth="50.0"
+                               text="Status"/>
+                  <TableColumn fx:id="usernameColumn" editable="false" prefWidth="75.0" text="Username"/>
+                  <TableColumn fx:id="favouriteColumn" editable="false" maxWidth="75.0" minWidth="50.0" prefWidth="50.0"
+                               text="Favourite"/>
               </columns>
               <columnResizePolicy>
-                <TableView fx:constant="CONSTRAINED_RESIZE_POLICY"/>
+                  <TableView fx:constant="CONSTRAINED_RESIZE_POLICY"/>
               </columnResizePolicy>
             </TableView>
           </children>
         </AnchorPane>
             <AnchorPane id="Content" minHeight="-1.0" minWidth="-1.0" prefHeight="545.0" prefWidth="430.0">
               <children>
-                <Label alignment="CENTER" font="$x1" layoutX="14.0" layoutY="14.0" style="&#10;" text="Call"
-                       textAlignment="CENTER" textFill="$x2" wrapText="false"/>
-                <Button fx:id="callBtn" layoutX="65.0" layoutY="704.0" minHeight="80.0" minWidth="80.0"
-                        mnemonicParsing="false" onAction="#call" text="Call" AnchorPane.bottomAnchor="50.0"
-                        AnchorPane.leftAnchor="50.0"/>
-                <Button fx:id="muteBtn" layoutX="142.0" layoutY="704.0" minHeight="80.0" minWidth="80.0"
-                        mnemonicParsing="false" onAction="#mute" text="Mute" AnchorPane.bottomAnchor="50.0"
-                        AnchorPane.leftAnchor="150.0"/>
-                <Button fx:id="disconnectBtn" layoutX="240.0" layoutY="668.0" minHeight="80.0" minWidth="80.0"
-                        mnemonicParsing="false" onAction="#disconnect" text="Disconnect" AnchorPane.bottomAnchor="50.0"
-                        AnchorPane.leftAnchor="250.0"/>
-                <Label layoutX="23.0" layoutY="105.0" text="Selected User:" AnchorPane.leftAnchor="10.0"
-                       AnchorPane.topAnchor="100.0"/>
-                <Label fx:id="selectedUserLbl" layoutX="75.0" layoutY="147.0" text="-----" AnchorPane.leftAnchor="10.0"
-                       AnchorPane.topAnchor="120.0"/>
+                  <Label alignment="CENTER" font="$x1" layoutX="14.0" layoutY="14.0" style="&#10;" text="Call"
+                         textAlignment="CENTER" textFill="$x2" wrapText="false"/>
+                  <Button fx:id="callBtn" layoutX="65.0" layoutY="704.0" minHeight="80.0" minWidth="80.0"
+                          mnemonicParsing="false" onAction="#call" text="Call" AnchorPane.bottomAnchor="50.0"
+                          AnchorPane.leftAnchor="50.0"/>
+                  <Button fx:id="muteBtn" layoutX="142.0" layoutY="704.0" minHeight="80.0" minWidth="80.0"
+                          mnemonicParsing="false" onAction="#mute" text="Mute" AnchorPane.bottomAnchor="50.0"
+                          AnchorPane.leftAnchor="150.0"/>
+                  <Button fx:id="disconnectBtn" layoutX="240.0" layoutY="668.0" minHeight="80.0" minWidth="80.0"
+                          mnemonicParsing="false" onAction="#disconnect" text="Disconnect"
+                          AnchorPane.bottomAnchor="50.0" AnchorPane.leftAnchor="250.0"/>
+                  <Label layoutX="23.0" layoutY="105.0" text="Selected User:" AnchorPane.leftAnchor="10.0"
+                         AnchorPane.topAnchor="100.0"/>
+                  <Label fx:id="selectedUserLbl" layoutX="75.0" layoutY="147.0" text="-----"
+                         AnchorPane.leftAnchor="10.0" AnchorPane.topAnchor="120.0"/>
+                  <Label layoutX="169.0" layoutY="100.0" text="User IP:"/>
+                  <Label fx:id="userIpLbl" layoutX="169.0" layoutY="120.0" text="-----"/>
               </children>
             </AnchorPane>
         <AnchorPane>
           <children>
-            <Label alignment="CENTER" disable="true" font="$x1" layoutX="14.0" layoutY="14.0" style="&#10;"
-                   text="Details" textAlignment="CENTER" textFill="$x2" visible="false" wrapText="false"/>
+              <Label alignment="CENTER" disable="true" font="$x1" layoutX="14.0" layoutY="14.0" style="&#10;"
+                     text="Details" textAlignment="CENTER" textFill="$x2" visible="false" wrapText="false"/>
           </children>
         </AnchorPane>
       </items>
