@@ -47,6 +47,6 @@ public class EncryptorTest {
 
         MicrophoneData encrypt = new EncryptorImpl(key).encrypt(microphoneData);
 
-        Assert.assertEquals(new String(encrypt.getData()), new String(datagramPacket.getData()));
+        Assert.assertNotEquals(new String(encrypt.getData()), new String(datagramPacket.getData()));
     }
 }
