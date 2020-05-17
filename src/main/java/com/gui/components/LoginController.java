@@ -4,6 +4,8 @@ import com.models.LoginForm;
 import com.rest_providers.AuthProviderImpl;
 import com.utils.IpUtils;
 import com.utils.PasswordUtils;
+import com.utils.PreferencesKeys;
+import com.utils.PreferencesUtils;
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -45,7 +47,7 @@ public class LoginController {
 
     @FXML
     void login(ActionEvent event) throws
-            IOException {
+                                  IOException {
         LoginForm loginForm = LoginForm
                 .builder()
                 .username(usernameTF.getText())
@@ -53,26 +55,38 @@ public class LoginController {
                 .IPAddress(IpUtils.getLocalIpAddr())
                 .build();
 
-        new Thread(() -> {
-            Platform.runLater(() -> {
-                try {
-                    userProvider.login(loginForm);
-                    mainController.initRefreshingToken(userProvider.getToken());
-                    mainController.switchToCall();
-                } catch (Exception e) {
-                    e.printStackTrace();
-                    AlertController.showAlert("Failed to login!",
-                            null,
-                            "Register or activate your account!");
-                }
-            });
-
-        }).start();
+        login(loginForm);
     }
 
     @FXML
     void register(ActionEvent event) {
         mainController.switchToRegister();
+    }
+
+    void login(LoginForm loginForm) {
+        new Thread(() -> {
+            Platform.runLater(() -> {
+                try {
+                    userProvider.login(loginForm);
+                    mainController.initRefreshingToken(AuthProviderImpl.getToken());
+                    mainController.switchToCall();
+
+                    if (rememberMeCB.isSelected()) {
+                        PreferencesUtils.setValue(PreferencesKeys.REMEMBER_ME, true);
+                        PreferencesUtils.setValue(PreferencesKeys.USERNAME, loginForm.getUsername());
+                        PreferencesUtils.setValue(PreferencesKeys.PASSWORD_HASH, loginForm.getPassword());
+                    } else {
+                        PreferencesUtils.setValue(PreferencesKeys.REMEMBER_ME, false);
+                    }
+                } catch (Exception e) {
+                    e.printStackTrace();
+                    AlertController.showAlert("Failed to login!",
+                                              null,
+                                              "Register or activate your account!");
+                }
+            });
+
+        }).start();
     }
 }
 

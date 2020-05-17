@@ -1,13 +1,23 @@
 package com.gui.components;
 
+import com.models.LoginForm;
+import com.models.UserTO;
+import com.utils.IpUtils;
+import com.utils.PreferencesKeys;
+import com.utils.PreferencesUtils;
 import com.utils.TokenService;
 import javafx.fxml.FXML;
 import javafx.scene.layout.VBox;
 import lombok.Getter;
+import lombok.Setter;
 import org.springframework.stereotype.Controller;
 
 @Controller
 public class MainController {
+    @Getter
+    @Setter
+    private static UserTO userMe;
+
     @Getter
     private TokenService tokenService;
 
@@ -30,8 +40,23 @@ public class MainController {
     private CallPageController callPageController;
 
     @FXML
-    void initialize() {
+    void initialize() throws
+                      Exception {
         makePanelsVisible(false, true, false);
+
+        if (PreferencesUtils.getValue(PreferencesKeys.REMEMBER_ME)) {
+            String passwordHash = PreferencesUtils.getValue(PreferencesKeys.PASSWORD_HASH);
+            String username = PreferencesUtils.getValue(PreferencesKeys.USERNAME);
+
+            LoginForm loginForm = LoginForm
+                    .builder()
+                    .username(username)
+                    .password(passwordHash)
+                    .IPAddress(IpUtils.getLocalIpAddr())
+                    .build();
+
+            loginController.login(loginForm);
+        }
     }
 
     public void switchToLogin() {

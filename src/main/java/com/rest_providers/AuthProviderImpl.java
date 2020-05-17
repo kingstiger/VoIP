@@ -1,5 +1,6 @@
 package com.rest_providers;
 
+import com.gui.components.MainController;
 import com.models.LoginForm;
 import com.models.RegistrationForm;
 import com.models.UserTO;
@@ -24,24 +25,26 @@ public class AuthProviderImpl implements AuthProvider {
     private RestTemplate restTemplate = RestTemplateConfiguration.restTemplate();
 
     public UserTO login(LoginForm loginForm) {
-        String endpointUrl = url + "/login";
+        String endpointUrl = url + "/auth/login";
         ResponseEntity<UserTO> userTOResponseEntity = restTemplate.postForEntity(endpointUrl, loginForm, UserTO.class);
 
         user = userTOResponseEntity.getBody();
         token = Objects.requireNonNull(userTOResponseEntity.getHeaders()
-                                                           .get("Token"))
+                                                           .get("token"))
                        .get(0);
+
+        MainController.setUserMe(user);
         return userTOResponseEntity.getBody();
     }
 
     public UserTO register(RegistrationForm registerForm) {
-        String endpointUrl = url + "/register";
+        String endpointUrl = url + "/auth/register";
         return restTemplate.postForObject(endpointUrl, registerForm, UserTO.class);
     }
 
     @Override
     public String renewToken(String actualToken) {
-        String endpointUrl = url + "/renewToken";
+        String endpointUrl = url + "/auth/renewToken";
 
         UriComponentsBuilder builder = UriComponentsBuilder.fromHttpUrl(endpointUrl)
                                                            .queryParam("userID", user.getUserID());

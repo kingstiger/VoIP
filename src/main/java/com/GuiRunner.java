@@ -21,8 +21,9 @@ import java.net.URL;
 @SpringBootApplication
 public class GuiRunner extends Application {
     private static Logger logger = Logger.getLogger(GuiRunner.class);
-    private Image icon = new Image("file:///icons/phone.jpg");
+    private Image icon = new Image("file:///src/main/resources/icons/phone.jpg");
     private MainController component;
+
     @Getter
     private static boolean running = true;
 
@@ -63,9 +64,9 @@ public class GuiRunner extends Application {
         primaryStage.setTitle("Voip Caller");
         primaryStage.getIcons()
                     .add(icon);
+
         primaryStage.setScene(new Scene(root, 800, 800));
 
         primaryStage.show();
     }
-
 }
