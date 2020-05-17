@@ -33,10 +33,18 @@ public class UserDAO {
     private String IPAddress = "127.0.0.1";
 
     public UserShortTO mapToFav() {
-        return new UserShortTO(_id.toString(), username, true);
+        return UserShortTO.builder()
+                .UserID(_id.toString())
+                .username(username)
+                .isFavourite(true)
+                .build();
     }
 
     public UserShortTO mapToNotFav() {
-        return new UserShortTO(_id.toString(), username, false);
+        return UserShortTO.builder()
+                .UserID(_id.toString())
+                .username(username)
+                .isFavourite(false)
+                .build();
     }
 }
