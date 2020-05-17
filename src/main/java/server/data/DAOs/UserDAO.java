@@ -36,6 +36,7 @@ public class UserDAO {
         return UserShortTO.builder()
                 .UserID(_id.toString())
                 .username(username)
+                .IPAddress(IPAddress)
                 .isFavourite(true)
                 .build();
     }
@@ -44,6 +45,7 @@ public class UserDAO {
         return UserShortTO.builder()
                 .UserID(_id.toString())
                 .username(username)
+                .IPAddress(IPAddress)
                 .isFavourite(false)
                 .build();
     }
