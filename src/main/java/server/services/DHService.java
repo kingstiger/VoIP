@@ -195,7 +195,7 @@ public class DHService {
 
     public String encryptKey(String secret, String key) {
 
-        byte[] iv = "10101010".getBytes();
+        byte[] iv = {'1','0','1','0','1','0','1','0', '1','0','1','0','1','0','1','0'};
         IvParameterSpec ivParameterSpec = new IvParameterSpec(iv);
 
         try {
