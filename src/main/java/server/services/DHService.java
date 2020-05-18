@@ -199,8 +199,10 @@ public class DHService {
         IvParameterSpec ivParameterSpec = new IvParameterSpec(iv);
 
         try {
+            secret = secret + "0000000000000000";
+            secret = secret.substring(0, 15);
             Cipher cipher = Cipher.getInstance("AES/CBC/PKCS5Padding");
-            SecretKeySpec secretKeySpec = new SecretKeySpec(secret.getBytes(), "AES");
+            SecretKeySpec secretKeySpec = new SecretKeySpec(secret.getBytes(StandardCharsets.UTF_8), "AES");
             cipher.init(Cipher.ENCRYPT_MODE, secretKeySpec, ivParameterSpec);
             byte[] encryptedBytes = cipher.doFinal(key.getBytes());
             return Arrays.toString(encryptedBytes);
