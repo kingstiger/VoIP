@@ -5,7 +5,10 @@ import com.models.ConnectionDetails;
 import com.models.UserTO;
 import com.rest_providers.AuthProviderImpl;
 import com.rest_providers.CallerProvider;
+import com.rest_providers.DHProvider;
 import com.rest_providers.UserProviderImpl;
+import com.security_utils.DecryptorImpl;
+import com.security_utils.EncryptorImpl;
 import com.sound_utils.Microphone;
 import com.sound_utils.Speaker;
 import com.udp_communication.SingleClientVoiceSender;
@@ -101,7 +104,7 @@ public class CallPageController {
                                  IOException,
                                  LineUnavailableException {
         try {
-            startCall(selectedUser);
+            startCall(selectedUser, mainController.getTokenService().getToken(), null);
             callerProvider.callTo(selectedUser);
             disconnectBtn.setDisable(false);
         } catch (Exception e) {
@@ -129,14 +132,14 @@ public class CallPageController {
         muteBtn.setDisable(true);
     }
 
-    public void informAboutNewCall(UserTO callingUser) {
+    public void informAboutNewCall(UserTO callingUser, String conversationID) {
         Platform.runLater(() -> {
             Optional<ButtonType> result = AlertController.showCallAlert(callingUser);
 
             if (result.isPresent() && result.get()
-                                            .equals(ButtonType.OK)) {
+                    .equals(ButtonType.OK)) {
                 try {
-                    startCall(callingUser);
+                    startCall(callingUser, mainController.getTokenService().getToken(), conversationID);
                 } catch (IOException | LineUnavailableException e) {
                     disconnect(null);
                     e.printStackTrace();
@@ -168,25 +171,27 @@ public class CallPageController {
         userIpLbl.setText(selectedUser.getIPAddress());
     }
 
-    private void startCall(UserTO user) throws
-                                        IOException,
-                                        LineUnavailableException {
+    private void startCall(UserTO user, String token, String conversationID) throws
+            IOException,
+            LineUnavailableException {
+
+        String keyForConversation = DHProvider.getKeyForConversation(true, token, conversationID);
         disconnectBtn.setDisable(false);
         muteBtn.setDisable(false);
 
         AudioFormat format = new AudioFormat(AudioFormat.Encoding.PCM_SIGNED, 44100, 16, 2, 4, 44100, true);
         ConnectionDetails receiverConnection = new ConnectionDetails(InetAddress.getByName("localhost"), 5555, 1024);
         ConnectionDetails senderConnection = new ConnectionDetails(InetAddress.getByName(user.getIPAddress()),
-                                                                   5555,
-                                                                   1024);
+                5555,
+                1024);
 
         Speaker speaker = new Speaker(format);
-        voiceReceiver = new VoiceReceiverImpl(receiverConnection, speaker);
+        voiceReceiver = new VoiceReceiverImpl(receiverConnection, speaker, new DecryptorImpl(keyForConversation));
         voiceReceiver.startListening();
 
         try {
             Microphone microphone = new Microphone(format);
-            voiceSender = new SingleClientVoiceSender(senderConnection, microphone);
+            voiceSender = new SingleClientVoiceSender(senderConnection, microphone, new EncryptorImpl(keyForConversation));
             voiceSender.startSending();
         } catch (Exception e) {
             AlertController.showAlert("You have no microphone!", null, "Check your microphone settings!");
