@@ -12,7 +12,7 @@ import server.data.DTOs.DHRequestTO;
 @Builder
 @Getter
 @Setter
-public class DHDAO extends DHRequestTO {
+public class DHDAO {
     @Id
     private ObjectId _id;
     private Long p;
