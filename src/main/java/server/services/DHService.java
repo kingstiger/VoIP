@@ -205,7 +205,7 @@ public class DHService {
             SecretKeySpec secretKeySpec = new SecretKeySpec(secret.getBytes(StandardCharsets.UTF_8), "AES");
             cipher.init(Cipher.ENCRYPT_MODE, secretKeySpec, ivParameterSpec);
             byte[] encryptedBytes = cipher.doFinal(key.getBytes());
-            return Arrays.toString(encryptedBytes);
+            return new String(encryptedBytes, StandardCharsets.UTF_8);
         } catch (NoSuchPaddingException | NoSuchAlgorithmException | InvalidKeyException | BadPaddingException | IllegalBlockSizeException | InvalidAlgorithmParameterException e) {
             throw new DHException("Cannot perform ciphering " + e.getMessage());
         }
