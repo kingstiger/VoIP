@@ -200,7 +200,7 @@ public class DHService {
 
         try {
             secret = secret + "0000000000000000";
-            secret = secret.substring(0, 15);
+            secret = secret.substring(0, 16);
             Cipher cipher = Cipher.getInstance("AES/CBC/PKCS5Padding");
             SecretKeySpec secretKeySpec = new SecretKeySpec(secret.getBytes(StandardCharsets.UTF_8), "AES");
             cipher.init(Cipher.ENCRYPT_MODE, secretKeySpec, ivParameterSpec);
