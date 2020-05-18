@@ -14,7 +14,6 @@ public class ConversationTO {
     private String ID;
     private String key;
     private Long S;
-    private List<UserShortTO> members;
 
     public String encryptKey(Supplier<String> run) {
         key = run.get();

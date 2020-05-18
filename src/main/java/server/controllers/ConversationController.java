@@ -26,8 +26,8 @@ public class ConversationController {
     /*
     Someone who wants to begin conversation with someone else starts here DH (gives p, g, A and list of people who he wants to call)
     */
-    @PostMapping(value = "/startConversation")
-    public ResponseEntity<?> startConversation(
+    @PostMapping(value = "/calling")
+    public ResponseEntity<ConversationTO> startConversation(
             @RequestParam("userID") String userID,
             @RequestHeader("token") String token,
             @RequestBody DHRequestTO dhRequestTO
@@ -36,21 +36,21 @@ public class ConversationController {
             ConversationTO conversationTO = conversationService.handleConversationRequest(userID, dhRequestTO);
             return ResponseEntity.ok(conversationTO);
         } else {
-            return new ResponseEntity<>("Unauthorized", HttpStatus.UNAUTHORIZED);
+            return new ResponseEntity<>(null, HttpStatus.UNAUTHORIZED);
         }
     }
 
-    @PostMapping(value = "/addToConversation")
-    public ResponseEntity<?> addToConversation(
+    @PostMapping(value = "/beingCalled")
+    public ResponseEntity<ConversationTO> addToConversation(
             @RequestParam("userID") String userID,
             @RequestHeader("token") String token,
             @RequestBody DHRequestTO dhRequestTO
     ) {
         if (securityService.isTokenValid(userID, token)) {
-            conversationService.handleAddToConversationRequest(userID, dhRequestTO);
-            return ResponseEntity.ok().build();
+            ConversationTO conversationTO = conversationService.handleAddToConversationRequest(userID, dhRequestTO);
+            return ResponseEntity.ok(conversationTO);
         } else {
-            return new ResponseEntity<>("Unauthorized", HttpStatus.UNAUTHORIZED);
+            return new ResponseEntity<>(null, HttpStatus.UNAUTHORIZED);
         }
     }
 

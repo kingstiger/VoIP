@@ -16,5 +16,4 @@ public class DHRequestTO {
     private Long p;
     private Long g;
     private Long A;
-    private List<String> whoIWantToCall;
 }

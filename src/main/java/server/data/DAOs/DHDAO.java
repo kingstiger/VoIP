@@ -4,6 +4,7 @@ import lombok.*;
 import org.bson.types.ObjectId;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
+import server.data.DTOs.DHRequestTO;
 
 @Data
 @Document(collection = "DH")
@@ -11,7 +12,7 @@ import org.springframework.data.mongodb.core.mapping.Document;
 @Builder
 @Getter
 @Setter
-public class DHDAO {
+public class DHDAO extends DHRequestTO {
     @Id
     private ObjectId _id;
     private Long p;

@@ -20,4 +20,12 @@ public class UserShortDAO {
                 .IPAddress(userShortTO.getIPAddress())
                 .build();
     }
+
+    public static UserShortDAO map(UserDAO userDAO) {
+        return UserShortDAO.builder()
+                .username(userDAO.getUsername())
+                .userID(userDAO.get_id().toString())
+                .IPAddress(userDAO.getIPAddress())
+                .build();
+    }
 }

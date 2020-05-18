@@ -5,6 +5,7 @@ import org.jetbrains.annotations.NotNull;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.util.Pair;
 import org.springframework.stereotype.Service;
+import server.data.DAOs.ConversationDAO;
 import server.data.DTOs.ConversationTO;
 import server.data.DTOs.DHRequestTO;
 import server.repositories.ConversationRepository;
@@ -169,16 +170,28 @@ public class DHService {
         long S = power(g, _s, p);
         long secret = power(A, _s, p);
 
-        String key = (caller) ? generateKey() : conversationRepository.findById(dhRequestTO.getID())
+        String key = (caller)
+                ? generateKey()
+                : conversationRepository.findById(dhRequestTO.getID())
                 .orElseThrow(DHException::new)
                 .getKey();
 
-        return Pair.of(ConversationTO.builder()
-                        .S(S)
-                        .key(key)
-                        .build(),
-                secret);
+        if (caller) {
+            return Pair.of(ConversationTO.builder()
+                            .S(S)
+                            .key(key)
+                            .build(),
+                    secret);
+        } else {
+            return Pair.of(ConversationTO.builder()
+                            .S(S)
+                            .ID(dhRequestTO.getID())
+                            .key(key)
+                            .build(),
+                    secret);
+        }
     }
+
 
     public String encryptKey(String secret, String key) {
 

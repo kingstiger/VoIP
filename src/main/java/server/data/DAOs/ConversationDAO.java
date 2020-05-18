@@ -2,6 +2,7 @@ package server.data.DAOs;
 
 import lombok.*;
 import org.bson.types.ObjectId;
+import org.mockito.internal.util.collections.Sets;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
@@ -22,11 +23,12 @@ public class ConversationDAO {
     private Set<UserShortDAO> participants;
     private String key;
 
-    public static ConversationDAO createStartedWith(String key) {
+    public static ConversationDAO createStartedWith(String key, UserShortDAO userShortDAO) {
         return ConversationDAO.builder()
                 .began(System.currentTimeMillis())
                 .isOngoing(true)
                 .key(key)
+                .participants(Sets.newSet(userShortDAO))
                 .build();
     }
 
