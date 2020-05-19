@@ -196,8 +196,8 @@ public class DHService {
 
     public String encryptKey(String secret, String key) {
 
-        byte[] iv = {'1','0','1','0','1','0','1','0', '1','0','1','0','1','0','1','0'};
-        IvParameterSpec ivParameterSpec = new IvParameterSpec(iv);
+//        byte[] iv = {'1','0','1','0','1','0','1','0', '1','0','1','0','1','0','1','0'};
+//        IvParameterSpec ivParameterSpec = new IvParameterSpec(iv);
 
         try {
             secret = secret + "0000000000000000";
@@ -205,10 +205,11 @@ public class DHService {
             byte[] secretBytes = Base64.getDecoder().decode(secret);
             Cipher cipher = Cipher.getInstance("AES");
             SecretKeySpec secretKeySpec = new SecretKeySpec(secretBytes, "AES");
-            cipher.init(Cipher.ENCRYPT_MODE, secretKeySpec, ivParameterSpec);
+//            cipher.init(Cipher.ENCRYPT_MODE, secretKeySpec, ivParameterSpec);
+            cipher.init(Cipher.ENCRYPT_MODE, secretKeySpec);
             byte[] encryptedBytes = cipher.doFinal(key.getBytes(StandardCharsets.UTF_8));
             return Base64.getEncoder().encodeToString(encryptedBytes);
-        } catch (NoSuchPaddingException | NoSuchAlgorithmException | InvalidKeyException | BadPaddingException | IllegalBlockSizeException | InvalidAlgorithmParameterException e) {
+        } catch (NoSuchPaddingException | NoSuchAlgorithmException | InvalidKeyException | BadPaddingException | IllegalBlockSizeException e) {
             throw new DHException("Cannot perform ciphering " + e.getMessage());
         }
     }
