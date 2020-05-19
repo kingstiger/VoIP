@@ -22,6 +22,7 @@ import java.security.InvalidAlgorithmParameterException;
 import java.security.InvalidKeyException;
 import java.security.NoSuchAlgorithmException;
 import java.util.Arrays;
+import java.util.Base64;
 import java.util.HashSet;
 import java.util.Random;
 
@@ -201,11 +202,12 @@ public class DHService {
         try {
             secret = secret + "0000000000000000";
             secret = secret.substring(0, 16);
-            Cipher cipher = Cipher.getInstance("AES/CBC/PKCS5Padding");
-            SecretKeySpec secretKeySpec = new SecretKeySpec(secret.getBytes(StandardCharsets.UTF_8), "AES");
+            byte[] secretBytes = Base64.getDecoder().decode(secret);
+            Cipher cipher = Cipher.getInstance("AES");
+            SecretKeySpec secretKeySpec = new SecretKeySpec(secretBytes, "AES");
             cipher.init(Cipher.ENCRYPT_MODE, secretKeySpec, ivParameterSpec);
-            byte[] encryptedBytes = cipher.doFinal(key.getBytes());
-            return new String(encryptedBytes, StandardCharsets.UTF_8);
+            byte[] encryptedBytes = cipher.doFinal(key.getBytes(StandardCharsets.UTF_8));
+            return Base64.getEncoder().encodeToString(encryptedBytes);
         } catch (NoSuchPaddingException | NoSuchAlgorithmException | InvalidKeyException | BadPaddingException | IllegalBlockSizeException | InvalidAlgorithmParameterException e) {
             throw new DHException("Cannot perform ciphering " + e.getMessage());
         }
