@@ -202,9 +202,8 @@ public class DHService {
         try {
             secret = secret + "0000000000000000";
             secret = secret.substring(0, 16);
-            byte[] secretBytes = Base64.getDecoder().decode(secret);
             Cipher cipher = Cipher.getInstance("AES");
-            SecretKeySpec secretKeySpec = new SecretKeySpec(secretBytes, "AES");
+            SecretKeySpec secretKeySpec = new SecretKeySpec(secret.getBytes(StandardCharsets.UTF_8), "AES");
 //            cipher.init(Cipher.ENCRYPT_MODE, secretKeySpec, ivParameterSpec);
             cipher.init(Cipher.ENCRYPT_MODE, secretKeySpec);
             byte[] encryptedBytes = cipher.doFinal(key.getBytes(StandardCharsets.UTF_8));
