@@ -21,7 +21,7 @@ public class DHProvider {
     public static String getKeyForConversation(
             boolean startingConversation,
             String token,
-            String conversationID
+            String[] conversationID
     ) {
         if (startingConversation) {
             String calling = url + "/call/calling";
@@ -29,10 +29,11 @@ public class DHProvider {
 
             ConversationTO response = requestWhile(calling, dhRequestStart, token);
 
+            conversationID[0] = response.getID();
             return DHUtils.getKeyFromDHResponse(response);
         } else {
             String beingCalled = url + "/call/beingCalled";
-            DHRequestTO dhRequestBeingCalled = DHUtils.generateDHRequest(conversationID);
+            DHRequestTO dhRequestBeingCalled = DHUtils.generateDHRequest(conversationID[0]);
 
             ConversationTO response = requestWhile(beingCalled, dhRequestBeingCalled, token);
 

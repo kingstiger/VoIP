@@ -15,7 +15,8 @@ public class CallerController {
 
     @PostMapping("/call")
     public MessageTO serveIncomingCall(@RequestBody UserTO user, @RequestParam String conversationID) {
-        controller.informAboutNewCall(user, conversationID);
+        String[] conversationIDContainer = {conversationID};
+        controller.informAboutNewCall(user, conversationIDContainer);
         return new MessageTO("User informed!");
     }
 }

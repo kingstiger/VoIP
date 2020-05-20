@@ -4,6 +4,7 @@ import com.models.MessageTO;
 import com.models.UserTO;
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestTemplate;
+import org.springframework.web.util.UriComponentsBuilder;
 
 @Component
 public class CallerProvider {
@@ -11,8 +12,10 @@ public class CallerProvider {
 
     private RestTemplate restTemplate = RestTemplateConfiguration.restTemplate();
 
-    public MessageTO callTo(UserTO user) {
+    public MessageTO callTo(UserTO user, String conversationID) {
         String url = "http://" + user.getIPAddress() + port + "/call";
-        return restTemplate.postForObject(url, user, MessageTO.class);
+        UriComponentsBuilder builder = UriComponentsBuilder.fromHttpUrl(url)
+                .queryParam("conversationID", conversationID);
+        return restTemplate.postForObject(builder.toUriString(), user, MessageTO.class);
     }
 }

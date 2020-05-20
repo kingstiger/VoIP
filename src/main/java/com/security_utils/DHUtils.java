@@ -7,12 +7,11 @@ import javax.crypto.BadPaddingException;
 import javax.crypto.Cipher;
 import javax.crypto.IllegalBlockSizeException;
 import javax.crypto.NoSuchPaddingException;
-import javax.crypto.spec.IvParameterSpec;
 import javax.crypto.spec.SecretKeySpec;
-import java.security.InvalidAlgorithmParameterException;
+import java.nio.charset.StandardCharsets;
 import java.security.InvalidKeyException;
 import java.security.NoSuchAlgorithmException;
-import java.util.Arrays;
+import java.util.Base64;
 import java.util.HashSet;
 import java.util.Random;
 
@@ -26,16 +25,19 @@ public class DHUtils {
 
     public static String decryptKey(String secret, String key) {
 
-        byte[] iv = "10101010".getBytes();
-        IvParameterSpec ivParameterSpec = new IvParameterSpec(iv);
+//        byte[] iv = {'1','0','1','0','1','0','1','0', '1','0','1','0','1','0','1','0'};
+//        IvParameterSpec ivParameterSpec = new IvParameterSpec(iv);
 
         try {
-            Cipher cipher = Cipher.getInstance("AES/CBC/PKCS5Padding");
-            SecretKeySpec secretKeySpec = new SecretKeySpec(secret.getBytes(), "AES");
-            cipher.init(Cipher.DECRYPT_MODE, secretKeySpec, ivParameterSpec);
-            byte[] encryptedBytes = cipher.doFinal(key.getBytes());
-            return Arrays.toString(encryptedBytes);
-        } catch (NoSuchPaddingException | NoSuchAlgorithmException | InvalidKeyException | BadPaddingException | IllegalBlockSizeException | InvalidAlgorithmParameterException e) {
+            secret = secret + "0000000000000000";
+            secret = secret.substring(0, 16);
+            Cipher cipher = Cipher.getInstance("AES");
+            SecretKeySpec secretKeySpec = new SecretKeySpec(secret.getBytes(StandardCharsets.UTF_8), "AES");
+//            cipher.init(Cipher.DECRYPT_MODE, secretKeySpec, ivParameterSpec);
+            cipher.init(Cipher.DECRYPT_MODE, secretKeySpec);
+            byte[] decryptedBytes = cipher.doFinal(Base64.getDecoder().decode(key));
+            return new String(decryptedBytes);
+        } catch (NoSuchPaddingException | NoSuchAlgorithmException | InvalidKeyException | BadPaddingException | IllegalBlockSizeException e) {
             throw new RuntimeException(e); //TODO different
         }
     }

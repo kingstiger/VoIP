@@ -104,8 +104,9 @@ public class CallPageController {
                                  IOException,
                                  LineUnavailableException {
         try {
-            startCall(selectedUser, mainController.getTokenService().getToken(), null);
-            callerProvider.callTo(selectedUser);
+            String[] conversationID = new String[1];
+            startCall(selectedUser, conversationID, true);
+            callerProvider.callTo(selectedUser, conversationID[0]);
             disconnectBtn.setDisable(false);
         } catch (Exception e) {
             this.disconnect(null);
@@ -132,14 +133,14 @@ public class CallPageController {
         muteBtn.setDisable(true);
     }
 
-    public void informAboutNewCall(UserTO callingUser, String conversationID) {
+    public void informAboutNewCall(UserTO callingUser, String[] conversationID) {
         Platform.runLater(() -> {
             Optional<ButtonType> result = AlertController.showCallAlert(callingUser);
 
             if (result.isPresent() && result.get()
                     .equals(ButtonType.OK)) {
                 try {
-                    startCall(callingUser, mainController.getTokenService().getToken(), conversationID);
+                    startCall(callingUser, conversationID, false);
                 } catch (IOException | LineUnavailableException e) {
                     disconnect(null);
                     e.printStackTrace();
@@ -171,18 +172,19 @@ public class CallPageController {
         userIpLbl.setText(selectedUser.getIPAddress());
     }
 
-    private void startCall(UserTO user, String token, String conversationID) throws
+    private void startCall(UserTO user, String[] conversationID, boolean calling) throws
             IOException,
             LineUnavailableException {
 
-        String keyForConversation = DHProvider.getKeyForConversation(true, token, conversationID);
+        String token = mainController.getTokenService().getToken();
+        String keyForConversation = DHProvider.getKeyForConversation(calling, token, conversationID);
         disconnectBtn.setDisable(false);
         muteBtn.setDisable(false);
 
         AudioFormat format = new AudioFormat(AudioFormat.Encoding.PCM_SIGNED, 44100, 16, 2, 4, 44100, true);
         ConnectionDetails receiverConnection = new ConnectionDetails(InetAddress.getByName("localhost"), 5555, 1024);
         ConnectionDetails senderConnection = new ConnectionDetails(InetAddress.getByName(user.getIPAddress()),
-                5555,
+                5566,
                 1024);
 
         Speaker speaker = new Speaker(format);
