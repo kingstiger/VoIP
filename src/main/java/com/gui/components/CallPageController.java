@@ -127,7 +127,11 @@ public class CallPageController {
 
     @FXML
     void disconnect(ActionEvent event) {
-        voiceSender.stopSending();
+        try {
+            voiceSender.stopSending();
+        }
+        catch (Exception ignored){}
+
         voiceReceiver.stopListening();
         disconnectBtn.setDisable(true);
         muteBtn.setDisable(true);
