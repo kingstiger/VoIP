@@ -7,12 +7,14 @@ import server.data.DAOs.ConversationDAO;
 import server.data.DAOs.UserDAO;
 import server.data.DAOs.UserShortDAO;
 import server.data.DTOs.ConversationTO;
+import server.data.DTOs.CurrentConversationTO;
 import server.data.DTOs.DHRequestTO;
 import server.repositories.ConversationRepository;
 import server.repositories.UsersRepository;
 import server.utility.exceptions.DHException;
 import server.utility.exceptions.NoSuchUserException;
 
+import java.util.Objects;
 import java.util.Set;
 
 @Service
@@ -66,6 +68,32 @@ public class ConversationService {
         );
 
         return conversationTO;
+    }
+
+    public void handleHangUpRequest(String userID, String conversationID) {
+        ConversationDAO conversationDAO = conversationRepository.findById(conversationID)
+                .orElseThrow(RuntimeException::new);
+
+        Set<UserShortDAO> currentParticipants = conversationDAO.getCurrentParticipants();
+
+        currentParticipants.removeIf((e) -> e.getUserID().equals(userID));
+
+        if (currentParticipants.size() < 2) {
+            conversationDAO.setEnded(System.currentTimeMillis());
+            conversationDAO.setIsOngoing(false);
+            currentParticipants.removeIf(Objects::nonNull);
+            conversationRepository.save(conversationDAO);
+        } else {
+            conversationDAO.setCurrentParticipants(currentParticipants);
+            conversationRepository.save(conversationDAO);
+        }
+    }
+
+    public CurrentConversationTO getCurrentConversation(String conversationID) {
+        ConversationDAO conversationDAO = conversationRepository.findById(conversationID)
+                .orElseThrow(RuntimeException::new);
+
+        return CurrentConversationTO.map(conversationDAO);
     }
 
     private void addToParticipants(UserDAO userDAO, ConversationDAO conversationDAO) {

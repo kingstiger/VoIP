@@ -5,6 +5,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import server.data.DTOs.ConversationTO;
+import server.data.DTOs.CurrentConversationTO;
 import server.data.DTOs.DHRequestTO;
 import server.services.ConversationService;
 import server.services.SecurityService;
@@ -54,4 +55,31 @@ public class ConversationController {
         }
     }
 
+    @PostMapping(value = "/hangUp")
+    public ResponseEntity<?> hangUp(
+            @RequestParam("userID") String userID,
+            @RequestParam("conversationID") String conversationID,
+            @RequestHeader("token") String token
+    ) {
+        if (securityService.isTokenValid(userID, token)) {
+            conversationService.handleHangUpRequest(userID, conversationID);
+            return ResponseEntity.ok().build();
+        } else {
+            return new ResponseEntity<>("Unauthorized", HttpStatus.UNAUTHORIZED);
+        }
+    }
+
+    @GetMapping(value = "/currentConversation")
+    public ResponseEntity<CurrentConversationTO> getCurrentConversation(
+            @RequestParam("userID") String userID,
+            @RequestParam("conversationID") String conversationID,
+            @RequestHeader("token") String token
+    ) {
+        if (securityService.isTokenValid(userID, token)) {
+            CurrentConversationTO currentConversation = conversationService.getCurrentConversation(conversationID);
+            return ResponseEntity.ok(currentConversation);
+        } else {
+            return new ResponseEntity<>(null, HttpStatus.UNAUTHORIZED);
+        }
+    }
 }

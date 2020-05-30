@@ -21,6 +21,7 @@ public class ConversationDAO {
     private Long ended;
     private Boolean isOngoing;
     private Set<UserShortDAO> participants;
+    private Set<UserShortDAO> currentParticipants;
     private String key;
 
     public static ConversationDAO createStartedWith(String key, UserShortDAO userShortDAO) {
