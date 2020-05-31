@@ -33,7 +33,12 @@ public class ConversationUpdater {
                                 .removeIf((p) -> p.getValue() < System.currentTimeMillis());
                     }
                 })
-                .peek(e -> e.setIsOngoing(!e.getCurrentParticipants().isEmpty()));
+                .peek(e -> {
+                    if (e.getCurrentParticipants().isEmpty()) {
+                        e.setIsOngoing(false);
+                        e.setEnded(System.currentTimeMillis());
+                    }
+                });
 
         if (stream.anyMatch(Objects::nonNull)) {
             conversationRepository.saveAll(stream.collect(Collectors.toList()));
