@@ -2,11 +2,13 @@ package com.gui.components;
 
 import com.GuiRunner;
 import com.models.ConnectionDetails;
+import com.models.CurrentConversationTO;
 import com.models.UserTO;
 import com.rest_providers.AuthProviderImpl;
 import com.rest_providers.CallerProvider;
 import com.rest_providers.DHProvider;
 import com.rest_providers.UserProviderImpl;
+import com.runners.ConversationUpdater;
 import com.security_utils.DecryptorImpl;
 import com.security_utils.EncryptorImpl;
 import com.sound_utils.Microphone;
@@ -41,10 +43,15 @@ public class CallPageController {
     private VoiceSender voiceSender;
     private VoiceReceiver voiceReceiver;
 
+    @Setter
+    private CurrentConversationTO currentConversation;
     private UserTO selectedUser;
 
     @Autowired
     private MainController mainController;
+
+    @Autowired
+    private ConversationUpdater conversationUpdater;
 
     @Autowired
     private AuthProviderImpl authProvider;
@@ -132,6 +139,7 @@ public class CallPageController {
         }
         catch (Exception ignored){}
 
+        conversationUpdater.stopUpdatingAndHangUp(mainController.getTokenService().getToken());
         voiceReceiver.stopListening();
         disconnectBtn.setDisable(true);
         muteBtn.setDisable(true);
@@ -153,13 +161,17 @@ public class CallPageController {
         });
     }
 
+    private void informServerAboutHangUp() {
+
+    }
+
     private void initRefreshingUsersThread() {
         new Thread(() -> {
             while (GuiRunner.isRunning()) {
                 try {
                     if (CallPageController.isVisible()) {
                         List<UserTO> allUsers = userProvider.getAllUsers(mainController.getTokenService()
-                                                                                       .getToken());
+                                .getToken());
                         usersTable.setItems(FXCollections.observableArrayList(allUsers));
                     }
 
@@ -202,5 +214,7 @@ public class CallPageController {
         } catch (Exception e) {
             AlertController.showAlert("You have no microphone!", null, "Check your microphone settings!");
         }
+
+        conversationUpdater.startUpdating(this::setCurrentConversation, conversationID[0], MainController.getUserMe().getUserID(), token);
     }
 }
