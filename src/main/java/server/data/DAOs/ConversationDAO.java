@@ -6,6 +6,7 @@ import org.mockito.internal.util.collections.Sets;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
+import java.util.HashMap;
 import java.util.Set;
 
 @Data
@@ -21,7 +22,7 @@ public class ConversationDAO {
     private Long ended;
     private Boolean isOngoing;
     private Set<UserShortDAO> participants;
-    private Set<UserShortDAO> currentParticipants;
+    private HashMap<UserShortDAO, Long> currentParticipants;
     private String key;
 
     public static ConversationDAO createStartedWith(String key, UserShortDAO userShortDAO) {

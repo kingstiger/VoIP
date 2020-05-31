@@ -14,8 +14,11 @@ import server.repositories.UsersRepository;
 import server.utility.exceptions.DHException;
 import server.utility.exceptions.NoSuchUserException;
 
-import java.util.Objects;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 @Service
 public class ConversationService {
@@ -74,24 +77,45 @@ public class ConversationService {
         ConversationDAO conversationDAO = conversationRepository.findById(conversationID)
                 .orElseThrow(RuntimeException::new);
 
-        Set<UserShortDAO> currentParticipants = conversationDAO.getCurrentParticipants();
+        HashMap<UserShortDAO, Long> currentParticipants = conversationDAO.getCurrentParticipants();
 
-        currentParticipants.removeIf((e) -> e.getUserID().equals(userID));
+        currentParticipants.remove(
+                currentParticipants
+                        .keySet()
+                        .stream()
+                        .filter(e -> e.getUserID().equals(userID))
+                        .findFirst()
+                        .get()
+        );
 
-        if (currentParticipants.size() < 2) {
+        if (currentParticipants.size() < 1) {
             conversationDAO.setEnded(System.currentTimeMillis());
             conversationDAO.setIsOngoing(false);
-            currentParticipants.removeIf(Objects::nonNull);
-            conversationRepository.save(conversationDAO);
         } else {
             conversationDAO.setCurrentParticipants(currentParticipants);
-            conversationRepository.save(conversationDAO);
         }
+        conversationRepository.save(conversationDAO);
     }
 
-    public CurrentConversationTO getCurrentConversation(String conversationID) {
+    public CurrentConversationTO getCurrentConversation(String conversationID, String userID) {
         ConversationDAO conversationDAO = conversationRepository.findById(conversationID)
                 .orElseThrow(RuntimeException::new);
+
+        HashMap<UserShortDAO, Long> currentParticipants = conversationDAO.getCurrentParticipants();
+
+        List<Map.Entry<UserShortDAO, Long>> entryList = currentParticipants.entrySet()
+                .stream()
+                .filter(e -> e.getValue() < System.currentTimeMillis())
+                .collect(Collectors.toList());
+        currentParticipants.entrySet().removeIf(entryList::contains);
+
+        long currentTime = System.currentTimeMillis();
+        currentParticipants.entrySet()
+                .stream()
+                .filter(e -> e.getKey().getUserID().equals(userID))
+                .peek(e -> e.setValue(currentTime));
+
+        conversationDAO.setCurrentParticipants(currentParticipants);
 
         return CurrentConversationTO.map(conversationDAO);
     }
@@ -101,5 +125,20 @@ public class ConversationService {
         participants.add(UserShortDAO.map(userDAO));
         conversationDAO.setParticipants(participants);
         conversationRepository.save(conversationDAO);
+    }
+
+    public List<CurrentConversationTO> getAllConversationsOfUser(String userID) {
+        return conversationRepository.findAll()
+                .stream()
+                .filter((e) -> e.getParticipants()
+                        .stream()
+                        .anyMatch(userShortDAO -> userShortDAO
+                                .getUserID()
+                                .equals(userID)
+                        )
+                        && !e.getIsOngoing()
+                )
+                .map(CurrentConversationTO::map)
+                .collect(Collectors.toList());
     }
 }

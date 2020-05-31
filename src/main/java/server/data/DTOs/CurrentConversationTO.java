@@ -21,7 +21,7 @@ public class CurrentConversationTO {
     public static CurrentConversationTO map(ConversationDAO conversationDAO) {
         return CurrentConversationTO.builder()
                 .conversationID(conversationDAO.get_id().toString())
-                .currentParticipants(conversationDAO.getCurrentParticipants())
+                .currentParticipants(conversationDAO.getCurrentParticipants().keySet())
                 .began(conversationDAO.getBegan())
                 .isOngoing(conversationDAO.getIsOngoing())
                 .participants(conversationDAO.getParticipants())

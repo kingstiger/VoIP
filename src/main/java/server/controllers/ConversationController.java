@@ -11,6 +11,8 @@ import server.services.ConversationService;
 import server.services.SecurityService;
 import server.services.UserService;
 
+import java.util.List;
+
 @RestController
 @RequestMapping("/call")
 public class ConversationController {
@@ -76,8 +78,21 @@ public class ConversationController {
             @RequestHeader("token") String token
     ) {
         if (securityService.isTokenValid(userID, token)) {
-            CurrentConversationTO currentConversation = conversationService.getCurrentConversation(conversationID);
+            CurrentConversationTO currentConversation = conversationService.getCurrentConversation(conversationID, userID);
             return ResponseEntity.ok(currentConversation);
+        } else {
+            return new ResponseEntity<>(null, HttpStatus.UNAUTHORIZED);
+        }
+    }
+
+    @GetMapping(value = "/history")
+    public ResponseEntity<List<CurrentConversationTO>> getAllConversations(
+            @RequestParam("userID") String userID,
+            @RequestHeader("token") String token
+    ) {
+        if (securityService.isTokenValid(userID, token)) {
+            List<CurrentConversationTO> history = conversationService.getAllConversationsOfUser(userID);
+            return ResponseEntity.ok(history);
         } else {
             return new ResponseEntity<>(null, HttpStatus.UNAUTHORIZED);
         }
