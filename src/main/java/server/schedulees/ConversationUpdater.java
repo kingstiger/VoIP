@@ -30,7 +30,7 @@ public class ConversationUpdater {
                     if (e.getCurrentParticipants() != null && !e.getCurrentParticipants().isEmpty()) {
                         e.getCurrentParticipants()
                                 .entrySet()
-                                .removeIf((p) -> p.getValue() > System.currentTimeMillis() - 4000);
+                                .removeIf((p) -> p.getValue() < System.currentTimeMillis() - 4000);
                     }
                 })
                 .peek(e -> {

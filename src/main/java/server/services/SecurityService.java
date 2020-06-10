@@ -1,12 +1,15 @@
 package server.services;
 
 import com.google.common.hash.Hashing;
+import jdk.nashorn.internal.parser.Token;
 import org.jetbrains.annotations.NotNull;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.util.Pair;
 import org.springframework.stereotype.Service;
 import server.data.DAOs.SecurityInfoDAO;
 import server.repositories.SecurityRepository;
 import server.repositories.UsersRepository;
+import server.utility.TokenServiceUtils;
 import server.utility.exceptions.CannotRenewTokenException;
 import server.utility.exceptions.NoSuchUserException;
 
@@ -25,14 +28,14 @@ public class SecurityService {
     public SecurityInfoDAO getNewToken(String userID) {
         String token = getTokenString();
 
-        securityRepository.findByUserID(userID)
-                .ifPresent((e) -> securityRepository.delete(e));
+//        securityRepository.findByUserID(userID)
+//                .ifPresent((e) -> securityRepository.delete(e));
 
-        return securityRepository.save(SecurityInfoDAO.builder()
+        return SecurityInfoDAO.builder()
                 .userID(userID)
                 .token(token)
                 .expires(System.currentTimeMillis() + (90 * 60 * 1000))
-                .build());
+                .build();
     }
 
     @NotNull
@@ -44,29 +47,23 @@ public class SecurityService {
                 .toString();
     }
 
-    public SecurityInfoDAO validateAndRenewToken(String userID, String token) {
-        SecurityInfoDAO securityInfoDAO = securityRepository.findByUserID(userID)
-                .orElseThrow(NoSuchUserException::new);
-
-        if (isTokenValid(securityInfoDAO, token)) {
-            String renewedToken = getTokenString();
-            securityInfoDAO.setToken(renewedToken);
-            securityInfoDAO.setExpires(System.currentTimeMillis() + (90 * 60 * 1000));
-            return securityRepository.save(securityInfoDAO);
-        }
-
-        throw new CannotRenewTokenException("Current token invalid, login again");
-    }
+//    public SecurityInfoDAO validateAndRenewToken(String userID, String token) {
+//        SecurityInfoDAO securityInfoDAO = securityRepository.findByUserID(userID)
+//                .orElseThrow(NoSuchUserException::new);
+//
+//        if (isTokenValid(securityInfoDAO, token)) {
+//            String renewedToken = getTokenString();
+//            securityInfoDAO.setToken(renewedToken);
+//            securityInfoDAO.setExpires(System.currentTimeMillis() + (90 * 60 * 1000));
+//            return securityRepository.save(securityInfoDAO);
+//        }
+//
+//        throw new CannotRenewTokenException("Current token invalid, login again");
+//    }
 
     public boolean isTokenValid(String userID, String token) {
-        SecurityInfoDAO securityInfoDAO = securityRepository.findByUserID(userID)
-                .orElseThrow(NoSuchUserException::new);
-
-        if (!securityInfoDAO.getToken().equals(token)) {
-            return false;
-        }
-
-        return securityInfoDAO.getExpires() > System.currentTimeMillis();
+        Pair<String, Long> stringLongPair = TokenServiceUtils.tokensWithUserIDsAndExpires.get(userID);
+        return stringLongPair != null && stringLongPair.getFirst().equals(token) && stringLongPair.getSecond() > System.currentTimeMillis() - 1000;
     }
 
     public boolean isTokenValid(SecurityInfoDAO securityInfoDAO, String token) {

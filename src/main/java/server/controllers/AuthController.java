@@ -10,6 +10,7 @@ import server.data.DTOs.RegistrationForm;
 import server.data.DTOs.UserTO;
 import server.services.SecurityService;
 import server.services.UserService;
+import server.utility.TokenServiceUtils;
 import server.utility.Validator;
 import server.utility.exceptions.WrongFormatException;
 
@@ -26,7 +27,7 @@ public class AuthController {
     @PostMapping(value = "/renewToken")
     public ResponseEntity<SecurityInfoDAO> renewToken(@RequestParam("userID") String userID,
                                                       @RequestHeader("token") String token) {
-        SecurityInfoDAO renewedToken = securityService.validateAndRenewToken(userID, token);
+        SecurityInfoDAO renewedToken = TokenServiceUtils.renewToken(userID, token);
         return ResponseEntity.ok(renewedToken);
     }
 
@@ -34,7 +35,7 @@ public class AuthController {
     public ResponseEntity<UserTO> tryToLogin(@RequestBody LoginForm loginForm) {
         if (Validator.isLoginFormValid(loginForm)) {
             UserDAO userDAO = userService.tryToLogIn(loginForm);
-            SecurityInfoDAO newToken = securityService.getNewToken(userDAO.get_id().toString());
+            SecurityInfoDAO newToken = TokenServiceUtils.getNewToken(userDAO.get_id().toString());
             return ResponseEntity.ok().header("token", newToken.getToken()).body(UserTO.map(userDAO));
         }
         throw new WrongFormatException("Invalid username and/or password!");

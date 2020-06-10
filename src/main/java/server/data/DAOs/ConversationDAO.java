@@ -34,7 +34,7 @@ public class ConversationDAO {
                 .participants(Sets.newSet(userShortDAO))
                 .build();
         HashMap<UserShortDAO, Long> current = new HashMap<>();
-        current.put(userShortDAO, System.currentTimeMillis());
+        current.put(userShortDAO, System.currentTimeMillis() + 5000);
         build.setCurrentParticipants(current);
         return build;
     }

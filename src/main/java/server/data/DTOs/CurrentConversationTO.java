@@ -4,6 +4,7 @@ import lombok.*;
 import server.data.DAOs.ConversationDAO;
 import server.data.DAOs.UserShortDAO;
 
+import java.util.HashSet;
 import java.util.Set;
 
 @AllArgsConstructor
@@ -22,7 +23,9 @@ public class CurrentConversationTO {
     public static CurrentConversationTO map(ConversationDAO conversationDAO) {
         return CurrentConversationTO.builder()
                 .conversationID(conversationDAO.get_id().toString())
-                .currentParticipants(conversationDAO.getCurrentParticipants().keySet())
+                .currentParticipants((conversationDAO.getCurrentParticipants() != null)
+                        ? conversationDAO.getCurrentParticipants().keySet()
+                        : new HashSet<>())
                 .began(conversationDAO.getBegan())
                 .ended(conversationDAO.getEnded())
                 .isOngoing(conversationDAO.getIsOngoing())

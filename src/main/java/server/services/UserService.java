@@ -1,12 +1,14 @@
 package server.services;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.util.Pair;
 import org.springframework.stereotype.Service;
 import server.data.DAOs.SecurityInfoDAO;
 import server.data.DAOs.UserDAO;
 import server.data.DTOs.*;
 import server.repositories.SecurityRepository;
 import server.repositories.UsersRepository;
+import server.utility.TokenServiceUtils;
 import server.utility.exceptions.*;
 
 import java.util.ArrayList;
@@ -185,9 +187,9 @@ public class UserService {
     }
 
     private void accept(UserShortTO e) {
-        Optional<SecurityInfoDAO> repository = securityRepository.findByUserID(e.getUserID());
-        if (repository.isPresent()) {
-            if (repository.get().getExpires() > (System.currentTimeMillis() - 4000)) {
+        if(TokenServiceUtils.tokensWithUserIDsAndExpires.containsKey(e.getUserID())) {
+            Pair<String, Long> tokenExpiresPair = TokenServiceUtils.tokensWithUserIDsAndExpires.get(e.getUserID());
+            if(tokenExpiresPair.getSecond() > System.currentTimeMillis() - 2000) {
                 e.setActive(true);
             }
         }
