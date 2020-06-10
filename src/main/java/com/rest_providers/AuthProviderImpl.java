@@ -33,7 +33,7 @@ public class AuthProviderImpl implements AuthProvider {
                                                            .get("token"))
                        .get(0);
 
-        MainController.setUserMe(user);
+        MainController.setUserMe(user.map());
         return userTOResponseEntity.getBody();
     }
 

@@ -12,18 +12,22 @@ import java.util.List;
 @NoArgsConstructor
 public class UserTO {
     private String userID;
+
+    private boolean active = false;
+    private boolean favourite = false;
+
     private String username;
     private String email;
     private List<UserShortDAO> favourites;
     @JsonProperty("ipaddress")
     private String IPAddress;
 
-    public static UserTO map(UserDAO userDAO) {
-        return UserTO.builder()
-                     .username(userDAO.getUsername())
-                     .email(userDAO.getEmail())
-                     .favourites(userDAO.getFavourites())
-                     .IPAddress(userDAO.getIPAddress())
+    public UserShortTO map() {
+        return UserShortTO.builder()
+                    .userID(getUserID())
+                     .username(getUsername())
+                     .favourite(isFavourite())
+                     .IPAddress(getIPAddress())
                      .build();
     }
 }

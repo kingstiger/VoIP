@@ -3,6 +3,7 @@ package com.rest_providers;
 import com.gui.components.MainController;
 import com.models.ConversationTO;
 import com.models.DHRequestTO;
+import com.models.UserShortTO;
 import com.models.UserTO;
 import com.security_utils.DHUtils;
 import org.springframework.http.HttpEntity;
@@ -42,7 +43,7 @@ public class DHProvider {
     }
 
     private static ConversationTO requestWhile(String what, DHRequestTO dhRequestTO, String token) {
-        UserTO userMe = MainController.getUserMe();
+        UserShortTO userMe = MainController.getUserMe();
         UriComponentsBuilder builder = UriComponentsBuilder.fromHttpUrl(what)
                 .queryParam("userID", userMe.getUserID());
         HttpHeaders headers = new HttpHeaders();

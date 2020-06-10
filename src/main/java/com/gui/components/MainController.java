@@ -1,6 +1,7 @@
 package com.gui.components;
 
 import com.models.LoginForm;
+import com.models.UserShortTO;
 import com.models.UserTO;
 import com.utils.IpUtils;
 import com.utils.PreferencesKeys;
@@ -17,7 +18,7 @@ import org.springframework.stereotype.Controller;
 public class MainController {
     @Getter
     @Setter
-    private static UserTO userMe;
+    private static UserShortTO userMe;
 
     @Getter
     private TokenService tokenService;
