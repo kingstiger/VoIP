@@ -28,6 +28,7 @@ public class ConversationDAO {
 
     public static ConversationDAO createStartedWith(String key, UserShortDAO userShortDAO) {
         ConversationDAO build = ConversationDAO.builder()
+                ._id(new ObjectId())
                 .began(System.currentTimeMillis())
                 .isOngoing(true)
                 .key(key)
