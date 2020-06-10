@@ -11,6 +11,7 @@ import server.services.ConversationService;
 import server.services.SecurityService;
 import server.services.UserService;
 
+import java.util.Arrays;
 import java.util.List;
 
 @RestController
@@ -71,9 +72,8 @@ public class ConversationController {
                 return new ResponseEntity<>("Unauthorized", HttpStatus.UNAUTHORIZED);
             }
         } catch (Exception e) {
-            e.printStackTrace();
+            return new ResponseEntity<String>(Arrays.toString(e.getStackTrace()), HttpStatus.I_AM_A_TEAPOT);
         }
-        return new ResponseEntity<>("Ooops", HttpStatus.I_AM_A_TEAPOT);
     }
 
     @GetMapping(value = "/currentConversation")

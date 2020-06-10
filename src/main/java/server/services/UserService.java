@@ -94,7 +94,7 @@ public class UserService {
 
     public UserFavouritesTO getFavouritesOfUser(String userID) {
         UserDAO userDAO = usersRepository.findById(userID)
-                .orElseThrow(NoClassDefFoundError::new);
+                .orElseThrow(NoSuchUserException::new);
 
         List<String> favouritesIDs = userDAO.getFavourites();
 

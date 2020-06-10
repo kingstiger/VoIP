@@ -13,7 +13,9 @@ import server.services.UserService;
 import server.utility.Validator;
 import server.utility.exceptions.WrongFormatException;
 
+import java.util.Arrays;
 import java.util.List;
+import java.util.logging.Handler;
 
 @RestController
 @RequestMapping("/users")
@@ -65,11 +67,15 @@ public class UserController {
     @GetMapping(value = "/favourites")
     public ResponseEntity<?> getFavouritesOfUser(@RequestParam("userID") String userID,
                                                  @RequestHeader("token") String token) {
-        if (securityService.isTokenValid(userID, token)) {
-            UserFavouritesTO favouritesOfUser = userService.getFavouritesOfUser(userID);
-            return ResponseEntity.ok(favouritesOfUser);
-        } else {
-            return new ResponseEntity<>(null, HttpStatus.UNAUTHORIZED);
+        try {
+            if (securityService.isTokenValid(userID, token)) {
+                UserFavouritesTO favouritesOfUser = userService.getFavouritesOfUser(userID);
+                return ResponseEntity.ok(favouritesOfUser);
+            } else {
+                return new ResponseEntity<>(null, HttpStatus.UNAUTHORIZED);
+            }
+        } catch (Exception e) {
+            return new ResponseEntity<String>(Arrays.toString(e.getStackTrace()), HttpStatus.OK);
         }
     }
 
