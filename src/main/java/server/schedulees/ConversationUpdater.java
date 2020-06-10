@@ -19,7 +19,7 @@ public class ConversationUpdater {
     @Autowired
     private ConversationRepository conversationRepository;
 
-    @Scheduled(fixedRate = 15000) //15s
+    @Scheduled(fixedRate = 15000, initialDelay = 2000) //15s
     public void updateConversations() {
         List<ConversationDAO> allByIsOngoing = conversationRepository.findAllByIsOngoing(true);
         Stream<ConversationDAO> stream = allByIsOngoing

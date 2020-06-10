@@ -185,7 +185,7 @@ public class UserService {
         if(securityInfoDAOOptional.isPresent()) {
             SecurityInfoDAO securityInfoDAO = securityInfoDAOOptional.get();
             long expires = securityInfoDAO.getExpires();
-            if(expires > System.currentTimeMillis()) {
+            if(expires < System.currentTimeMillis()) {
                 e.setActive(true);
             } else {
                 e.setActive(false);
