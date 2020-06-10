@@ -50,10 +50,11 @@ public class ConversationProvider {
         headers.set("token", token);
         HttpEntity<Object> entity = new HttpEntity<>(headers);
 
-        restTemplate.postForLocation(
+        restTemplate.exchange(
                 builder.toUriString(),
-                HttpMethod.GET,
-                entity
+                HttpMethod.POST,
+                entity,
+                String.class
         );
     }
 

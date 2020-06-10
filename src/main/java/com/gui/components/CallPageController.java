@@ -36,11 +36,11 @@ import java.util.Optional;
 
 @Controller
 public class CallPageController {
+    private VoiceSender voiceSender;
+    private VoiceReceiver voiceReceiver;
     @Getter
     @Setter
     private static boolean visible = false;
-    private VoiceSender voiceSender;
-    private VoiceReceiver voiceReceiver;
 
     @Setter
     private CurrentConversationTO currentConversation;
@@ -60,6 +60,9 @@ public class CallPageController {
 
     @Autowired
     private CallerProvider callerProvider;
+
+    @FXML
+    public Button getHistoryBtn;
 
     @FXML
     public TableColumn<String, HistoryDisplayData> startedHistoryCol;
@@ -113,11 +116,9 @@ public class CallPageController {
         endedHistoryCol.setCellValueFactory(new PropertyValueFactory<>("ended"));
         startedHistoryCol.setCellValueFactory(new PropertyValueFactory<>("began"));
         participantsHistoryCol.setCellValueFactory(new PropertyValueFactory<>("participants"));
-
-        refreshHistoryTable();
     }
 
-    private void refreshHistoryTable() {
+    public void refreshHistory() {
         ObservableList<HistoryDisplayData> history = FXCollections.observableList(
                 ConversationProvider.getHistory(
                         MainController.getUserMe().getUserID(),
@@ -173,7 +174,7 @@ public class CallPageController {
         disconnectBtn.setDisable(true);
         muteBtn.setDisable(true);
 
-        refreshHistoryTable();
+        refreshHistory();
     }
 
     public void informAboutNewCall(UserTO callingUser, String[] conversationID) {

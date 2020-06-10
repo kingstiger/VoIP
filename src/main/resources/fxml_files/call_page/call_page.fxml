@@ -80,6 +80,8 @@
                         <TableView fx:constant="CONSTRAINED_RESIZE_POLICY"/>
                     </columnResizePolicy>
                 </TableView>
+                <Button fx:id="getHistoryBtn" layoutX="116.0" layoutY="15.0" mnemonicParsing="false"
+                        onAction="#refreshHistory" text="Get History"/>
             </children>
         </AnchorPane>
       </items>

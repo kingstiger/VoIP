@@ -17,6 +17,8 @@ public class ConversationUpdater {
 
     public void startUpdating(Consumer<CurrentConversationTO> consumer, String conversationID, String userID, String token) {
         shouldRun = true;
+        this.conversationID = conversationID;
+        this.userID = userID;
 
         new Thread(() -> {
             while (shouldRun) {
