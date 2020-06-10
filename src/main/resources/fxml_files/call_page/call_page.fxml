@@ -71,8 +71,8 @@
                     <columns>
                         <TableColumn fx:id="startedHistoryCol" editable="false" prefWidth="65.0" sortable="false"
                                      text="Began"/>
-                        <TableColumn fx:id="endedHistoryCol" editable="false" prefWidth="65.0" sortable="false"
-                                     text="Ended"/>
+<!--                        <TableColumn fx:id="endedHistoryCol" editable="false" prefWidth="65.0" sortable="false"-->
+<!--                                     text="Ended"/>-->
                         <TableColumn fx:id="participantsHistoryCol" editable="false" prefWidth="130.0" sortable="false"
                                      text="Participants"/>
                     </columns>

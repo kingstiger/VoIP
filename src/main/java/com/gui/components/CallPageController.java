@@ -75,8 +75,8 @@ public class CallPageController {
 
     @FXML
     private TableColumn<Boolean, UserShortTO> statusColumn;
-    @FXML
-    public TableColumn<String, HistoryDisplayData> endedHistoryCol;
+//    @FXML
+//    public TableColumn<String, HistoryDisplayData> endedHistoryCol;
     @FXML
     public TableColumn<String, HistoryDisplayData> participantsHistoryCol;
     @FXML
@@ -121,7 +121,7 @@ public class CallPageController {
     }
 
     private void initHistory() {
-        endedHistoryCol.setCellValueFactory(new PropertyValueFactory<>("ended"));
+//        endedHistoryCol.setCellValueFactory(new PropertyValueFactory<>("ended"));
         startedHistoryCol.setCellValueFactory(new PropertyValueFactory<>("began"));
         participantsHistoryCol.setCellValueFactory(new PropertyValueFactory<>("participants"));
     }
