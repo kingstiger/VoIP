@@ -19,7 +19,7 @@ public class ReceiverRunner {
                                            UnknownHostException,
                                            LineUnavailableException,
                                            SocketException {
-        Decryptor decryptor = new DecryptorImpl("testowyklucz");
+        Decryptor decryptor = new DecryptorImpl("b38f8c68806e0099e6a95a85295183b3e5f2f50b5e52dc1e71ad4571e5c869e8");
 
         AudioFormat format = new AudioFormat(AudioFormat.Encoding.PCM_SIGNED, 44100, 16, 2, 4, 44100, true);
         ConnectionDetails sender = new ConnectionDetails(InetAddress.getByName("localhost"), 5555, 1024);
