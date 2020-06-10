@@ -141,7 +141,8 @@ public class CallPageController {
         try {
             String[] conversationID = new String[1];
             startCall(selectedUser, conversationID, true);
-            callerProvider.callTo(selectedUser, conversationID[0]);
+
+            callerProvider.callTo(MainController.getUserMe(), selectedUser, conversationID[0]);
             disconnectBtn.setDisable(false);
         } catch (Exception e) {
             this.disconnect(null);

@@ -12,10 +12,10 @@ public class CallerProvider {
 
     private RestTemplate restTemplate = RestTemplateConfiguration.restTemplate();
 
-    public MessageTO callTo(UserTO user, String conversationID) {
-        String url = "http://" + user.getIPAddress() + port + "/call";
+    public MessageTO callTo(UserTO userMe, UserTO callingUser, String conversationID) {
+        String url = "http://" + callingUser.getIPAddress() + port + "/call";
         UriComponentsBuilder builder = UriComponentsBuilder.fromHttpUrl(url)
                 .queryParam("conversationID", conversationID);
-        return restTemplate.postForObject(builder.toUriString(), user, MessageTO.class);
+        return restTemplate.postForObject(builder.toUriString(), userMe, MessageTO.class);
     }
 }
