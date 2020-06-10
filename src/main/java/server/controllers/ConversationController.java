@@ -63,12 +63,17 @@ public class ConversationController {
             @RequestParam("conversationID") String conversationID,
             @RequestHeader("token") String token
     ) {
-        if (securityService.isTokenValid(userID, token)) {
-            conversationService.handleHangUpRequest(userID, conversationID);
-            return ResponseEntity.ok().build();
-        } else {
-            return new ResponseEntity<>("Unauthorized", HttpStatus.UNAUTHORIZED);
+        try {
+            if (securityService.isTokenValid(userID, token)) {
+                conversationService.handleHangUpRequest(userID, conversationID);
+                return ResponseEntity.ok().build();
+            } else {
+                return new ResponseEntity<>("Unauthorized", HttpStatus.UNAUTHORIZED);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
         }
+        return new ResponseEntity<>("Ooops", HttpStatus.I_AM_A_TEAPOT);
     }
 
     @GetMapping(value = "/currentConversation")
