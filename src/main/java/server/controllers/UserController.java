@@ -80,13 +80,13 @@ public class UserController {
     }
 
     @PostMapping(value = "/favourites")
-    public ResponseEntity<UserFavouritesTO> addUserToFavourites(
+    public ResponseEntity<List<UserShortTO>> addUserToFavourites(
             @RequestParam("userID") String userID,
             @RequestParam("favUsername") String favUsername,
             @RequestHeader("token") String token) {
         if (securityService.isTokenValid(userID, token)) {
             UserFavouritesTO userFavouritesTO = userService.addToFavourites(userID, favUsername);
-            return ResponseEntity.ok(userFavouritesTO);
+            return ResponseEntity.ok(userFavouritesTO.getFavourites());
         } else {
             return new ResponseEntity<>(null, HttpStatus.UNAUTHORIZED);
         }
