@@ -107,7 +107,17 @@ public class CallPageController {
         muteBtn.setDisable(true);
         disconnectBtn.setDisable(true);
 
-        initHistory();
+        new Thread(() -> {
+            while(GuiRunner.isRunning()) {
+                try {
+                    initHistory();
+                    refreshHistory();
+                    Thread.sleep(5000);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+        }).start();
     }
 
     private void initHistory() {

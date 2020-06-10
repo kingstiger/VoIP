@@ -56,10 +56,6 @@ public class UserProviderImpl {
                 UserShortTO[].class)
                 .getBody());
 
-        users.stream()
-                .filter(user -> user.getUsername().equals("Krzysiulek") || user.getUsername().equals("piotrek"))
-                .forEach(user -> user.setActive(true));
-
         return users;
     }
 }
