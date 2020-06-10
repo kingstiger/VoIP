@@ -1,10 +1,7 @@
 package com.gui.components;
 
 import com.GuiRunner;
-import com.models.ConnectionDetails;
-import com.models.CurrentConversationTO;
-import com.models.HistoryDisplayData;
-import com.models.UserTO;
+import com.models.*;
 import com.rest_providers.*;
 import com.runners.ConversationUpdater;
 import com.security_utils.DecryptorImpl;
@@ -44,7 +41,7 @@ public class CallPageController {
 
     @Setter
     private CurrentConversationTO currentConversation;
-    private UserTO selectedUser;
+    private UserShortTO selectedUser;
 
     @Autowired
     private MainController mainController;
@@ -68,16 +65,16 @@ public class CallPageController {
     public TableColumn<String, HistoryDisplayData> startedHistoryCol;
 
     @FXML
-    private TableView<UserTO> usersTable;
+    private TableView<UserShortTO> usersTable;
 
     @FXML
-    private TableColumn<String, UserTO> usernameColumn;
+    private TableColumn<String, UserShortTO> usernameColumn;
 
     @FXML
-    private TableColumn<Boolean, UserTO> favouriteColumn;
+    private TableColumn<Boolean, UserShortTO> favouriteColumn;
 
     @FXML
-    private TableColumn<Boolean, UserTO> statusColumn;
+    private TableColumn<Boolean, UserShortTO> statusColumn;
     @FXML
     public TableColumn<String, HistoryDisplayData> endedHistoryCol;
     @FXML
@@ -105,11 +102,12 @@ public class CallPageController {
         usernameColumn.setCellValueFactory(new PropertyValueFactory("username"));
         statusColumn.setCellValueFactory(new PropertyValueFactory("active"));
         favouriteColumn.setCellValueFactory(new PropertyValueFactory("favourite"));
+
         initRefreshingUsersThread();
         muteBtn.setDisable(true);
         disconnectBtn.setDisable(true);
 
-        initHistory();
+//        initHistory();
     }
 
     private void initHistory() {
@@ -177,7 +175,7 @@ public class CallPageController {
         refreshHistory();
     }
 
-    public void informAboutNewCall(UserTO callingUser, String[] conversationID) {
+    public void informAboutNewCall(UserShortTO callingUser, String[] conversationID) {
         Platform.runLater(() -> {
             Optional<ButtonType> result = AlertController.showCallAlert(callingUser);
 
@@ -202,7 +200,7 @@ public class CallPageController {
             while (GuiRunner.isRunning()) {
                 try {
                     if (CallPageController.isVisible()) {
-                        List<UserTO> allUsers = userProvider.getAllUsers(mainController.getTokenService()
+                        List<UserShortTO> allUsers = userProvider.getFavourites(mainController.getTokenService()
                                 .getToken());
                         usersTable.setItems(FXCollections.observableArrayList(allUsers));
                     }
@@ -220,7 +218,7 @@ public class CallPageController {
         userIpLbl.setText(selectedUser.getIPAddress());
     }
 
-    private void startCall(UserTO user, String[] conversationID, boolean calling) throws
+    private void startCall(UserShortTO user, String[] conversationID, boolean calling) throws
             IOException,
             LineUnavailableException {
 

@@ -7,6 +7,7 @@
  ********************************************/
 package com.gui.components;
 
+import com.models.UserShortTO;
 import com.models.UserTO;
 import javafx.scene.control.Alert;
 import javafx.scene.control.ButtonType;
@@ -50,7 +51,7 @@ public class AlertController {
         return result.orElse("");
     }
 
-    public static Optional<ButtonType> showCallAlert(UserTO callingUser) {
+    public static Optional<ButtonType> showCallAlert(UserShortTO callingUser) {
         Alert alert = new Alert(Alert.AlertType.WARNING,
                                 "User " + callingUser.getUsername() + "is calling.\nWould you like to answer?",
                                 ButtonType.CANCEL, ButtonType.OK);

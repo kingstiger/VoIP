@@ -2,6 +2,8 @@ package com.rest_providers;
 
 import com.google.common.collect.Lists;
 import com.gui.components.MainController;
+import com.models.UserShortDAO;
+import com.models.UserShortTO;
 import com.models.UserTO;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
@@ -29,10 +31,31 @@ public class UserProviderImpl {
         HttpEntity<String> entity = new HttpEntity<>(headers);
 
         List<UserTO> users = Lists.newArrayList(restTemplate.exchange(urlBuilder.toUriString(),
-                                                                      HttpMethod.GET,
-                                                                      entity,
-                                                                      UserTO[].class)
-                                                            .getBody());
+                HttpMethod.GET,
+                entity,
+                UserTO[].class)
+                .getBody());
+        return users;
+    }
+
+    public List<UserShortTO> getFavourites(String token) {
+        String endpointUrl = url + "/favourites";
+
+        UriComponentsBuilder urlBuilder = UriComponentsBuilder.fromHttpUrl(endpointUrl)
+                .queryParam("userID",
+                        MainController.getUserMe()
+                                .getUserID());
+
+        HttpHeaders headers = new HttpHeaders();
+        headers.set("token", token);
+        HttpEntity<String> entity = new HttpEntity<>(headers);
+
+        List<UserShortTO> users = Lists.newArrayList(restTemplate.exchange(urlBuilder.toUriString(),
+                HttpMethod.GET,
+                entity,
+                UserShortTO[].class)
+                .getBody());
+
         return users;
     }
 }
