@@ -203,9 +203,11 @@ public class CallPageController {
                         List<UserShortTO> allUsers = userProvider.getFavourites(mainController.getTokenService()
                                 .getToken());
                         usersTable.setItems(FXCollections.observableArrayList(allUsers));
+                        Thread.sleep(2000);
                     }
-
-                    Thread.sleep(10000);
+                    else {
+                        Thread.sleep(100);
+                    }
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 }
