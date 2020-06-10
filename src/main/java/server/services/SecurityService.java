@@ -74,6 +74,6 @@ public class SecurityService {
             return false;
         }
 
-        return securityInfoDAO.getExpires() < System.currentTimeMillis();
+        return securityInfoDAO.getExpires() > System.currentTimeMillis();
     }
 }
