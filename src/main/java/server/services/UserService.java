@@ -115,7 +115,7 @@ public class UserService {
 
         favourites.addAll(notFavourites);
 
-        updateUsers();
+        TokenServiceUtils.updateUsers();
         for (UserShortTO favourite : favourites) {
             favourite.setActive(TokenServiceUtils.usersActive.getOrDefault(favourite.getUserID(), false));
         }
@@ -123,16 +123,7 @@ public class UserService {
         return new UserFavouritesTO(userID, userDAO.getUsername(), favourites);
     }
 
-    public void updateUsers() {
-        HashMap<String, Pair<String, Long>> tokensWithUserIDsAndExpires = TokenServiceUtils.tokensWithUserIDsAndExpires;
-        for (Map.Entry<String, Pair<String, Long>> userIDTokenExpires : tokensWithUserIDsAndExpires.entrySet()) {
-            if (userIDTokenExpires.getValue().getSecond() > System.currentTimeMillis()) {
-                TokenServiceUtils.usersActive.put(userIDTokenExpires.getKey(), true);
-            } else {
-                TokenServiceUtils.usersActive.put(userIDTokenExpires.getKey(), false);
-            }
-        }
-    }
+
 
     public UserFavouritesTO addToFavourites(String userID, String favouriteUsername) {
         UserDAO userDAO = usersRepository.findById(userID)
@@ -153,10 +144,13 @@ public class UserService {
     }
 
     public UserFavouritesTO deleteFavourite(String userID, String favUsername) {
-        UserDAO userDAO = usersRepository.findById(userID)
+        UserDAO userDAO = usersRepository
+                .findById(userID)
                 .orElseThrow(() -> new NoSuchUserException(userID));
-        UserDAO favUserDAO = usersRepository.findByUsername(favUsername)
+        UserDAO favUserDAO = usersRepository
+                .findByUsername(favUsername)
                 .orElseThrow(() -> new NoSuchUserException((favUsername)));
+
         List<String> favourites = userDAO.getFavourites();
         String favUserID = favUserDAO.get_id().toString();
 
