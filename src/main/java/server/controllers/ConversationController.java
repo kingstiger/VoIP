@@ -10,6 +10,7 @@ import server.data.DTOs.DHRequestTO;
 import server.services.ConversationService;
 import server.services.SecurityService;
 import server.services.UserService;
+import server.utility.TokenServiceUtils;
 
 import java.util.Arrays;
 import java.util.List;
@@ -36,7 +37,7 @@ public class ConversationController {
             @RequestHeader("token") String token,
             @RequestBody DHRequestTO dhRequestTO
     ) {
-        if (securityService.isTokenValid(userID, token)) {
+        if (TokenServiceUtils.isTokenValid(userID, token)) {
             ConversationTO conversationTO = conversationService.handleConversationRequest(userID, dhRequestTO);
             return ResponseEntity.ok(conversationTO);
         } else {
@@ -50,7 +51,7 @@ public class ConversationController {
             @RequestHeader("token") String token,
             @RequestBody DHRequestTO dhRequestTO
     ) {
-        if (securityService.isTokenValid(userID, token)) {
+        if (TokenServiceUtils.isTokenValid(userID, token)) {
             ConversationTO conversationTO = conversationService.handleAddToConversationRequest(userID, dhRequestTO);
             return ResponseEntity.ok(conversationTO);
         } else {
@@ -65,7 +66,7 @@ public class ConversationController {
             @RequestHeader("token") String token
     ) {
         try {
-            if (securityService.isTokenValid(userID, token)) {
+            if (TokenServiceUtils.isTokenValid(userID, token)) {
                 conversationService.handleHangUpRequest(userID, conversationID);
                 return ResponseEntity.ok().build();
             } else {
@@ -85,7 +86,7 @@ public class ConversationController {
             @RequestParam("conversationID") String conversationID,
             @RequestHeader("token") String token
     ) {
-        if (securityService.isTokenValid(userID, token)) {
+        if (TokenServiceUtils.isTokenValid(userID, token)) {
             CurrentConversationTO currentConversation = conversationService.getCurrentConversation(conversationID, userID);
             return ResponseEntity.ok(currentConversation);
         } else {
@@ -98,7 +99,7 @@ public class ConversationController {
             @RequestParam("userID") String userID,
             @RequestHeader("token") String token
     ) {
-        if (securityService.isTokenValid(userID, token)) {
+        if (TokenServiceUtils.isTokenValid(userID, token)) {
             List<CurrentConversationTO> history = conversationService.getAllConversationsOfUser(userID);
             return ResponseEntity.ok(history);
         } else {

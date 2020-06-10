@@ -10,6 +10,7 @@ import server.data.DTOs.UserShortTO;
 import server.data.DTOs.UserTO;
 import server.services.SecurityService;
 import server.services.UserService;
+import server.utility.TokenServiceUtils;
 import server.utility.Validator;
 import server.utility.exceptions.WrongFormatException;
 
@@ -37,7 +38,7 @@ public class UserController {
     public ResponseEntity<List<UserShortTO>> getAllUsers(
             @RequestParam("userID") String userID,
             @RequestHeader("token") String token) {
-        if (securityService.isTokenValid(userID, token)) {
+        if (TokenServiceUtils.isTokenValid(userID, token)) {
             return ResponseEntity.ok(userService.getAllUsers(userID));
         } else {
             return new ResponseEntity<>(null, HttpStatus.UNAUTHORIZED);
@@ -48,7 +49,7 @@ public class UserController {
     public ResponseEntity<UserTO> getMeXD(
             @RequestParam("userID") String userID,
             @RequestHeader("token") String token) {
-        if (securityService.isTokenValid(userID, token)) {
+        if (TokenServiceUtils.isTokenValid(userID, token)) {
             return ResponseEntity.ok(userService.getUser(userID));
         } else {
             return new ResponseEntity<>(null, HttpStatus.UNAUTHORIZED);
@@ -68,7 +69,7 @@ public class UserController {
     public ResponseEntity<?> getFavouritesOfUser(@RequestParam("userID") String userID,
                                                  @RequestHeader("token") String token) {
         try {
-            if (securityService.isTokenValid(userID, token)) {
+            if (TokenServiceUtils.isTokenValid(userID, token)) {
                 UserFavouritesTO favouritesOfUser = userService.getFavouritesOfUser(userID);
                 return ResponseEntity.ok(favouritesOfUser.getFavourites());
             } else {
@@ -84,7 +85,7 @@ public class UserController {
             @RequestParam("userID") String userID,
             @RequestParam("favUsername") String favUsername,
             @RequestHeader("token") String token) {
-        if (securityService.isTokenValid(userID, token)) {
+        if (TokenServiceUtils.isTokenValid(userID, token)) {
             UserFavouritesTO userFavouritesTO = userService.addToFavourites(userID, favUsername);
             return ResponseEntity.ok(userFavouritesTO.getFavourites());
         } else {
@@ -97,7 +98,7 @@ public class UserController {
             @RequestParam("userID") String userID,
             @RequestParam("favUsername") String favUsername,
             @RequestHeader("token") String token) {
-        if (securityService.isTokenValid(userID, token)) {
+        if (TokenServiceUtils.isTokenValid(userID, token)) {
             UserFavouritesTO userFavouritesTO = userService.deleteFavourite(userID, favUsername);
             return ResponseEntity.ok(userFavouritesTO.getFavourites());
         } else {
@@ -116,7 +117,7 @@ public class UserController {
     @DeleteMapping(value = "/{userID}")
     public ResponseEntity<String> removeUser(@PathVariable String userID,
                                         @RequestHeader("token") String token) {
-        if (securityService.isTokenValid(userID, token)) {
+        if (TokenServiceUtils.isTokenValid(userID, token)) {
             userService.deleteUser(userID);
             return ResponseEntity.ok("Deleted user");
         } else {
