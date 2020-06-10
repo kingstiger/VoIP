@@ -1,11 +1,14 @@
 package server.utility;
 
+import com.google.common.hash.Hashing;
+import org.bson.types.ObjectId;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.util.Pair;
 import server.data.DAOs.SecurityInfoDAO;
 import server.services.SecurityService;
 import server.utility.exceptions.CannotRenewTokenException;
 
+import java.nio.charset.StandardCharsets;
 import java.util.HashMap;
 import java.util.Optional;
 
@@ -16,9 +19,25 @@ public class TokenServiceUtils {
     public static HashMap<String, Pair<String, Long>> tokensWithUserIDsAndExpires = new HashMap<>();
 
     public static SecurityInfoDAO getNewToken(String userID) {
-        SecurityInfoDAO newToken = securityService.getNewToken(userID);
-        tokensWithUserIDsAndExpires.put(userID, Pair.of(newToken.getToken(), System.currentTimeMillis() + 90 * 60 * 1000));
-        return newToken;
+        long expires = System.currentTimeMillis() + 90 * 60 * 1000;
+        String tokenString = getTokenString();
+        tokensWithUserIDsAndExpires.put(userID, Pair.of(tokenString, expires));
+        return SecurityInfoDAO.builder()
+                .token(tokenString)
+                .expires(expires)
+                .userID(userID)
+                ._id(new ObjectId())
+                .username("username")
+                .build();
+    }
+
+
+    private static String getTokenString() {
+        String originalString = String.valueOf(System.currentTimeMillis());
+
+        return Hashing.sha256()
+                .hashString(originalString, StandardCharsets.UTF_8)
+                .toString();
     }
 
     public static SecurityInfoDAO renewToken(String userID, String token) {
