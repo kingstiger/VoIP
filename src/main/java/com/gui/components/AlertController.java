@@ -8,7 +8,6 @@
 package com.gui.components;
 
 import com.models.UserShortTO;
-import com.models.UserTO;
 import javafx.scene.control.Alert;
 import javafx.scene.control.ButtonType;
 import javafx.scene.control.TextInputDialog;
@@ -53,8 +52,8 @@ public class AlertController {
 
     public static Optional<ButtonType> showCallAlert(UserShortTO callingUser) {
         Alert alert = new Alert(Alert.AlertType.WARNING,
-                                "User " + callingUser.getUsername() + "is calling.\nWould you like to answer?",
-                                ButtonType.CANCEL, ButtonType.OK);
+                "User " + callingUser.getUsername() + " is calling.\nWould you like to answer?",
+                ButtonType.CANCEL, ButtonType.OK);
 
         Optional<ButtonType> result = alert.showAndWait();
         return result;
