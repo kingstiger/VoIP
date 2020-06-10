@@ -14,6 +14,7 @@ import java.util.Set;
 public class CurrentConversationTO {
     private String conversationID;
     private Long began;
+    private Long ended;
     private Boolean isOngoing;
     private Set<UserShortDAO> participants;
     private Set<UserShortDAO> currentParticipants;
@@ -23,6 +24,7 @@ public class CurrentConversationTO {
                 .conversationID(conversationDAO.get_id().toString())
                 .currentParticipants(conversationDAO.getCurrentParticipants().keySet())
                 .began(conversationDAO.getBegan())
+                .ended(conversationDAO.getEnded())
                 .isOngoing(conversationDAO.getIsOngoing())
                 .participants(conversationDAO.getParticipants())
                 .build();

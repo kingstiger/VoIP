@@ -19,7 +19,8 @@ public class ConversationDAO {
     @Id
     private ObjectId _id;
     private Long began;
-    private Long ended;
+    @Builder.Default
+    private Long ended = 0L;
     private Boolean isOngoing;
     private Set<UserShortDAO> participants;
     private HashMap<UserShortDAO, Long> currentParticipants;
