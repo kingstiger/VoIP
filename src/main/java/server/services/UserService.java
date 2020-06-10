@@ -2,19 +2,25 @@ package server.services;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import server.data.DAOs.SecurityInfoDAO;
 import server.data.DAOs.UserDAO;
 import server.data.DTOs.*;
+import server.repositories.SecurityRepository;
 import server.repositories.UsersRepository;
 import server.utility.exceptions.*;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
 public class UserService {
     @Autowired
     private UsersRepository usersRepository;
+
+    @Autowired
+    private SecurityRepository securityRepository;
 
     @Autowired
     private EmailUtility emailUtility;
@@ -101,10 +107,12 @@ public class UserService {
         List<UserShortTO> favourites = usersRepository.findAllBy_idIn(favouritesIDs)
                 .stream()
                 .map(UserDAO::mapToFav)
+                .peek(this::accept)
                 .collect(Collectors.toList());
         List<UserShortTO> notFavourites = usersRepository.findAllBy_idNotIn(favouritesIDs)
                 .stream()
                 .map(UserDAO::mapToNotFav)
+                .peek(this::accept)
                 .collect(Collectors.toList());
 
         favourites.addAll(notFavourites);
@@ -170,5 +178,18 @@ public class UserService {
 
     public List<UserShortTO> getAllUsers(String userID) {
         return getFavouritesOfUser(userID).getFavourites();
+    }
+
+    private void accept(UserShortTO e) {
+        Optional<SecurityInfoDAO> securityInfoDAOOptional = securityRepository.findByUserID(e.getUserID());
+        if(securityInfoDAOOptional.isPresent()) {
+            SecurityInfoDAO securityInfoDAO = securityInfoDAOOptional.get();
+            long expires = securityInfoDAO.getExpires();
+            if(expires > System.currentTimeMillis()) {
+                e.setActive(true);
+            } else {
+                e.setActive(false);
+            }
+        }
     }
 }
