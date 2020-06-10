@@ -128,6 +128,7 @@ public class ConversationService {
         Set<UserShortDAO> participants = conversationDAO.getParticipants();
         participants.add(UserShortDAO.map(userDAO));
         conversationDAO.setParticipants(participants);
+        conversationDAO.getCurrentParticipants().put(UserShortDAO.map(userDAO), System.currentTimeMillis());
         conversationRepository.save(conversationDAO);
     }
 

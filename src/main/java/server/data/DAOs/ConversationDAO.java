@@ -27,12 +27,16 @@ public class ConversationDAO {
     private String key;
 
     public static ConversationDAO createStartedWith(String key, UserShortDAO userShortDAO) {
-        return ConversationDAO.builder()
+        ConversationDAO build = ConversationDAO.builder()
                 .began(System.currentTimeMillis())
                 .isOngoing(true)
                 .key(key)
                 .participants(Sets.newSet(userShortDAO))
                 .build();
+        HashMap<UserShortDAO, Long> current = new HashMap<>();
+        current.put(userShortDAO, System.currentTimeMillis());
+        build.setCurrentParticipants(current);
+        return build;
     }
 
     public boolean isParticipating(String username) {
