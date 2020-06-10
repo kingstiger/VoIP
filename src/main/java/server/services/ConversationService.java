@@ -14,10 +14,7 @@ import server.repositories.UsersRepository;
 import server.utility.exceptions.DHException;
 import server.utility.exceptions.NoSuchUserException;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
@@ -79,14 +76,14 @@ public class ConversationService {
 
         HashMap<UserShortDAO, Long> currentParticipants = conversationDAO.getCurrentParticipants();
 
-        currentParticipants.remove(
-                currentParticipants
-                        .keySet()
-                        .stream()
-                        .filter(e -> e.getUserID().equals(userID))
-                        .findFirst()
-                        .get()
-        );
+        Optional<UserShortDAO> userShortDAO = currentParticipants
+                .keySet()
+                .stream()
+                .filter(e -> e.getUserID().equals(userID))
+                .findFirst();
+
+
+        userShortDAO.ifPresent(currentParticipants::remove);
 
         if (currentParticipants.size() < 1) {
             conversationDAO.setEnded(System.currentTimeMillis());
@@ -94,6 +91,7 @@ public class ConversationService {
         } else {
             conversationDAO.setCurrentParticipants(currentParticipants);
         }
+
         conversationRepository.save(conversationDAO);
     }
 
