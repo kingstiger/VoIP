@@ -14,6 +14,7 @@ import java.util.Optional;
 
 public class TokenServiceUtils {
 
+    public static HashMap<String, Boolean> usersActive = new HashMap<>();
     public static HashMap<String, Pair<String, Long>> tokensWithUserIDsAndExpires = new HashMap<>();
 
     public static SecurityInfoDAO getNewToken(String userID) {

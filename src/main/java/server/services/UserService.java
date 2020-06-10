@@ -120,7 +120,7 @@ public class UserService {
                 userID,
                 userDAO.getUsername(),
                 favourites.stream()
-                        .peek(this::accept)
+                        .peek(e -> TokenServiceUtils.usersActive.getOrDefault(e.getUserID(), false))
                         .collect(Collectors.toList())
         );
     }
@@ -184,14 +184,5 @@ public class UserService {
 
     public List<UserShortTO> getAllUsers(String userID) {
         return getFavouritesOfUser(userID).getFavourites();
-    }
-
-    private void accept(UserShortTO e) {
-        if(TokenServiceUtils.tokensWithUserIDsAndExpires.containsKey(e.getUserID())) {
-            Pair<String, Long> tokenExpiresPair = TokenServiceUtils.tokensWithUserIDsAndExpires.get(e.getUserID());
-            if(tokenExpiresPair.getSecond() > System.currentTimeMillis() - 6000) {
-                e.setActive(true);
-            }
-        }
     }
 }
