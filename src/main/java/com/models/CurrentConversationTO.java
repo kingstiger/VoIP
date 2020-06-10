@@ -12,6 +12,7 @@ import java.util.Set;
 public class CurrentConversationTO {
     private String conversationID;
     private Long began;
+    private Long ended;
     private Boolean isOngoing;
     private Set<UserShortDAO> participants;
     private Set<UserShortDAO> currentParticipants;

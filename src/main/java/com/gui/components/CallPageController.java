@@ -3,11 +3,9 @@ package com.gui.components;
 import com.GuiRunner;
 import com.models.ConnectionDetails;
 import com.models.CurrentConversationTO;
+import com.models.HistoryDisplayData;
 import com.models.UserTO;
-import com.rest_providers.AuthProviderImpl;
-import com.rest_providers.CallerProvider;
-import com.rest_providers.DHProvider;
-import com.rest_providers.UserProviderImpl;
+import com.rest_providers.*;
 import com.runners.ConversationUpdater;
 import com.security_utils.DecryptorImpl;
 import com.security_utils.EncryptorImpl;
@@ -19,6 +17,7 @@ import com.udp_communication.VoiceReceiverImpl;
 import com.udp_communication.VoiceSender;
 import javafx.application.Platform;
 import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
@@ -63,6 +62,9 @@ public class CallPageController {
     private CallerProvider callerProvider;
 
     @FXML
+    public TableColumn<String, HistoryDisplayData> startedHistoryCol;
+
+    @FXML
     private TableView<UserTO> usersTable;
 
     @FXML
@@ -73,6 +75,12 @@ public class CallPageController {
 
     @FXML
     private TableColumn<Boolean, UserTO> statusColumn;
+    @FXML
+    public TableColumn<String, HistoryDisplayData> endedHistoryCol;
+    @FXML
+    public TableColumn<String, HistoryDisplayData> participantsHistoryCol;
+    @FXML
+    private TableView<HistoryDisplayData> historyTable;
 
     @FXML
     private Button disconnectBtn;
@@ -97,12 +105,32 @@ public class CallPageController {
         initRefreshingUsersThread();
         muteBtn.setDisable(true);
         disconnectBtn.setDisable(true);
+
+        initHistory();
+    }
+
+    private void initHistory() {
+        endedHistoryCol.setCellValueFactory(new PropertyValueFactory<>("ended"));
+        startedHistoryCol.setCellValueFactory(new PropertyValueFactory<>("began"));
+        participantsHistoryCol.setCellValueFactory(new PropertyValueFactory<>("participants"));
+
+        refreshHistoryTable();
+    }
+
+    private void refreshHistoryTable() {
+        ObservableList<HistoryDisplayData> history = FXCollections.observableList(
+                ConversationProvider.getHistory(
+                        MainController.getUserMe().getUserID(),
+                        mainController.getTokenService().getToken())
+        );
+
+        historyTable.setItems(history);
     }
 
     @FXML
     void updateSelectedUser() {
         selectedUser = usersTable.getSelectionModel()
-                                 .getSelectedItem();
+                .getSelectedItem();
         updateSelectedUserInfo();
     }
 
@@ -136,13 +164,15 @@ public class CallPageController {
     void disconnect(ActionEvent event) {
         try {
             voiceSender.stopSending();
+        } catch (Exception ignored) {
         }
-        catch (Exception ignored){}
 
         conversationUpdater.stopUpdatingAndHangUp(mainController.getTokenService().getToken());
         voiceReceiver.stopListening();
         disconnectBtn.setDisable(true);
         muteBtn.setDisable(true);
+
+        refreshHistoryTable();
     }
 
     public void informAboutNewCall(UserTO callingUser, String[] conversationID) {

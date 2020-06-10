@@ -2,6 +2,7 @@ package com.rest_providers;
 
 import com.google.common.collect.Lists;
 import com.models.CurrentConversationTO;
+import com.models.HistoryDisplayData;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
@@ -9,8 +10,10 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.util.UriComponentsBuilder;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
+import java.util.stream.Collectors;
 
 @Component
 public class ConversationProvider {
@@ -54,7 +57,7 @@ public class ConversationProvider {
         );
     }
 
-    public static List<CurrentConversationTO> getHistory(String userID, String token) {
+    public static List<HistoryDisplayData> getHistory(String userID, String token) {
         String current = url + "/call/history";
         UriComponentsBuilder urlBuilder = UriComponentsBuilder.fromHttpUrl(current)
                 .queryParam("userID", userID);
@@ -63,10 +66,15 @@ public class ConversationProvider {
         headers.set("token", token);
         HttpEntity<Object> entity = new HttpEntity<>(headers);
 
-        return Lists.newArrayList(Objects.requireNonNull(restTemplate.exchange(urlBuilder.toUriString(),
+        ArrayList<CurrentConversationTO> currentConversationTOS = Lists.newArrayList(Objects.requireNonNull(restTemplate.exchange(urlBuilder.toUriString(),
                 HttpMethod.GET,
                 entity,
                 CurrentConversationTO[].class)
                 .getBody()));
+
+        return currentConversationTOS
+                .stream()
+                .map(HistoryDisplayData::map)
+                .collect(Collectors.toList());
     }
 }
