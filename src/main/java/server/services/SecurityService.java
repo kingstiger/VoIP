@@ -31,7 +31,7 @@ public class SecurityService {
         return securityRepository.save(SecurityInfoDAO.builder()
                 .userID(userID)
                 .token(token)
-                .expires(System.currentTimeMillis())
+                .expires(System.currentTimeMillis() + (90 * 60 * 1000))
                 .build());
     }
 

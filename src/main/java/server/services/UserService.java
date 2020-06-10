@@ -107,25 +107,19 @@ public class UserService {
         List<UserShortTO> favourites = usersRepository.findAllBy_idIn(favouritesIDs)
                 .stream()
                 .map(UserDAO::mapToFav)
-                .peek(this::accept)
                 .collect(Collectors.toList());
         List<UserShortTO> notFavourites = usersRepository.findAllBy_idNotIn(favouritesIDs)
                 .stream()
                 .map(UserDAO::mapToNotFav)
-                .peek(this::accept)
                 .collect(Collectors.toList());
 
         favourites.addAll(notFavourites);
-        return new UserFavouritesTO(userID, userDAO.getUsername(), favourites.stream()
-                .peek(e -> {
-                    Optional<SecurityInfoDAO> repository = securityRepository.findByUsername(e.getUsername());
-                    if (repository.isPresent()) {
-                        if (repository.get().getExpires() > (System.currentTimeMillis() - 2000)) {
-                            e.setActive(true);
-                        }
-                    }
-                })
-                .collect(Collectors.toList())
+        return new UserFavouritesTO(
+                userID,
+                userDAO.getUsername(),
+                favourites.stream()
+                        .peek(this::accept)
+                        .collect(Collectors.toList())
         );
     }
 
@@ -191,14 +185,10 @@ public class UserService {
     }
 
     private void accept(UserShortTO e) {
-        Optional<SecurityInfoDAO> securityInfoDAOOptional = securityRepository.findByUserID(e.getUserID());
-        if (securityInfoDAOOptional.isPresent()) {
-            SecurityInfoDAO securityInfoDAO = securityInfoDAOOptional.get();
-            long expires = securityInfoDAO.getExpires();
-            if (expires < System.currentTimeMillis()) {
+        Optional<SecurityInfoDAO> repository = securityRepository.findByUserID(e.getUserID());
+        if (repository.isPresent()) {
+            if (repository.get().getExpires() > (System.currentTimeMillis() - 4000)) {
                 e.setActive(true);
-            } else {
-                e.setActive(false);
             }
         }
     }
