@@ -66,7 +66,7 @@ public class SecurityService {
             return false;
         }
 
-        return securityInfoDAO.getExpires() < System.currentTimeMillis();
+        return securityInfoDAO.getExpires() > System.currentTimeMillis();
     }
 
     public boolean isTokenValid(SecurityInfoDAO securityInfoDAO, String token) {
