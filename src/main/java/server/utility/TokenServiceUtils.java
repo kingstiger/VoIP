@@ -19,7 +19,7 @@ public class TokenServiceUtils {
     public static HashMap<String, Pair<String, Long>> tokensWithUserIDsAndExpires = new HashMap<>();
 
     public static SecurityInfoDAO getNewToken(String userID) {
-        long expires = System.currentTimeMillis() + 60 * 1000;
+        long expires = System.currentTimeMillis() + 2 * 60 * 1000;
         String tokenString = getTokenString();
         tokensWithUserIDsAndExpires.put(userID, Pair.of(tokenString, expires));
         usersActive.put(userID, true);
@@ -46,6 +46,13 @@ public class TokenServiceUtils {
         HashMap<String, Pair<String, Long>> tokensWithUserIDsAndExpires = TokenServiceUtils.tokensWithUserIDsAndExpires;
         for (Map.Entry<String, Pair<String, Long>> userIDTokenExpires : tokensWithUserIDsAndExpires.entrySet()) {
             if (userIDTokenExpires.getValue().getSecond() > System.currentTimeMillis()) {
+                TokenServiceUtils.tokensWithUserIDsAndExpires.put(
+                        userIDTokenExpires.getKey(),
+                        Pair.of(
+                                userIDTokenExpires.getValue().getFirst(),
+                                System.currentTimeMillis() + 2 * 60 * 1000
+                        )
+                );
                 TokenServiceUtils.usersActive.put(userIDTokenExpires.getKey(), true);
             } else {
                 TokenServiceUtils.usersActive.put(userIDTokenExpires.getKey(), false);
@@ -69,7 +76,7 @@ public class TokenServiceUtils {
         if(tokensWithUserIDsAndExpires.containsKey(userID)) {
             if(tokensWithUserIDsAndExpires.get(userID).getSecond() > System.currentTimeMillis()
                     && tokensWithUserIDsAndExpires.get(userID).getFirst().equals(token)) {
-                expires = System.currentTimeMillis() + 60 * 1000;
+                expires = System.currentTimeMillis() + 2 * 60 * 1000;
                 tokensWithUserIDsAndExpires.put(userID, Pair.of(token, expires));
                 usersActive.put(userID, true);
             }
