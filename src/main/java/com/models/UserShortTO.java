@@ -15,6 +15,6 @@ public class UserShortTO {
     private String username;
     @JsonProperty("ipaddress")
     private String IPAddress;
-    private boolean favourite;
-    private boolean active;
+    private boolean favourite = false;
+    private boolean active = false;
 }
