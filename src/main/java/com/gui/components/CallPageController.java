@@ -70,8 +70,8 @@ public class CallPageController {
     @FXML
     private TableColumn<String, UserShortTO> usernameColumn;
 
-    @FXML
-    private TableColumn<Boolean, UserShortTO> favouriteColumn;
+//    @FXML
+//    private TableColumn<Boolean, UserShortTO> favouriteColumn;
 
     @FXML
     private TableColumn<Boolean, UserShortTO> statusColumn;
@@ -101,13 +101,13 @@ public class CallPageController {
     void initialize() {
         usernameColumn.setCellValueFactory(new PropertyValueFactory("username"));
         statusColumn.setCellValueFactory(new PropertyValueFactory("active"));
-        favouriteColumn.setCellValueFactory(new PropertyValueFactory("favourite"));
+//        favouriteColumn.setCellValueFactory(new PropertyValueFactory("favourite"));
 
         initRefreshingUsersThread();
         muteBtn.setDisable(true);
         disconnectBtn.setDisable(true);
 
-//        initHistory();
+        initHistory();
     }
 
     private void initHistory() {
