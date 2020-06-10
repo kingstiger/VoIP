@@ -2,9 +2,7 @@ package com.rest_providers;
 
 import com.google.common.collect.Lists;
 import com.gui.components.MainController;
-import com.models.UserShortDAO;
 import com.models.UserShortTO;
-import com.models.UserTO;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
@@ -18,25 +16,6 @@ import java.util.List;
 public class UserProviderImpl {
     final String url = "https://server-voip.herokuapp.com/users";
     private final RestTemplate restTemplate = RestTemplateConfiguration.restTemplate();
-
-    public List<UserTO> getAllUsers(String token) {
-        String endpointUrl = url + "/all";
-        UriComponentsBuilder urlBuilder = UriComponentsBuilder.fromHttpUrl(endpointUrl)
-                                                              .queryParam("userID",
-                                                                          MainController.getUserMe()
-                                                                                        .getUserID());
-
-        HttpHeaders headers = new HttpHeaders();
-        headers.set("token", token);
-        HttpEntity<String> entity = new HttpEntity<>(headers);
-
-        List<UserTO> users = Lists.newArrayList(restTemplate.exchange(urlBuilder.toUriString(),
-                HttpMethod.GET,
-                entity,
-                UserTO[].class)
-                .getBody());
-        return users;
-    }
 
     public List<UserShortTO> getFavourites(String token) {
         String endpointUrl = url + "/favourites";
@@ -57,5 +36,43 @@ public class UserProviderImpl {
                 .getBody());
 
         return users;
+    }
+
+    public void addToFavourites(String favUsername, String token) {
+        String endpointUrl = url + "/favourites";
+
+        UriComponentsBuilder urlBuilder = UriComponentsBuilder.fromHttpUrl(endpointUrl)
+                .queryParam("userID",
+                        MainController.getUserMe()
+                                .getUserID())
+                .queryParam("favUsername", favUsername);
+
+        HttpHeaders headers = new HttpHeaders();
+        headers.set("token", token);
+        HttpEntity<String> entity = new HttpEntity<>(headers);
+
+        restTemplate.exchange(urlBuilder.toUriString(),
+                HttpMethod.POST,
+                entity,
+                Object.class);
+    }
+
+    public void deleteFromFavourites(String favUsername, String token) {
+        String endpointUrl = url + "/favourites";
+
+        UriComponentsBuilder urlBuilder = UriComponentsBuilder.fromHttpUrl(endpointUrl)
+                .queryParam("userID",
+                        MainController.getUserMe()
+                                .getUserID())
+                .queryParam("favUsername", favUsername);
+
+        HttpHeaders headers = new HttpHeaders();
+        headers.set("token", token);
+        HttpEntity<String> entity = new HttpEntity<>(headers);
+
+        restTemplate.exchange(urlBuilder.toUriString(),
+                HttpMethod.DELETE,
+                entity,
+                Object.class);
     }
 }

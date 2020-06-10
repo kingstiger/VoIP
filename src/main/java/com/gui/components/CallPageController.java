@@ -1,7 +1,10 @@
 package com.gui.components;
 
 import com.GuiRunner;
-import com.models.*;
+import com.models.ConnectionDetails;
+import com.models.CurrentConversationTO;
+import com.models.HistoryDisplayData;
+import com.models.UserShortTO;
 import com.rest_providers.*;
 import com.runners.ConversationUpdater;
 import com.security_utils.DecryptorImpl;
@@ -71,16 +74,18 @@ public class CallPageController {
     private TableColumn<String, UserShortTO> usernameColumn;
 
 //    @FXML
-//    private TableColumn<Boolean, UserShortTO> favouriteColumn;
+//    private TableColumn<Booleashn, UserShortTO> favouriteColumn;
 
     @FXML
     private TableColumn<Boolean, UserShortTO> statusColumn;
-//    @FXML
+    //    @FXML
 //    public TableColumn<String, HistoryDisplayData> endedHistoryCol;
     @FXML
     public TableColumn<String, HistoryDisplayData> participantsHistoryCol;
     @FXML
     private TableView<HistoryDisplayData> historyTable;
+    @FXML
+    private CheckBox favouriteCheckBox;
 
     @FXML
     private Button disconnectBtn;
@@ -110,9 +115,9 @@ public class CallPageController {
         new Thread(() -> {
             while(GuiRunner.isRunning()) {
                 try {
+                    Thread.sleep(10000);
                     initHistory();
                     refreshHistory();
-                    Thread.sleep(5000);
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
@@ -140,6 +145,8 @@ public class CallPageController {
     void updateSelectedUser() {
         selectedUser = usersTable.getSelectionModel()
                 .getSelectedItem();
+
+        favouriteCheckBox.setSelected(selectedUser.isFavourite());
         updateSelectedUserInfo();
     }
 
@@ -183,6 +190,16 @@ public class CallPageController {
         muteBtn.setDisable(true);
 
         refreshHistory();
+    }
+
+    @FXML
+    void favouriteChanged(ActionEvent event) {
+        if (favouriteCheckBox.isSelected()) {
+            userProvider.addToFavourites(selectedUser.getUsername(), mainController.getTokenService().getToken());
+        } else {
+            System.out.println("Deleted");
+            userProvider.deleteFromFavourites(selectedUser.getUsername(), mainController.getTokenService().getToken());
+        }
     }
 
     public void informAboutNewCall(UserShortTO callingUser, String[] conversationID) {

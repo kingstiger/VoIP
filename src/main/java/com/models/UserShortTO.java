@@ -1,7 +1,10 @@
 package com.models;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
 @Data
 @AllArgsConstructor
@@ -12,8 +15,6 @@ public class UserShortTO {
     private String username;
     @JsonProperty("ipaddress")
     private String IPAddress;
-    @JsonProperty("isFavourite")
     private boolean favourite;
-    @JsonProperty("isActive")
     private boolean active;
 }
