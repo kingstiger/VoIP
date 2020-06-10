@@ -7,7 +7,6 @@ import lombok.NoArgsConstructor;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
-import java.util.Objects;
 
 @Data
 @AllArgsConstructor
@@ -17,7 +16,6 @@ public class HistoryDisplayData {
     private static final SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy HH:mm");
 
     private String began;
-    private String ended;
     private String participants;
 
     public static HistoryDisplayData map(CurrentConversationTO currentConversationTO) {
@@ -29,13 +27,6 @@ public class HistoryDisplayData {
                         .reduce((allPrevious, next) -> allPrevious.concat("\n").concat(next))
                         .orElse("")
                 );
-
-        if (Objects.isNull(currentConversationTO.getEnded())) {
-            participants.ended("----");
-        }else {
-            participants.ended(sdf.format(new Date(currentConversationTO.getEnded())));
-        }
-
         return participants.build();
     }
 }
