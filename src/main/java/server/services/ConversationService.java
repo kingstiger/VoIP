@@ -76,6 +76,12 @@ public class ConversationService {
 
         HashMap<UserShortDAO, Long> currentParticipants = conversationDAO.getCurrentParticipants();
 
+        if(currentParticipants == null) {
+            conversationDAO.setEnded(System.currentTimeMillis());
+            conversationDAO.setIsOngoing(false);
+            return;
+        }
+
         Optional<UserShortDAO> userShortDAO = currentParticipants
                 .keySet()
                 .stream()
@@ -111,7 +117,7 @@ public class ConversationService {
         currentParticipants.entrySet()
                 .stream()
                 .filter(e -> e.getKey().getUserID().equals(userID))
-                .peek(e -> e.setValue(currentTime));
+                .peek(e -> e.setValue(currentTime + 20000));
 
         conversationDAO.setCurrentParticipants(currentParticipants);
 
