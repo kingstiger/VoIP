@@ -19,11 +19,9 @@ public class ConversationDAO {
     @Id
     private ObjectId _id;
     private Long began;
-    @Builder.Default
-    private Long ended = 0L;
     private Boolean isOngoing;
     private Set<UserShortDAO> participants;
-    private HashMap<UserShortDAO, Long> currentParticipants;
+    private HashMap<String, Long> currentParticipants;
     private String key;
 
     public static ConversationDAO createStartedWith(String key, UserShortDAO userShortDAO) {
@@ -34,8 +32,8 @@ public class ConversationDAO {
                 .key(key)
                 .participants(Sets.newSet(userShortDAO))
                 .build();
-        HashMap<UserShortDAO, Long> current = new HashMap<>();
-        current.put(userShortDAO, System.currentTimeMillis() + 5000);
+        HashMap<String, Long> current = new HashMap<>();
+        current.put(userShortDAO.getUserID(), System.currentTimeMillis() + 5000);
         build.setCurrentParticipants(current);
         return build;
     }

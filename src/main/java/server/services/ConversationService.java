@@ -74,25 +74,18 @@ public class ConversationService {
         ConversationDAO conversationDAO = conversationRepository.findById(conversationID)
                 .orElseThrow(RuntimeException::new);
 
-        HashMap<UserShortDAO, Long> currentParticipants = conversationDAO.getCurrentParticipants();
+        HashMap<String, Long> currentParticipants = conversationDAO.getCurrentParticipants();
 
-        if(currentParticipants == null) {
-            conversationDAO.setEnded(System.currentTimeMillis());
-            conversationDAO.setIsOngoing(false);
-            return;
-        }
 
-        Optional<UserShortDAO> userShortDAO = currentParticipants
+        Optional<String> userShortDAO = currentParticipants
                 .keySet()
                 .stream()
-                .filter(e -> e.getUserID().equals(userID))
+                .filter(e -> e.equals(userID))
                 .findFirst();
-
 
         userShortDAO.ifPresent(currentParticipants::remove);
 
         if (currentParticipants.size() < 1) {
-            conversationDAO.setEnded(System.currentTimeMillis());
             conversationDAO.setIsOngoing(false);
         } else {
             conversationDAO.setCurrentParticipants(currentParticipants);
@@ -105,9 +98,9 @@ public class ConversationService {
         ConversationDAO conversationDAO = conversationRepository.findById(conversationID)
                 .orElseThrow(RuntimeException::new);
 
-        HashMap<UserShortDAO, Long> currentParticipants = conversationDAO.getCurrentParticipants();
+        HashMap<String, Long> currentParticipants = conversationDAO.getCurrentParticipants();
 
-        List<Map.Entry<UserShortDAO, Long>> entryList = currentParticipants.entrySet()
+        List<Map.Entry<String, Long>> entryList = currentParticipants.entrySet()
                 .stream()
                 .filter(e -> e.getValue() < System.currentTimeMillis())
                 .collect(Collectors.toList());
@@ -116,7 +109,7 @@ public class ConversationService {
         long currentTime = System.currentTimeMillis();
         currentParticipants.entrySet()
                 .stream()
-                .filter(e -> e.getKey().getUserID().equals(userID))
+                .filter(e -> e.getKey().equals(userID))
                 .peek(e -> e.setValue(currentTime + 20000));
 
         conversationDAO.setCurrentParticipants(currentParticipants);
@@ -128,7 +121,7 @@ public class ConversationService {
         Set<UserShortDAO> participants = conversationDAO.getParticipants();
         participants.add(UserShortDAO.map(userDAO));
         conversationDAO.setParticipants(participants);
-        conversationDAO.getCurrentParticipants().put(UserShortDAO.map(userDAO), System.currentTimeMillis());
+        conversationDAO.getCurrentParticipants().put(userDAO.get_id().toString(), System.currentTimeMillis());
         conversationRepository.save(conversationDAO);
     }
 
