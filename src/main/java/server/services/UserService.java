@@ -11,9 +11,7 @@ import server.repositories.UsersRepository;
 import server.utility.TokenServiceUtils;
 import server.utility.exceptions.*;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
@@ -116,13 +114,24 @@ public class UserService {
                 .collect(Collectors.toList());
 
         favourites.addAll(notFavourites);
-        return new UserFavouritesTO(
-                userID,
-                userDAO.getUsername(),
-                favourites.stream()
-                        .peek(e -> TokenServiceUtils.usersActive.getOrDefault(e.getUserID(), false))
-                        .collect(Collectors.toList())
-        );
+
+        updateUsers();
+        for (UserShortTO favourite : favourites) {
+            favourite.setActive(TokenServiceUtils.usersActive.getOrDefault(favourite.getUserID(), false));
+        }
+
+        return new UserFavouritesTO(userID, userDAO.getUsername(), favourites);
+    }
+
+    public void updateUsers() {
+        HashMap<String, Pair<String, Long>> tokensWithUserIDsAndExpires = TokenServiceUtils.tokensWithUserIDsAndExpires;
+        for (Map.Entry<String, Pair<String, Long>> userIDTokenExpires : tokensWithUserIDsAndExpires.entrySet()) {
+            if (userIDTokenExpires.getValue().getSecond() > System.currentTimeMillis()) {
+                TokenServiceUtils.usersActive.put(userIDTokenExpires.getKey(), true);
+            } else {
+                TokenServiceUtils.usersActive.put(userIDTokenExpires.getKey(), false);
+            }
+        }
     }
 
     public UserFavouritesTO addToFavourites(String userID, String favouriteUsername) {

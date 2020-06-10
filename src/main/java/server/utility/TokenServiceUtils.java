@@ -21,6 +21,7 @@ public class TokenServiceUtils {
         long expires = System.currentTimeMillis() + 90 * 60 * 1000;
         String tokenString = getTokenString();
         tokensWithUserIDsAndExpires.put(userID, Pair.of(tokenString, expires));
+        usersActive.put(userID, true);
         return SecurityInfoDAO.builder()
                 .token(tokenString)
                 .expires(expires)
@@ -41,8 +42,10 @@ public class TokenServiceUtils {
 
     public static boolean isTokenValid(String userID, String token) {
         if(tokensWithUserIDsAndExpires.containsKey(userID)) {
+            usersActive.put(userID, true);
             return tokensWithUserIDsAndExpires.get(userID).getFirst().equals(token);
         } else {
+            usersActive.put(userID, false);
             return false;
         }
     }
@@ -54,11 +57,14 @@ public class TokenServiceUtils {
                     && tokensWithUserIDsAndExpires.get(userID).getFirst().equals(token)) {
                 expires = System.currentTimeMillis() + 90 * 60 * 1000;
                 tokensWithUserIDsAndExpires.put(userID, Pair.of(token, System.currentTimeMillis() + 90 * 60 * 1000));
+                usersActive.put(userID, true);
             }
             else {
+                usersActive.put(userID, false);
                 throw new CannotRenewTokenException("Current token invalid, login again");
             }
         } else {
+            usersActive.put(userID, false);
             throw new CannotRenewTokenException("Current token invalid, login again");
         }
         return SecurityInfoDAO.builder()
