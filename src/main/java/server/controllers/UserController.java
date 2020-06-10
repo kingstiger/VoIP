@@ -70,7 +70,7 @@ public class UserController {
         try {
             if (securityService.isTokenValid(userID, token)) {
                 UserFavouritesTO favouritesOfUser = userService.getFavouritesOfUser(userID);
-                return ResponseEntity.ok(favouritesOfUser);
+                return ResponseEntity.ok(favouritesOfUser.getFavourites());
             } else {
                 return new ResponseEntity<>(null, HttpStatus.UNAUTHORIZED);
             }
@@ -93,13 +93,13 @@ public class UserController {
     }
 
     @DeleteMapping(value = "/favourites")
-    public ResponseEntity<UserFavouritesTO> removeUserFromFavourites(
+    public ResponseEntity<List<UserShortTO>> removeUserFromFavourites(
             @RequestParam("userID") String userID,
             @RequestParam("favUsername") String favUsername,
             @RequestHeader("token") String token) {
         if (securityService.isTokenValid(userID, token)) {
             UserFavouritesTO userFavouritesTO = userService.deleteFavourite(userID, favUsername);
-            return ResponseEntity.ok(userFavouritesTO);
+            return ResponseEntity.ok(userFavouritesTO.getFavourites());
         } else {
             return new ResponseEntity<>(null, HttpStatus.UNAUTHORIZED);
         }
