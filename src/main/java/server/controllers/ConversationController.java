@@ -72,7 +72,10 @@ public class ConversationController {
                 return new ResponseEntity<>("Unauthorized", HttpStatus.UNAUTHORIZED);
             }
         } catch (Exception e) {
-            return new ResponseEntity<String>(Arrays.toString(e.getStackTrace()), HttpStatus.I_AM_A_TEAPOT);
+            System.out.println("************************************************");
+            System.out.println(Arrays.toString(e.getStackTrace()));
+            System.out.println("************************************************");
+            return new ResponseEntity<String>(e.getMessage(), HttpStatus.I_AM_A_TEAPOT);
         }
     }
 
