@@ -189,7 +189,7 @@ public class UserService {
     private void accept(UserShortTO e) {
         if(TokenServiceUtils.tokensWithUserIDsAndExpires.containsKey(e.getUserID())) {
             Pair<String, Long> tokenExpiresPair = TokenServiceUtils.tokensWithUserIDsAndExpires.get(e.getUserID());
-            if(tokenExpiresPair.getSecond() > System.currentTimeMillis() - 2000) {
+            if(tokenExpiresPair.getSecond() > System.currentTimeMillis() - 6000) {
                 e.setActive(true);
             }
         }

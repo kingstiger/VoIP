@@ -141,7 +141,6 @@ public class ConversationService {
                                 .getUserID()
                                 .equals(userID)
                         )
-                        && !e.getIsOngoing()
                 )
                 .map(CurrentConversationTO::map)
                 .collect(Collectors.toList());

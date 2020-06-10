@@ -62,8 +62,7 @@ public class SecurityService {
 //    }
 
     public boolean isTokenValid(String userID, String token) {
-        Pair<String, Long> stringLongPair = TokenServiceUtils.tokensWithUserIDsAndExpires.get(userID);
-        return stringLongPair != null && stringLongPair.getFirst().equals(token) && stringLongPair.getSecond() > System.currentTimeMillis() - 1000;
+        return TokenServiceUtils.isTokenValid(userID, token);
     }
 
     public boolean isTokenValid(SecurityInfoDAO securityInfoDAO, String token) {

@@ -13,8 +13,6 @@ import java.util.HashMap;
 import java.util.Optional;
 
 public class TokenServiceUtils {
-    @Autowired
-    private static SecurityService securityService;
 
     public static HashMap<String, Pair<String, Long>> tokensWithUserIDsAndExpires = new HashMap<>();
 
@@ -38,6 +36,14 @@ public class TokenServiceUtils {
         return Hashing.sha256()
                 .hashString(originalString, StandardCharsets.UTF_8)
                 .toString();
+    }
+
+    public static boolean isTokenValid(String userID, String token) {
+        if(tokensWithUserIDsAndExpires.containsKey(userID)) {
+            return tokensWithUserIDsAndExpires.get(userID).getFirst().equals(token);
+        } else {
+            return false;
+        }
     }
 
     public static SecurityInfoDAO renewToken(String userID, String token) {
