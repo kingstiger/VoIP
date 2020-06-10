@@ -9,4 +9,5 @@ import java.util.Optional;
 @Repository
 public interface SecurityRepository extends MongoRepository<SecurityInfoDAO, String> {
     Optional<SecurityInfoDAO> findByUserID(String userID);
+    Optional<SecurityInfoDAO> findByUsername(String username);
 }

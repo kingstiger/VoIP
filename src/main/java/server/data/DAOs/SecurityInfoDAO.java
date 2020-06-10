@@ -16,5 +16,6 @@ public class SecurityInfoDAO {
     private ObjectId _id;
     private String userID;
     private String token;
+    private String username;
     private long expires;
 }

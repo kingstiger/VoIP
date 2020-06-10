@@ -116,7 +116,17 @@ public class UserService {
                 .collect(Collectors.toList());
 
         favourites.addAll(notFavourites);
-        return new UserFavouritesTO(userID, userDAO.getUsername(), favourites);
+        return new UserFavouritesTO(userID, userDAO.getUsername(), favourites.stream()
+                .peek(e -> {
+                    Optional<SecurityInfoDAO> repository = securityRepository.findByUsername(e.getUsername());
+                    if (repository.isPresent()) {
+                        if (repository.get().getExpires() > (System.currentTimeMillis() - 2000)) {
+                            e.setActive(true);
+                        }
+                    }
+                })
+                .collect(Collectors.toList())
+        );
     }
 
     public UserFavouritesTO addToFavourites(String userID, String favouriteUsername) {
@@ -182,10 +192,10 @@ public class UserService {
 
     private void accept(UserShortTO e) {
         Optional<SecurityInfoDAO> securityInfoDAOOptional = securityRepository.findByUserID(e.getUserID());
-        if(securityInfoDAOOptional.isPresent()) {
+        if (securityInfoDAOOptional.isPresent()) {
             SecurityInfoDAO securityInfoDAO = securityInfoDAOOptional.get();
             long expires = securityInfoDAO.getExpires();
-            if(expires < System.currentTimeMillis()) {
+            if (expires < System.currentTimeMillis()) {
                 e.setActive(true);
             } else {
                 e.setActive(false);
