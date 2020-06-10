@@ -24,7 +24,7 @@ public class UserTO {
                 .username(getUsername())
                 .favourite(isFavourite())
                 .IPAddress(getIPAddress())
-                .active(false)
+//                .active(false)
                      .build();
     }
 }
