@@ -14,6 +14,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.util.ResourceUtils;
 
+import java.io.File;
 import java.io.IOException;
 import java.net.URISyntaxException;
 import java.net.URL;
@@ -21,7 +22,7 @@ import java.net.URL;
 @SpringBootApplication
 public class GuiRunner extends Application {
     private static Logger logger = Logger.getLogger(GuiRunner.class);
-    private Image icon = new Image("file:///src/main/resources/icons/phone.jpg");
+    private Image icon = new Image("file:///" + new File("resources/icons/phone.jpg").getAbsoluteFile());
     private MainController component;
 
     @Getter
@@ -61,10 +62,10 @@ public class GuiRunner extends Application {
         component = loader.getController();
 
         primaryStage.setTitle("Voip Caller");
-        primaryStage.getIcons()
-                    .add(icon);
-
         primaryStage.setScene(new Scene(root, 800, 800));
+
+        URL iconFile = ResourceUtils.getURL("src/main/resources/icons/telephone.png");
+        primaryStage.getIcons().add(new Image("file:///" + iconFile.getPath()));
 
         primaryStage.show();
     }
