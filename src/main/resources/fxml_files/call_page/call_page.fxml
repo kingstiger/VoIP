@@ -29,7 +29,7 @@
                                    AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="50.0">
                             <columns>
                                 <TableColumn fx:id="statusColumn" editable="false" maxWidth="75.0" minWidth="50.0"
-                                             prefWidth="50.0" text="Status"/>
+                                             prefWidth="50.0" text="Active"/>
                                 <TableColumn fx:id="usernameColumn" editable="false" prefWidth="75.0" text="Username"/>
                                 <!--                                <TableColumn fx:id="favouriteColumn" editable="false" maxWidth="75.0" minWidth="50.0"-->
                                 <!--                                             prefWidth="50.0" text="Favourite"/>-->
